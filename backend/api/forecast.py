@@ -56,6 +56,7 @@ async def get_forecasts(session: Session = Depends(get_session)):
         select(
             Forecast.id.label("forecast_id"),
             AppUser.username,
+            AppUser.email.label("user_email"),
             Epic.name.label("epic_name"),
             Forecast.year,
             Forecast.month,
