@@ -19,9 +19,12 @@ def username() -> List[Select]:
     api_username = f"{base_url}/api/users"
     params = {"is_active": True}
     response_username = requests.get(api_username, params=params)
-    username_rows = [Select(value="", display_value="select username")]
+    username_rows = [Select(value="", display_value="select user")]
     for item in response_username.json():
-        d = Select(value=item["id"], display_value=(item["email"].split("@")[0]))
+        d = Select(
+            value=item["id"],
+            display_value=(item["last_name"] + " " + item["first_name"]),
+        )
         username_rows.append(d)
     return username_rows
 
