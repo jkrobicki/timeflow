@@ -37,7 +37,7 @@ def get_active_team_rows():
         d = {
             "Team name": item["team_name"],
             "Team short name": item["team_short_name"],
-            "User lead": item["username"],
+            "User lead": item["last_name"] + " " + item["first_name"],
             "Is active": item["is_active"],
         }
         rows.append(d)
