@@ -63,7 +63,6 @@ async def get_users(
             AppUser.username,
             AppUser.first_name,
             AppUser.last_name,
-            AppUser.email,
             Role.name.label("role_name"),
             Team.short_name.label("main_team"),
             AppUser.start_date,
