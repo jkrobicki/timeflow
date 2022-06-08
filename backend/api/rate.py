@@ -66,7 +66,7 @@ async def get_rates(session: Session = Depends(get_session)):
     user_id = None
     client_id = None
     """
-    Get all rates.
+    Get all rates.a
     
     Parameters
     ----------
@@ -74,48 +74,11 @@ async def get_rates(session: Session = Depends(get_session)):
                                         Defaults to Depends(get_session).
 
     """
-    if (user_id and client_id) != None:
-        statement = (
-            select(
-                AppUser.username,
-                Rate.id,
-                Client.name,
-                Rate.user_id,
-                Rate.valid_from,
-                Rate.valid_to,
-                Rate.amount,
-            )
-            .join(AppUser)
-            .join(Client)
-            .where(Rate.user_id == user_id)
-            .where(Rate.client_id == client_id)
-            .order_by(AppUser.username.asc())
-        )
-
-    else:
-        statement = (
-            select(
-                AppUser.username,
-                Rate.id,
-                Client.name,
-                Rate.user_id,
-                Rate.valid_from,
-                Rate.valid_to,
-                Rate.amount,
-            )
-            .join(AppUser)
-            .join(Client)
-            .order_by(AppUser.username.asc())
-        )
-    results = session.exec(statement).all()
-    return results
-
-
-@router.get("/users/{user_id}/")
-async def rates_by_user(user_id: int, session: Session = Depends(get_session)):
     statement = (
         select(
             AppUser.username,
+            AppUser.first_name,
+            AppUser.last_name,
             Rate.id,
             Client.name,
             Rate.user_id,
@@ -125,7 +88,36 @@ async def rates_by_user(user_id: int, session: Session = Depends(get_session)):
         )
         .join(AppUser)
         .join(Client)
-        .order_by(AppUser.username.asc())
+    )
+    if (user_id and client_id) != None:
+        statement_final = (
+            statement.where(Rate.user_id == user_id)
+            .where(Rate.client_id == client_id)
+            .order_by(AppUser.username.asc())
+        )
+
+    else:
+        statement_final = statement.order_by(AppUser.username.asc())
+    results = session.exec(statement_final).all()
+    return results
+
+
+@router.get("/users/{user_id}/")
+async def rates_by_user(user_id: int, session: Session = Depends(get_session)):
+    statement = (
+        select(
+            AppUser.last_name,
+            AppUser.first_name,
+            Rate.id,
+            Client.name,
+            Rate.user_id,
+            Rate.valid_from,
+            Rate.valid_to,
+            Rate.amount,
+        )
+        .join(AppUser)
+        .join(Client)
+        .order_by(AppUser.last_name.asc())
         .where(Rate.user_id == user_id)
     )
     results = session.exec(statement).all()
@@ -147,7 +139,8 @@ async def rates_by_client(client_id: int, session: Session = Depends(get_session
     """
     statement = (
         select(
-            AppUser.username,
+            AppUser.last_name,
+            AppUser.first_name,
             Rate.id,
             Client.name,
             Rate.user_id,
@@ -157,7 +150,7 @@ async def rates_by_client(client_id: int, session: Session = Depends(get_session
         )
         .join(AppUser)
         .join(Client)
-        .order_by(AppUser.username.asc())
+        .order_by(AppUser.last_name.asc())
         .where(Rate.client_id == client_id)
     )
     return session.exec(statement).all()
@@ -184,7 +177,8 @@ async def rates_by_user_client(
     """
     statement = (
         select(
-            AppUser.username,
+            AppUser.first_name,
+            AppUser.last_name,
             Rate.id,
             Client.name,
             Rate.user_id,
@@ -194,7 +188,7 @@ async def rates_by_user_client(
         )
         .join(AppUser)
         .join(Client)
-        .order_by(AppUser.username.asc())
+        .order_by(AppUser.last_name.asc())
         .where(Rate.user_id == user_id)
         .where(Rate.client_id == client_id)
     )
