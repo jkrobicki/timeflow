@@ -104,7 +104,7 @@ def create_team_form(
     # Create a dropdown of users which can then be selected
     selector_lead_user_id = Selector2(
         set_value=set_lead_user_id,
-        data=users_names(label="select user lead"),
+        data=users_names(label="select user lead", is_active=True),
         width="32%",
         md_width="32%",
     )
