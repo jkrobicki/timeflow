@@ -1,4 +1,3 @@
-from termios import FF0
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
 from ..models.forecast import Forecast
