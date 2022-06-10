@@ -14,7 +14,7 @@ from uiflow.components.heading import H3, H4
 from uiflow.components.input import InputDateTime
 
 from ..data.common import (
-    username,
+    user_full_name,
 )
 
 from ..data.epics import epics_names
@@ -148,7 +148,7 @@ def create_timelog_form(
     if admin == True:
         selector_user = Selector2(
             set_value=set_user_id,
-            data=username(),
+            data=user_full_name(),
             set_sel_value=set_post_response,
             sel_value="",
         )

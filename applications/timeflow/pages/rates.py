@@ -7,7 +7,7 @@ from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
 from ..data.common import (
     months_start,
-    username,
+    user_full_name,
 )
 
 from ..data.rates import (
@@ -106,7 +106,7 @@ def create_rates_form(
             set_on_submit(True)
 
     selector_user_id = Selector2(
-        set_value=set_user_id, data=username(), width="24%", md_width="24%"
+        set_value=set_user_id, data=user_full_name(), width="24%", md_width="24%"
     )
 
     selector_client_id = Selector2(

@@ -95,6 +95,9 @@ async def get_timelogs_all(session: Session = Depends(get_session), month: int =
         select(
             TimeLog.id,
             AppUser.username.label("username"),
+            AppUser.first_name,
+            AppUser.last_name,
+            AppUser.email.label("user_email"),
             Epic.name.label("epic_name"),
             EpicArea.name.label("epic_area_name"),
             TimeLog.start_time,
@@ -123,7 +126,9 @@ async def get_timelog_by_user_id(
     statement = (
         select(
             TimeLog.id,
-            AppUser.username.label("username"),
+            AppUser.email.label("user_email"),
+            AppUser.first_name,
+            AppUser.last_name,
             Epic.name.label("epic_name"),
             EpicArea.name.label("epic_area_name"),
             TimeLog.start_time,
