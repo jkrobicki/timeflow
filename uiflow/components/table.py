@@ -65,7 +65,11 @@ def SimpleTable(rows: List[Any]):
             table,
             Row(
                 PaginationBlock(
-                    set_page_number, qty_page, set_select_per_page, per_page_list
+                    set_page_number,
+                    qty_page,
+                    set_select_per_page,
+                    per_page_list,
+                    page_number,
                 ),
             ),
         )
