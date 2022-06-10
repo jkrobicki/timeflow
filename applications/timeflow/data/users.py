@@ -118,14 +118,17 @@ def deactivate_user(user_id: int):
 
 def users_names(is_active: bool = None, label="select user") -> List[Select]:
     # Connect to users list endpoint
-    api_username = f"{base_url}/api/users"
+    api = f"{base_url}/api/users"
     params = {"is_active": is_active}
-    response_username = requests.get(api_username, params=params)
-    username_rows = [Select(value="", display_value=label)]
-    for item in response_username.json():
-        d = Select(value=item["id"], display_value=item["username"])
-        username_rows.append(d)
-    return username_rows
+    response = requests.get(api, params=params)
+    rows = [Select(value="", display_value=label)]
+    for item in response.json():
+        d = Select(
+            value=item["id"],
+            display_value=(item["last_name"] + " " + item["first_name"]),
+        )
+        rows.append(d)
+    return rows
 
 
 def get_user_id_by_username(username):
