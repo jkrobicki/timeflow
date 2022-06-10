@@ -45,7 +45,7 @@ def capacities_all():
     for item in response.json():
         d = {
             "capacity id": item["capacity_id"],
-            "user": item["user_username"],
+            "user": item["last_name"] + " " + item["first_name"],
             "team": item["team_name"],
             "year": item["year"],
             "month": item["month"],
@@ -62,7 +62,7 @@ def capacities_by_user(user_id: int) -> List[Dict]:
     for item in response.json():
         d = {
             "capacity id": item["capacity_id"],
-            "user": item["user_username"],
+            "user": item["last_name"] + " " + item["first_name"],
             "team": item["team_name"],
             "year": item["year"],
             "month": item["month"],
@@ -79,7 +79,7 @@ def capacities_by_user_team(user_id: int, team_id: int) -> List[Dict]:
     for item in response.json():
         d = {
             "capacity id": item["capacity_id"],
-            "user": item["user_username"],
+            "user": item["last_name"] + " " + item["first_name"],
             "team": item["team_name"],
             "year": item["year"],
             "month": item["month"],
@@ -96,7 +96,7 @@ def capacities_by_team(team_id: int) -> List[Dict]:
     for item in response.json():
         d = {
             "capacity id": item["capacity_id"],
-            "user": item["user_username"],
+            "user": item["last_name"] + " " + item["first_name"],
             "team": item["team_name"],
             "year": item["year"],
             "month": item["month"],
