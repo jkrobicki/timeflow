@@ -1,3 +1,4 @@
+from termios import FF0
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
 from ..models.forecast import Forecast
@@ -64,6 +65,8 @@ async def get_forecasts(session: Session = Depends(get_session)):
         .select_from(Forecast)
         .join(AppUser)
         .join(Epic)
+        .order_by(Forecast.year.desc())
+        .order_by(Forecast.month.desc())
     )
     result = session.exec(statement).all()
     return result
@@ -97,6 +100,8 @@ async def get_forecasts_by_user(
         .join(AppUser)
         .join(Epic)
         .where(Forecast.user_id == user_id)
+        .order_by(Forecast.year.desc())
+        .order_by(Forecast.month.desc())
     )
     result = session.exec(statement).all()
     return result
