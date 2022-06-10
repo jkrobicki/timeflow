@@ -11,12 +11,12 @@ from ..data.common import (
 )
 
 from ..data.rates import (
-    rate_active_by_user_client,
+    rates_by_user_client,
     rate_update,
     to_rate,
     rates_all,
-    rates_active_by_user,
-    rates_active_by_client,
+    rates_by_user,
+    rates_by_client,
 )
 
 from ..data.clients import clients_names
@@ -140,11 +140,11 @@ def create_rates_form(
 @component
 def rates_table(user_id, client_id):
     if (user_id and client_id) != "":
-        rows = rate_active_by_user_client(user_id, client_id)
-    elif user_id != "":
-        rows = rates_active_by_user(user_id)
-    elif client_id != "":
-        rows = rates_active_by_client(client_id)
+        rows = rates_by_user_client(user_id, client_id)
+    elif user_id != "" and client_id == "":
+        rows = rates_by_user(user_id)
+    elif client_id != "" and user_id == "":
+        rows = rates_by_client(client_id)
     else:
         rows = rates_all()
     return html.div({"class": "flex w-full"}, SimpleTable(rows))

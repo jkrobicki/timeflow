@@ -23,7 +23,7 @@ def rates_all():
     for item in response.json():
         d = {
             "id": item["id"],
-            "username": item["username"],
+            "user": item["last_name"] + " " + item["first_name"],
             "client name": item["name"],
             "valid from": item["valid_from"],
             "valid to": item["valid_to"],
@@ -33,14 +33,14 @@ def rates_all():
     return rows
 
 
-def rates_active_by_user(user_id: int) -> List[Dict]:
+def rates_by_user(user_id: int) -> List[Dict]:
     api = f"{base_url}/api/rates/users/{user_id}/"
     response = requests.get(api)
     rows = []
     for item in response.json():
         d = {
             "id": item["id"],
-            "username": item["username"],
+            "user": item["last_name"] + item["first_name"],
             "client name": item["name"],
             "valid from": item["valid_from"],
             "valid to": item["valid_to"],
@@ -50,7 +50,7 @@ def rates_active_by_user(user_id: int) -> List[Dict]:
     return rows
 
 
-def rates_active_by_client(client_id: int) -> List[Dict]:
+def rates_by_client(client_id: int) -> List[Dict]:
     api = f"{base_url}/api/rates/clients/{client_id}/"
     response = requests.get(api)
     rows = []
@@ -67,14 +67,14 @@ def rates_active_by_client(client_id: int) -> List[Dict]:
     return rows
 
 
-def rate_active_by_user_client(user_id: int, client_id: int) -> List[Dict]:
+def rates_by_user_client(user_id: int, client_id: int) -> List[Dict]:
     api = f"{base_url}/api/rates/users/{user_id}/clients/{client_id}/"
     response = requests.get(api)
     rows = []
     for item in response.json():
         d = {
             "id": item["id"],
-            "username": item["username"],
+            "user": item["last_name"] + " " + item["first_name"],
             "client name": item["name"],
             "valid from": item["valid_from"],
             "valid to": item["valid_to"],
