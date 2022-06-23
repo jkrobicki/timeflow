@@ -2,7 +2,7 @@ from idom import html, use_state, component, event
 import requests
 from datetime import datetime
 
-from uiflow.components.input import Input, Selector2
+from uiflow.components.input import Input, Selector
 from uiflow.components.layout import Row, Column, Container
 from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
@@ -181,7 +181,7 @@ def deactivate_role(set_deact_role):
         set_deact_role(role_to_deact)
         return True
 
-    inp_deact_role = Selector2(
+    inp_deact_role = Selector(
         set_role_to_deact,
         data=roles_names_active(label="role name to deactivate"),
         width="96%",
@@ -206,7 +206,7 @@ def activate_role(set_activ_role):
         set_activ_role(role_to_activ)
         return True
 
-    inp_activ_role = Selector2(
+    inp_activ_role = Selector(
         set_role_to_activ,
         data=roles_names_inactive(label="role name to be activated"),
         width="96%",

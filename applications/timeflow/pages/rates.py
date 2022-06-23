@@ -1,7 +1,7 @@
 from idom import html, use_state, component, event
 from datetime import datetime
 
-from uiflow.components.input import Input, Selector2
+from uiflow.components.input import Input, Selector
 from uiflow.components.layout import Row, Column, Container
 from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
@@ -105,14 +105,14 @@ def create_rates_form(
         else:
             set_on_submit(True)
 
-    selector_user_id = Selector2(
+    selector_user_id = Selector(
         set_value=set_user_id, data=user_full_name(), width="24%", md_width="24%"
     )
 
-    selector_client_id = Selector2(
+    selector_client_id = Selector(
         set_value=set_client_id, data=clients_names(), width="24%", md_width="24%"
     )
-    selector_month_start = Selector2(
+    selector_month_start = Selector(
         set_value=set_month_start, data=months_start(), width="24%", md_width="24%"
     )
     inp_amount = Input(
