@@ -56,6 +56,8 @@ async def get_forecasts(session: Session = Depends(get_session)):
         select(
             Forecast.id.label("forecast_id"),
             AppUser.username,
+            AppUser.first_name,
+            AppUser.last_name,
             Epic.name.label("epic_name"),
             Forecast.year,
             Forecast.month,
@@ -64,6 +66,8 @@ async def get_forecasts(session: Session = Depends(get_session)):
         .select_from(Forecast)
         .join(AppUser)
         .join(Epic)
+        .order_by(Forecast.year.desc())
+        .order_by(Forecast.month.desc())
     )
     result = session.exec(statement).all()
     return result
@@ -88,6 +92,8 @@ async def get_forecasts_by_user(
         select(
             Forecast.id.label("forecast_id"),
             AppUser.username,
+            AppUser.first_name,
+            AppUser.last_name,
             Epic.name.label("epic_name"),
             Forecast.year,
             Forecast.month,
@@ -97,6 +103,8 @@ async def get_forecasts_by_user(
         .join(AppUser)
         .join(Epic)
         .where(Forecast.user_id == user_id)
+        .order_by(Forecast.year.desc())
+        .order_by(Forecast.month.desc())
     )
     result = session.exec(statement).all()
     return result

@@ -59,16 +59,20 @@ async def get_teams_list(
             Team.is_active,
             AppUser.id,
             AppUser.username.label("username"),
+            AppUser.first_name,
+            AppUser.last_name,
         )
         .join(AppUser)
         .where(AppUser.id == Team.lead_user_id)
     )
     if is_active != None:
         statement_final = statement.where(Team.is_active == is_active).order_by(
-            Team.is_active.desc()
+            Team.is_active.desc().order_by(Team.name.asc())
         )
     else:
-        statement_final = statement.order_by(Team.is_active.desc())
+        statement_final = statement.order_by(Team.is_active.desc()).order_by(
+            Team.name.asc()
+        )
 
     results = session.exec(statement_final).all()
     return results

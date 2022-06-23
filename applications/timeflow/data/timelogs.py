@@ -83,7 +83,7 @@ def timelog_by_user_id_month(user_id, month) -> List[Dict]:
         for item in response.json():
             d = {
                 "timelog id": item["id"],
-                "username": item["username"],
+                "user": item["last_name"] + " " + item["first_name"],
                 "epic name": item["epic_name"],
                 "epic area name": item["epic_area_name"],
                 "start time": (item["start_time"]).replace("T", " "),
@@ -103,7 +103,7 @@ def timelogs_all_by_month(month) -> List[Dict]:
     for item in response.json():
         d = {
             "timelog id": item["id"],
-            "username": item["username"],
+            "user": item["last_name"] + " " + item["first_name"],
             "epic name": item["epic_name"],
             "epic area name": item["epic_area_name"],
             "start time": (item["start_time"]).replace("T", " "),

@@ -26,7 +26,7 @@ def forecasts_all() -> List[Dict]:
     for item in response.json():
         d = {
             "FORECAST ID": item["forecast_id"],
-            "USERNAME": item["username"],
+            "USER": item["last_name"] + " " + item["first_name"],
             "EPIC NAME": item["epic_name"],
             "YEAR": item["year"],
             "MONTH": item["month"],
@@ -43,7 +43,7 @@ def forecasts_by_user(user_id: int) -> List[Dict]:
     for item in response.json():
         d = {
             "FORECAST ID": item["forecast_id"],
-            "USERNAME": item["username"],
+            "USER": item["last_name"] + " " + item["first_name"],
             "EPIC NAME": item["epic_name"],
             "YEAR": item["year"],
             "MONTH": item["month"],
@@ -51,24 +51,6 @@ def forecasts_by_user(user_id: int) -> List[Dict]:
         }
         rows.append(d)
     return rows
-
-
-def forecast_by_user_epic_year_month(user_id, epic_id, year, month) -> List[Dict]:
-    if user_id != "" and epic_id != "" and year != "" and month != "":
-        api = f"{base_url}/api/forecasts/users/{user_id}/epics/{epic_id}/year/{year}/month/{month}"
-        response = requests.get(api)
-        rows = []
-        for item in response.json():
-            d = {
-                "FORECAST ID": item["forecast_id"],
-                "USERNAME": item["username"],
-                "EPIC NAME": item["epic_name"],
-                "YEAR": item["year"],
-                "MONTH": item["month"],
-                "DAYS": item["forecast_days"],
-            }
-            rows.append(d)
-        return rows
 
 
 def forecast_days() -> List[Dict]:

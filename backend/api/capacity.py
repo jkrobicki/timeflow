@@ -68,38 +68,31 @@ async def get_capacities(
     year : int
         Year of capacity in question.
     """
+    statement = (
+        select(
+            Capacity.id.label("capacity_id"),
+            AppUser.last_name,
+            AppUser.first_name,
+            Team.name.label("team_name"),
+            Capacity.year,
+            Capacity.month,
+            Capacity.days,
+        )
+        .join(AppUser, Capacity.user_id == AppUser.id)
+        .join(Team, Capacity.team_id == Team.id)
+    )
     if (user_id and team_id and month and year) != None:
-        statement = (
-            select(
-                Capacity.id.label("capacity_id"),
-                AppUser.username.label("user_username"),
-                Team.name.label("team_name"),
-                Capacity.year,
-                Capacity.month,
-                Capacity.days,
-            )
-            .join(AppUser, Capacity.user_id == AppUser.id)
-            .join(Team, Capacity.team_id == Team.id)
-            .where(Capacity.user_id == user_id)
+        statement_final = (
+            statement.where(Capacity.user_id == user_id)
             .where(Capacity.team_id == team_id)
             .where(Capacity.month == month)
             .where(Capacity.year == year)
         )
-    else:
-        statement = (
-            select(
-                Capacity.id.label("capacity_id"),
-                AppUser.username.label("user_username"),
-                Team.name.label("team_name"),
-                Capacity.year,
-                Capacity.month,
-                Capacity.days,
-            )
-            .join(AppUser, Capacity.user_id == AppUser.id)
-            .join(Team, Capacity.team_id == Team.id)
-        )
 
-    result = session.exec(statement).all()
+    else:
+        statement_final = statement
+
+    result = session.exec(statement_final).all()
     return result
 
 
@@ -119,7 +112,8 @@ async def get_capacities_user(user_id: int, session: Session = Depends(get_sessi
     statement = (
         select(
             Capacity.id.label("capacity_id"),
-            AppUser.username.label("user_username"),
+            AppUser.first_name,
+            AppUser.last_name,
             Team.name.label("team_name"),
             Capacity.year,
             Capacity.month,
@@ -152,7 +146,8 @@ async def get_capacity_team(team_id: int, session: Session = Depends(get_session
     statement = (
         select(
             Capacity.id.label("capacity_id"),
-            AppUser.username.label("user_username"),
+            AppUser.last_name,
+            AppUser.first_name,
             Team.name.label("team_name"),
             Capacity.year,
             Capacity.month,
@@ -188,7 +183,8 @@ async def get_capacities_user_team(
     statement = (
         select(
             Capacity.id.label("capacity_id"),
-            AppUser.username.label("user_username"),
+            AppUser.last_name,
+            AppUser.first_name,
             Team.name.label("team_name"),
             Capacity.year,
             Capacity.month,

@@ -7,16 +7,16 @@ from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
 from ..data.common import (
     months_start,
-    username,
+    user_full_name,
 )
 
 from ..data.rates import (
-    rate_active_by_user_client,
+    rates_by_user_client,
     rate_update,
     to_rate,
     rates_all,
-    rates_active_by_user,
-    rates_active_by_client,
+    rates_by_user,
+    rates_by_client,
 )
 
 from ..data.clients import clients_names
@@ -106,7 +106,7 @@ def create_rates_form(
             set_on_submit(True)
 
     selector_user_id = Selector2(
-        set_value=set_user_id, data=username(), width="24%", md_width="24%"
+        set_value=set_user_id, data=user_full_name(), width="24%", md_width="24%"
     )
 
     selector_client_id = Selector2(
@@ -140,11 +140,11 @@ def create_rates_form(
 @component
 def rates_table(user_id, client_id):
     if (user_id and client_id) != "":
-        rows = rate_active_by_user_client(user_id, client_id)
-    elif user_id != "":
-        rows = rates_active_by_user(user_id)
-    elif client_id != "":
-        rows = rates_active_by_client(client_id)
+        rows = rates_by_user_client(user_id, client_id)
+    elif user_id != "" and client_id == "":
+        rows = rates_by_user(user_id)
+    elif client_id != "" and user_id == "":
+        rows = rates_by_client(client_id)
     else:
         rows = rates_all()
     return html.div({"class": "flex w-full"}, SimpleTable(rows))

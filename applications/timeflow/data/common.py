@@ -15,15 +15,18 @@ class Select(TypedDict):
     dispay_value: str
 
 
-def username() -> List[Select]:
-    api_username = f"{base_url}/api/users"
+def user_full_name() -> List[Select]:
+    api = f"{base_url}/api/users"
     params = {"is_active": True}
-    response_username = requests.get(api_username, params=params)
-    username_rows = [Select(value="", display_value="select username")]
-    for item in response_username.json():
-        d = Select(value=item["id"], display_value=item["username"])
-        username_rows.append(d)
-    return username_rows
+    response = requests.get(api, params=params)
+    rows = [Select(value="", display_value="select user")]
+    for item in response.json():
+        d = Select(
+            value=item["id"],
+            display_value=(item["last_name"] + " " + item["first_name"]),
+        )
+        rows.append(d)
+    return rows
 
 
 def year_month_dict_list(label: str = "select month") -> List[Select]:

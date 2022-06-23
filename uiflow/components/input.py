@@ -163,8 +163,12 @@ def AutoSelect(
 
 
 @component
-def SelectPerPage(set_select_per_page, per_page_list):
+def SelectPerPage(set_select_per_page, per_page_list, set_page_number):
     dropdown = [html.option({"value": el}, el) for el in per_page_list]
+
+    def onChange(event):
+        set_select_per_page(event["target"]["value"])
+        set_page_number(1)
 
     return html.div(
         {
@@ -174,7 +178,7 @@ def SelectPerPage(set_select_per_page, per_page_list):
         html.select(
             {
                 "class": selectClass,
-                "onChange": lambda event: set_select_per_page(event["target"]["value"]),
+                "onChange": onChange,
             },
             dropdown,
         ),
@@ -216,6 +220,17 @@ def InputDateTime(
             "class": "py-3 pl-3 w-full border-[1px] sm:w-[48%] md:w-[121px] bg-nav rounded-[3px] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-[14%]",
             "type": "datetime-local",
             "onChange": on_change,
+        },
+    )
+
+
+@component
+def InputDate(set_value):
+    return html.input(
+        {
+            "class": "py-3 pl-3 w-full border-[1px] sm:w-[48%] md:w-[121px] bg-nav rounded-[3px] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-[14%]",
+            "type": "date",
+            "onChange": lambda event: set_value(event["target"]["value"]),
         },
     )
 
