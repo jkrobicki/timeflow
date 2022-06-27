@@ -10,7 +10,7 @@ class EpicArea(SQLModel, table=True):
     epic_id: int = Field(foreign_key="app_db.epic.id")
     name: str
     is_active: bool
-    start_date: datetime
+    start_date: Optional[datetime] = None
     created_at: datetime
     updated_at: datetime
 
