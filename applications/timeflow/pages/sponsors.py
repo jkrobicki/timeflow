@@ -6,7 +6,7 @@ from uiflow.components.controls import (
     submit_button,
     Button,
 )
-from uiflow.components.input import Input, Selector2
+from uiflow.components.input import Input, Selector
 from uiflow.components.layout import Row, Column, Container
 from uiflow.components.table import SimpleTable
 
@@ -106,7 +106,7 @@ def create_sponsor_form(
     )
 
     # Create a dropdown of clients which can then be selected
-    selector_client_id = Selector2(
+    selector_client_id = Selector(
         set_value=set_client_id,
         data=clients_names(is_active=True),
         width="32%",
@@ -150,7 +150,7 @@ def deactivate_sponsor(set_deact_name):
         set_deact_name(name_to_deact)
 
     # Create input field for name of sponsor to be deactivated
-    sponsors_selector_deact = Selector2(
+    sponsors_selector_deact = Selector(
         set_name_to_deact,
         data=sponsor_names(is_active=True, label="sponsor to be deactivated"),
         width="96%",
@@ -176,7 +176,7 @@ def activate_sponsor(set_activ_name):
         set_activ_name(name_to_activ)
 
     # Create input field for name of sponsor to be activated
-    sponsors_selector_act = Selector2(
+    sponsors_selector_act = Selector(
         set_name_to_activ,
         data=sponsor_names(is_active=False, label="sponsor to be activated"),
         width="96%",

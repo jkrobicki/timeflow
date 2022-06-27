@@ -74,23 +74,6 @@ def SearchInput(input_value, set_input_value):
 @component
 def Selector(
     set_value: Callable,
-    placeholder,
-    dropdown_list,
-    _class: str = class_str,
-):
-    return html.select(
-        {
-            "class": _class,
-            "onChange": lambda event: set_value(event["target"]["value"]),
-        },
-        html.option({"value": ""}, placeholder),
-        dropdown_list,
-    )
-
-
-@component
-def Selector2(
-    set_value: Callable,
     data: List,
     width: str = "14%",
     md_width: str = "121px",
@@ -136,30 +119,6 @@ def SelectorDropdownKeyValue(rows: List[Any]):
             crows.append(c)
     dropdown_list = tuple(crows)
     return dropdown_list
-
-
-def SelectorDropdownList(rows: List[Any]):
-    crows = []
-    for n in rows:
-        a = html.option({"value": f"{n}"}, n)
-        crows.append(a)
-    dropdown_list = tuple(crows)
-    return dropdown_list
-
-
-@component
-def AutoSelect(
-    set_value: Callable,
-    option: Any,
-    _class: str = class_str,
-):
-    return html.select(
-        {
-            "class": _class,
-            "onChange": lambda event: set_value(event["target"]["value"]),
-        },
-        option,
-    )
 
 
 @component

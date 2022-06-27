@@ -6,7 +6,7 @@ from uiflow.components.controls import (
     submit_button,
     Button,
 )
-from uiflow.components.input import Input, Selector2
+from uiflow.components.input import Input, Selector
 from uiflow.components.layout import Row, Column, Container
 from uiflow.components.table import SimpleTable
 
@@ -83,7 +83,7 @@ def create_epic_area_form(epic_id, set_epic_id, name, set_name, is_event, set_is
         switch_state(is_event, set_is_event)
 
     # Create dropdown of active epics which can then be selected
-    selector_epic_id = Selector2(
+    selector_epic_id = Selector(
         set_value=set_epic_id,
         data=epics_names(is_active=True),
         width="48%",
@@ -129,7 +129,7 @@ def deactivate_epic_area(is_event, set_is_event):
         switch_state(is_event, set_is_event)
 
     # Create input field for id of epic area to be deactivated
-    selector_deact_name = Selector2(
+    selector_deact_name = Selector(
         set_name_to_deact,
         data=epic_areas_names(is_active=True, label="epic area to be deactivated"),
         width="96%",
@@ -155,7 +155,7 @@ def activate_epic_area(is_event, set_is_event):
         switch_state(is_event, set_is_event)
 
     # Create input field for name of epic area to be activated
-    selector_act_name = Selector2(
+    selector_act_name = Selector(
         set_name_to_activ,
         data=epic_areas_names(is_active=False, label="epic area to be activated"),
         width="96%",
@@ -185,14 +185,14 @@ def update_epic_areas(is_event, set_is_event):
         )
         switch_state(value=is_event, set_value=set_is_event)
 
-    epic_area_selector = Selector2(
+    epic_area_selector = Selector(
         set_update_id,
         data=epic_areas_names(is_active=True, label="select epic area to update"),
         width="48%",
         md_width="48%",
     )
 
-    epic_id_selector = Selector2(
+    epic_id_selector = Selector(
         set_new_epic_id,
         data=epics_names(is_active=True, label="select new epic name"),
         width="48%",

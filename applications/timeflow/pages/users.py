@@ -1,7 +1,7 @@
 from idom import html, use_state, component, event
 
 from .utils import switch_state
-from uiflow.components.input import Input, InputDate, Selector2
+from uiflow.components.input import Input, InputDate, Selector
 from uiflow.components.layout import Row, Column, Container
 from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
@@ -76,19 +76,19 @@ def update_users(is_event, set_is_event):
         set_value=set_new_last_name, label="last name", width="[48%]", md_width="[48%]"
     )
 
-    selector_user = Selector2(
+    selector_user = Selector(
         set_update_user_id,
         data=users_names(label="select user to update"),
         width="48%",
         md_width="48%",
     )
-    selector_team = Selector2(
+    selector_team = Selector(
         set_new_team_id,
         data=teams_id_name(label="select new team"),
         width="48%",
         md_width="48%",
     )
-    selector_role = Selector2(
+    selector_role = Selector(
         set_new_role_id,
         data=roles_id_name(),
         width="48%",
@@ -120,7 +120,7 @@ def deactivate_users(is_event, set_is_event):
 
         return True
 
-    selector_user = Selector2(
+    selector_user = Selector(
         set_deactiv_user_id,
         data=users_names(is_active=True, label="select user to deactivate"),
         width="96%",
@@ -145,7 +145,7 @@ def activate_users(is_event, set_is_event):
 
         return True
 
-    selector_user = Selector2(
+    selector_user = Selector(
         set_activ_user_id,
         data=users_names(is_active=False, label="select user to activate"),
         width="96%",

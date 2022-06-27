@@ -4,7 +4,7 @@ from idom.backend import fastapi
 import requests
 from datetime import datetime
 
-from uiflow.components.input import Input, Selector2, InputDate
+from uiflow.components.input import Input, Selector, InputDate
 from uiflow.components.layout import Row, Column, Container
 from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
@@ -124,8 +124,8 @@ def create_epic_form(
     inp_name = Input(
         set_name, "Full epic's name", placeholder="", width="[14%]", md_width="[32%]"
     )
-    selector_team = Selector2(set_team_id, teams_id_name(), width="14%", md_width="32%")
-    selector_sponsor = Selector2(
+    selector_team = Selector(set_team_id, teams_id_name(), width="14%", md_width="32%")
+    selector_sponsor = Selector(
         set_sponsor_id, sponsors_id_name(), width="14%", md_width="32%"
     )
     input_date = InputDate(set_start_date)
@@ -174,7 +174,7 @@ def deactivate_epic(is_event, set_is_event):
         epic_deactivate(epic_to_deact)
         switch_state(is_event, set_is_event)
 
-    inp_deact_epic = Selector2(
+    inp_deact_epic = Selector(
         set_epic_to_deact,
         data=epics_names(is_active=True, label="select epic to deactivate"),
         width="96%",
@@ -198,7 +198,7 @@ def activate_epic(is_event, set_is_event):
         epic_activate(epic_to_activ)
         switch_state(is_event, set_is_event)
 
-    inp_activ_epic = Selector2(
+    inp_activ_epic = Selector(
         set_epic_to_activ,
         data=epics_names(is_active=False, label="select epic to activate"),
         width="96%",
@@ -233,7 +233,7 @@ def update_epics(is_event, set_is_event):
         )
         switch_state(value=is_event, set_value=set_is_event)
 
-    epic_selector = Selector2(
+    epic_selector = Selector(
         set_update_epic_id,
         data=epics_names(is_active=True, label="select epic to update"),
         width="48%",
@@ -254,14 +254,14 @@ def update_epics(is_event, set_is_event):
         md_width="[48%]",
     )
 
-    team_selector = Selector2(
+    team_selector = Selector(
         set_new_team_id,
         data=teams_id_name(label="select new team"),
         width="48%",
         md_width="48%",
     )
 
-    sponsor_selector = Selector2(
+    sponsor_selector = Selector(
         set_new_sponsor_id,
         data=sponsor_names(is_active=True, label="select new sponsor"),
         width="48%",
