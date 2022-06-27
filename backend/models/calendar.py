@@ -6,7 +6,7 @@ from datetime import datetime
 class Calendar(SQLModel, table=True):
     """Create an SQLModel for a calendar"""
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
     date: datetime
     year_number: int
     year_name: str

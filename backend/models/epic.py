@@ -6,7 +6,7 @@ from datetime import datetime, date
 class Epic(SQLModel, table=True):
     """Create an SQLModel for epic entity"""
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
     short_name: str
     name: str
     team_id: int = Field(foreign_key="app_db.team.id")

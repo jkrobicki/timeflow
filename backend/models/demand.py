@@ -6,7 +6,7 @@ from datetime import datetime
 class Demand(SQLModel, table=True):
     """Create an SQLModel for demands"""
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
     team_id: int = Field(foreign_key="app_db.team.id")
     epic_id: int = Field(foreign_key="app_db.epic.id")
     year: int

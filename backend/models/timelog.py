@@ -20,7 +20,7 @@ from datetime import datetime
 class TimeLog(SQLModel, table=True):
     """Create an SQLModel for timelogs"""
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
     user_id: int = Field(foreign_key="app_db.appuser.id")
     start_time: datetime
     end_time: datetime

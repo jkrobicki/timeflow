@@ -6,7 +6,7 @@ from datetime import datetime
 class Client(SQLModel, table=True):
     """Create an SQLModel for clients"""
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
     name: str
     is_active: bool
     created_at: datetime
