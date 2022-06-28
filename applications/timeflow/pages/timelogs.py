@@ -166,7 +166,6 @@ def create_timelog_form(
         width="14%",
         md_width="32%",
     )
-
     selector_epic_area_id = Selector(
         set_value=set_epic_area_id,
         set_sel_value=set_post_response,
@@ -174,6 +173,7 @@ def create_timelog_form(
         data=epic_areas_names_by_epic_id(epic_id),
         width="14%",
         md_width="32%",
+        key_attr=epic_id,
     )
     h_start = H3("from:", "bold")
     input_start_datetime = InputDateTime(
