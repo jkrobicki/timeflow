@@ -6,7 +6,7 @@ from datetime import datetime
 class Role(SQLModel, table=True):
     """Create an SQLModel for roles"""
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
     short_name: str
     name: str
     created_at: datetime

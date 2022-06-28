@@ -6,7 +6,7 @@ from datetime import datetime, date
 class Rate(SQLModel, table=True):
     """Create an SQLModel for rates"""
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
     user_id: int = Field(foreign_key="app_db.appuser.id")
     client_id: int = Field(foreign_key="app_db.client.id")
     valid_from: date
