@@ -6,7 +6,7 @@ from datetime import datetime
 class Sponsor(SQLModel, table=True):
     """Create an SQLModel for sponsors"""
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
     client_id: int = Field(foreign_key="app_db.client.id")
     name: str
     short_name: str

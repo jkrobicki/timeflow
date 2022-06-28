@@ -4,7 +4,7 @@ import requests
 from datetime import datetime
 from uiflow.components.input import (
     Input,
-    Selector2,
+    Selector,
     display_value,
 )
 from uiflow.components.layout import Row, Column, Container
@@ -146,7 +146,7 @@ def create_timelog_form(
         return response
 
     if admin == True:
-        selector_user = Selector2(
+        selector_user = Selector(
             set_value=set_user_id,
             data=user_full_name(),
             set_sel_value=set_post_response,
@@ -156,7 +156,7 @@ def create_timelog_form(
         user_id = get_user_id_by_username(github_username)
         selector_user = display_value(user_id, github_username)
 
-    selector_epic_id = Selector2(
+    selector_epic_id = Selector(
         set_value=set_epic_id,
         set_sel_value=set_epic_area_id,
         sel_value="",
@@ -167,7 +167,7 @@ def create_timelog_form(
         md_width="32%",
     )
 
-    selector_epic_area_id = Selector2(
+    selector_epic_area_id = Selector(
         set_value=set_epic_area_id,
         set_sel_value=set_post_response,
         sel_value="",

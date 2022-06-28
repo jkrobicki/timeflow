@@ -4,7 +4,7 @@ from idom import html, use_state, component, event
 import requests
 from datetime import datetime
 
-from uiflow.components.input import Input, Selector2
+from uiflow.components.input import Input, Selector
 from uiflow.components.layout import Row, Column, FlexContainer
 from uiflow.components.table import SimpleTable, SubmitTable
 from uiflow.components.controls import Button
@@ -89,7 +89,7 @@ def deactivate_client(is_event, set_is_event):
         client_is_active(client_id=del_client_id, is_active=False)
         switch_state(is_event, set_is_event)
 
-    selector_deactivate_client = Selector2(
+    selector_deactivate_client = Selector(
         set_del_client_id,
         data=clients_names(is_active=True, label="Client id to be deactivated"),
         width="96%",
@@ -110,7 +110,7 @@ def activate_client(is_event, set_is_event):
         client_is_active(client_id=act_client_id, is_active=True)
         switch_state(is_event, set_is_event)
 
-    selector_activate_client = Selector2(
+    selector_activate_client = Selector(
         set_act_client_id,
         data=clients_names(is_active=False, label="Client id to be activated"),
         width="96%",

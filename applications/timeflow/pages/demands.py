@@ -2,7 +2,7 @@ from idom import html, use_state, component, event
 
 from .utils import switch_state
 
-from uiflow.components.input import Input, Selector2
+from uiflow.components.input import Input, Selector
 from uiflow.components.layout import Row, Column, Container
 
 from uiflow.components.table import SimpleTable
@@ -95,23 +95,23 @@ def create_demand_form(
         )
         switch_state(is_event, set_is_event)
 
-    selector_team_id = Selector2(
+    selector_team_id = Selector(
         set_value=set_team_id, data=teams_id_name(), width="24%", md_width="24%"
     )
-    selector_epic_id = Selector2(
+    selector_epic_id = Selector(
         set_value=set_epic_id,
         data=epics_names(is_active=True),
         width="24%",
         md_width="24%",
     )
-    selector_year_month = Selector2(
+    selector_year_month = Selector(
         set_value=set_year_month,
         data=year_month_dict_list(),
         width="24%",
         md_width="24%",
     )
 
-    selector_days = Selector2(
+    selector_days = Selector(
         set_value=set_days, data=demand_days(), width="24%", md_width="24%"
     )
 

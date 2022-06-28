@@ -6,7 +6,7 @@ from uiflow.components.controls import (
     submit_button,
     Button,
 )
-from uiflow.components.input import Input, Selector2
+from uiflow.components.input import Input, Selector
 from uiflow.components.layout import Row, Column, Container
 from uiflow.components.table import SimpleTable
 
@@ -102,7 +102,7 @@ def create_team_form(
     )
 
     # Create a dropdown of users which can then be selected
-    selector_lead_user_id = Selector2(
+    selector_lead_user_id = Selector(
         set_value=set_lead_user_id,
         data=users_names(label="select user lead", is_active=True),
         width="32%",
@@ -149,7 +149,7 @@ def deactivate_team(set_deact_name):
         set_deact_name(name_to_deact)
 
     # Create selector field for name of team to be deactivated
-    selector_team_deact = Selector2(
+    selector_team_deact = Selector(
         set_name_to_deact,
         data=teams_names(is_active=True, label="team to be deactivated"),
         width="96%",
@@ -175,7 +175,7 @@ def activate_team(set_activ_name):
         set_activ_name(name_to_activ)
 
     # Create selector field for name of team to be activated
-    selector_team_act = Selector2(
+    selector_team_act = Selector(
         set_name_to_activ,
         data=teams_names(is_active=False, label="team to be activated"),
         width="96%",

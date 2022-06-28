@@ -2,7 +2,7 @@ from idom import html, use_state, component, event
 
 from .utils import switch_state
 
-from uiflow.components.input import Input, Selector2
+from uiflow.components.input import Input, Selector
 from uiflow.components.layout import Row, Column, Container
 
 from uiflow.components.table import SimpleTable
@@ -95,21 +95,21 @@ def create_capacity_form(
         )
         switch_state(is_event, set_is_event)
 
-    selector_user_id = Selector2(
+    selector_user_id = Selector(
         set_value=set_user_id, data=users_names(), width="24%", md_width="24%"
     )
 
-    selector_team_id = Selector2(
+    selector_team_id = Selector(
         set_value=set_team_id, data=teams_id_name(), width="24%", md_width="24%"
     )
-    selector_year_month = Selector2(
+    selector_year_month = Selector(
         set_value=set_year_month,
         data=year_month_dict_list(),
         width="24%",
         md_width="24%",
     )
 
-    selector_days = Selector2(
+    selector_days = Selector(
         set_value=set_days, data=capacity_days(), width="24%", md_width="24%"
     )
 
