@@ -9,7 +9,7 @@ import re
 class AppUser(SQLModel, table=True):
     """Create an SQLModel for users"""
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
     username: str
     first_name: str
     last_name: str
