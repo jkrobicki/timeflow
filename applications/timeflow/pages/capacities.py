@@ -25,7 +25,7 @@ from ..data.teams import teams_id_name
 
 
 @component
-def page():
+def page(key_attr: str):
     """Creates a page for capacities"""
     user_id, set_user_id = use_state("")
     team_id, set_team_id = use_state("")
@@ -33,7 +33,7 @@ def page():
     days, set_days = use_state("")
     is_event, set_is_event = use_state(False)
     return html.div(
-        {"class": "w-full"},
+        {"class": "w-full", "key": key_attr},
         Row(
             create_capacity_form(
                 user_id,

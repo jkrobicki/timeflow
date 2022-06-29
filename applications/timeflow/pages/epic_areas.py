@@ -24,7 +24,7 @@ from .utils import switch_state
 
 
 @component
-def page():
+def page(key_attr: str):
     epic_id, set_epic_id = use_state("")
     name, set_name = use_state("")
     is_event, set_is_event = use_state(True)
@@ -32,7 +32,7 @@ def page():
     _, set_activ_name = use_state("")
 
     return html.div(
-        {"class": "w-full"},
+        {"class": "w-full", "key": key_attr},
         Row(
             Container(
                 create_epic_area_form(

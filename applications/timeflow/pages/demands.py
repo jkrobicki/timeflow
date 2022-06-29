@@ -25,7 +25,7 @@ from ..data.epics import epics_names
 
 
 @component
-def page():
+def page(key_attr: str):
     """Creates a page for demands"""
     team_id, set_team_id = use_state("")
     epic_id, set_epic_id = use_state("")
@@ -33,7 +33,7 @@ def page():
     days, set_days = use_state("")
     is_event, set_is_event = use_state(False)
     return html.div(
-        {"class": "w-full"},
+        {"class": "w-full", "key": key_attr},
         Row(
             create_demand_form(
                 team_id,
