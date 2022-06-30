@@ -1,6 +1,6 @@
 from idom import html, use_state, component, event
 
-from uiflow.components.input import Input, Selector
+from uiflow.components.input import Input, Selector, display_value
 from uiflow.components.layout import Row, Column, Container
 from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
@@ -16,21 +16,25 @@ from ..data.forecasts import (
     to_forecast,
     forecast_deletion,
 )
-from ..data.epics import client_name_by_epic_id
 
-from ..data.epics import epics_names
+from ..data.users import get_user_id_by_username
+
+from ..data.epics import client_name_by_epic_id, epics_names
 
 from ..config import base_url
 
 
 @component
-def page():
+def page(app_role: str, github_username: str):
     year_month, set_year_month = use_state("")
     days, set_days = use_state("")
     user_id, set_user_id = use_state("")
     epic_id, set_epic_id = use_state("")
     deleted_forecast, set_deleted_forecast = use_state("")
     on_submit, set_on_submit = use_state(True)
+    admin = True if app_role == "admin" or app_role == None else False
+    if not admin:
+        user_id = get_user_id_by_username(github_username)
     return html.div(
         {"class": "w-full"},
         Row(
@@ -46,6 +50,8 @@ def page():
                     set_epic_id,
                     on_submit,
                     set_on_submit,
+                    admin,
+                    github_username,
                 ),
             ),
             bg="bg-filter-block-bg",
@@ -73,6 +79,8 @@ def create_forecast_form(
     set_epic_id,
     on_submit,
     set_on_submit,
+    admin,
+    github_username,
 ):
     """Generates forecast form to submit forecasts and filter forecast by month user and epic
 
@@ -123,16 +131,20 @@ def create_forecast_form(
         else:
             set_on_submit(True)
 
-    selector_user_id = Selector(
-        set_value=set_user_id, data=user_full_name(), width="16%"
-    )
+    if admin:
+        selector_user_id = Selector(
+            set_value=set_user_id, data=user_full_name(), width="16%"
+        )
+    else:
+        user_id = get_user_id_by_username(github_username)
+        selector_user_id = display_value(user_id, github_username)
 
     selector_epic_id = Selector(
         set_value=set_epic_id,
         data=epics_names(is_active=True),
         width="16%",
     )
-    display_client = display_value(epic_id)
+    display_client = display_value_by_epic(epic_id)
     selector_year_month = Selector(
         set_value=set_year_month,
         data=year_month_dict_list(),
@@ -167,7 +179,7 @@ def create_forecast_form(
 
 
 @component
-def display_value(epic_id):
+def display_value_by_epic(epic_id):
     client = client_name_by_epic_id(epic_id)
     if epic_id == "":
         return html.div(
@@ -200,6 +212,7 @@ def forecasts_table(user_id):
     Returns:
         list of filtered forecasts
     """
+
     rows = forecasts_all()
     if user_id != "":
         rows = forecasts_by_user(user_id)
