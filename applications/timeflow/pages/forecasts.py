@@ -21,8 +21,6 @@ from ..data.users import get_user_id_by_username
 
 from ..data.epics import client_name_by_epic_id, epics_names
 
-from ..config import base_url
-
 
 @component
 def page(app_role: str, github_username: str):
@@ -30,8 +28,7 @@ def page(app_role: str, github_username: str):
     days, set_days = use_state("")
     user_id, set_user_id = use_state("")
     epic_id, set_epic_id = use_state("")
-    deleted_forecast, set_deleted_forecast = use_state("")
-    on_submit, set_on_submit = use_state(True)
+    is_event, set_is_event = use_state(False)
     admin = True if app_role == "admin" or app_role == None else False
     if not admin:
         user_id = get_user_id_by_username(github_username)
@@ -48,8 +45,8 @@ def page(app_role: str, github_username: str):
                     set_user_id,
                     epic_id,
                     set_epic_id,
-                    on_submit,
-                    set_on_submit,
+                    is_event,
+                    set_is_event,
                     admin,
                     github_username,
                 ),
@@ -62,7 +59,7 @@ def page(app_role: str, github_username: str):
             )
         ),
         Container(
-            Row(delete_forecast(set_deleted_forecast)),
+            Row(delete_forecast(is_event, set_is_event)),
         ),
     )
 
@@ -77,8 +74,8 @@ def create_forecast_form(
     set_user_id,
     epic_id,
     set_epic_id,
-    on_submit,
-    set_on_submit,
+    is_event,
+    set_is_event,
     admin,
     github_username,
 ):
@@ -126,10 +123,7 @@ def create_forecast_form(
             month=month,
             year=year,
         )
-        if on_submit:
-            set_on_submit(False)
-        else:
-            set_on_submit(True)
+        set_is_event(not is_event)
 
     if admin:
         selector_user_id = Selector(
@@ -220,12 +214,12 @@ def forecasts_table(user_id):
 
 
 @component
-def delete_forecast(set_deleted_forecast):
+def delete_forecast(is_event, set_is_event):
     forecast_to_delete, set_forecast_to_delete = use_state("")
 
     def handle_delete(event):
         forecast_deletion(forecast_to_delete)
-        set_deleted_forecast(forecast_to_delete)
+        set_is_event(not is_event)
 
     inp_forecast = Input(
         set_value=set_forecast_to_delete, label="forecast id to delete", width="full"
