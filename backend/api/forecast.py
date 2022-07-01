@@ -6,6 +6,7 @@ from ..models.user import AppUser
 from ..models.epic_area import EpicArea
 from sqlmodel import Session, select, and_
 from sqlalchemy.exc import NoResultFound
+from datetime import datetime, date
 
 router = APIRouter(prefix="/api/forecasts", tags=["forecast"])
 
@@ -33,12 +34,19 @@ async def post_forecast(*, forecast: Forecast, session: Session = Depends(get_se
     )
     try:
         result = session.exec(statement).one()
-        return False
+        return "A forecast for selected user, month and epic already exists"
     except NoResultFound:
-        session.add(forecast)
-        session.commit()
-        session.refresh(forecast)
-        return forecast
+        if (
+            datetime.strptime(f"{forecast.month}:{forecast.year}", "%m:%Y").date()
+            < date.today()
+        ):
+            return "Unable to post forecast for previous months"
+        else:
+            session.add(forecast)
+            session.commit()
+            session.refresh(forecast)
+            print(type(forecast), "forecast_is")
+            return "Your forecast has been submitted"
 
 
 @router.get("/")

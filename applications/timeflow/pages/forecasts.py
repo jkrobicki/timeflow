@@ -4,7 +4,7 @@ from uiflow.components.input import Input, Selector, display_value, InputMonth
 from uiflow.components.layout import Row, Column, Container
 from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
-from uiflow.components.heading import H3
+from uiflow.components.heading import H3, H4
 from ..data.common import (
     user_full_name,
 )
@@ -98,6 +98,7 @@ def create_forecast_form(
     Returns:
         _type_: _description_
     """
+    post_response, set_post_response = use_state("")
 
     @event(prevent_default=True)
     async def handle_submit(event):
@@ -116,18 +117,23 @@ def create_forecast_form(
         year = ym[:4]
         month = ym[5:7]
 
-        to_forecast(
+        response = to_forecast(
             user_id=user_id,
             epic_id=epic_id,
             days=days,
             month=month,
             year=year,
         )
+        set_post_response(response)
         set_is_event(not is_event)
 
     if admin:
         selector_user_id = Selector(
-            set_value=set_user_id, data=user_full_name(), width="16%"
+            set_value=set_user_id,
+            set_sel_value2=set_post_response,
+            sel_value2="",
+            data=user_full_name(),
+            width="16%",
         )
     else:
         user_id = get_user_id_by_username(github_username)
@@ -135,15 +141,23 @@ def create_forecast_form(
 
     selector_epic_id = Selector(
         set_value=set_epic_id,
+        set_sel_value2=set_post_response,
+        sel_value2="",
         data=epics_names(is_active=True),
         width="16%",
     )
     display_client = display_value_by_epic(epic_id)
 
-    input_date = InputMonth(set_year_month)
+    input_date = InputMonth(
+        set_year_month,
+        set_post_response,
+        "",
+    )
 
     selector_days = Selector(
         set_value=set_days,
+        set_sel_value2=set_post_response,
+        sel_value2="",
         data=forecast_days(),
         width="16%",
     )
@@ -167,6 +181,7 @@ def create_forecast_form(
             selector_days,
             btn,
         ),
+        H4(post_response),
     )
 
 
