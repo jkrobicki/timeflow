@@ -83,7 +83,7 @@ def to_forecast(user_id: int, epic_id: int, month: str, year: str, days: int) ->
         data=json.dumps(dict(data)),
         headers={"accept": "application/json", "Content-Type": "application/json"},
     )
-    return True
+    return response.json()
 
     # user_id=user_id,
     # client_id=client_id,
