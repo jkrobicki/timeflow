@@ -4,6 +4,7 @@ from uiflow.components.input import Input, Selector, display_value, InputMonth
 from uiflow.components.layout import Row, Column, Container
 from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
+from uiflow.components.heading import H3
 from ..data.common import (
     user_full_name,
 )
@@ -154,6 +155,7 @@ def create_forecast_form(
     btn = Button(is_disabled, handle_submit, label="Submit")
 
     return Column(
+        H3("Select forecast"),
         html.div(
             {
                 "class": "flex flex-wrap w-full justify-between items-center 2xl:justify-between"
@@ -164,7 +166,7 @@ def create_forecast_form(
             input_date,
             selector_days,
             btn,
-        )
+        ),
     )
 
 
