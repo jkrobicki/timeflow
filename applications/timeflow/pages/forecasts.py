@@ -1,12 +1,11 @@
 from idom import html, use_state, component, event
 
-from uiflow.components.input import Input, Selector, display_value
+from uiflow.components.input import Input, Selector, display_value, InputMonth
 from uiflow.components.layout import Row, Column, Container
 from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
 from ..data.common import (
     user_full_name,
-    year_month_dict_list,
 )
 
 from ..data.forecasts import (
@@ -139,11 +138,8 @@ def create_forecast_form(
         width="16%",
     )
     display_client = display_value_by_epic(epic_id)
-    selector_year_month = Selector(
-        set_value=set_year_month,
-        data=year_month_dict_list(),
-        width="16%",
-    )
+
+    input_date = InputMonth(set_year_month)
 
     selector_days = Selector(
         set_value=set_days,
@@ -165,7 +161,7 @@ def create_forecast_form(
             selector_user_id,
             selector_epic_id,
             display_client,
-            selector_year_month,
+            input_date,
             selector_days,
             btn,
         )
