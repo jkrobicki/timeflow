@@ -13,7 +13,6 @@ from ..data.capacities import (
     capacities_by_team,
     capacity_days,
     to_capacity,
-    capacities_by_user_team_year_month,
     capacity_deletion,
     capacities_all,
     capacities_by_user,

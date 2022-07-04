@@ -106,12 +106,11 @@ def capacities_by_team(team_id: int) -> List[Dict]:
     return rows
 
 
-def capacities_by_user_team_year_month(user_id, team_id, year_month) -> List[Dict]:
-    if user_id != "" and team_id != "" and year_month != "":
-        api = f"{base_url}/api/capacities/users/{user_id}/teams/{team_id}/years_months/{year_month}/"
+def capacities_by_user_year_month(user_id, year_month) -> List[Dict]:
+    if user_id != "" and year_month != "":
+        api = f"{base_url}/api/capacities/"
         params = {
             "user_id": user_id,
-            "team_id": team_id,
             "year": int(year_month[:4]),
             "month": int(year_month[5:7]),
         }
@@ -121,8 +120,7 @@ def capacities_by_user_team_year_month(user_id, team_id, year_month) -> List[Dic
         for item in response.json():
             d = {
                 "capacity id": item["capacity_id"],
-                "user": item["user_username"],
-                "team": item["team_name"],
+                "user": item["last_name"] + " " + item["first_name"],
                 "year": item["year"],
                 "month": item["month"],
                 "capacity days": item["days"],

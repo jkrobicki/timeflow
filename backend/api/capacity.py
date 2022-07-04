@@ -45,7 +45,6 @@ async def get_capacities(
     session: Session = Depends(get_session),
     is_locked: bool = None,
     user_id: int = None,
-    team_id: int = None,
     month: int = None,
     year: int = None,
 ):
@@ -81,10 +80,9 @@ async def get_capacities(
         .join(AppUser, Capacity.user_id == AppUser.id)
         .join(Team, Capacity.team_id == Team.id)
     )
-    if (user_id and team_id and month and year) != None:
+    if (user_id and month and year) != None:
         statement_final = (
             statement.where(Capacity.user_id == user_id)
-            .where(Capacity.team_id == team_id)
             .where(Capacity.month == month)
             .where(Capacity.year == year)
         )

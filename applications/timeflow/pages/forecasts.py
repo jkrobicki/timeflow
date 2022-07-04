@@ -2,7 +2,7 @@ from idom import html, use_state, component, event
 
 from uiflow.components.input import Input, Selector, display_value, InputMonth
 from uiflow.components.layout import Row, Column, Container
-from uiflow.components.table import SimpleTable
+from uiflow.components.table import SimpleTable, DisplayTable
 from uiflow.components.controls import Button
 from uiflow.components.heading import H3, H4
 from ..data.common import (
@@ -16,8 +16,9 @@ from ..data.forecasts import (
     to_forecast,
     forecast_deletion,
 )
+from ..data.capacities import capacities_by_user_year_month
 
-from ..data.users import get_user_id_by_username
+from ..data.users import get_user_id_by_username, user_full_name_by_id
 
 from ..data.epics import client_name_by_epic_id, epics_names
 
@@ -53,6 +54,7 @@ def page(app_role: str, github_username: str):
             ),
             bg="bg-filter-block-bg",
         ),
+        Container(capacities_table(user_id, year_month)),
         Container(
             Column(
                 Row(forecasts_table(user_id)),
@@ -169,7 +171,7 @@ def create_forecast_form(
     btn = Button(is_disabled, handle_submit, label="Submit")
 
     return Column(
-        H3("Select forecast"),
+        H3("Submit forecast"),
         html.div(
             {
                 "class": "flex flex-wrap w-full justify-between items-center 2xl:justify-between"
@@ -208,6 +210,29 @@ def display_value_by_epic(epic_id):
 
 
 @component
+def capacities_table(user_id, year_month):
+    rows = capacities_by_user_year_month(user_id, year_month)
+    displayed = H4("Select user and month to see a table")
+    if user_id != "" and year_month != "":
+        if rows == []:
+            full_user_name = user_full_name_by_id(user_id)
+            rows = []
+            d = {
+                "capacity id": "null",
+                "user": full_user_name,
+                "year": year_month[:4],
+                "month": year_month[5:7],
+                "capacity days": "null",
+            }
+            rows.append(d)
+        displayed = html.div({"class": "flex w-full"}, DisplayTable(rows=rows))
+    return Column(
+        H3("Users capacity per month"),
+        displayed,
+    )
+
+
+@component
 def forecasts_table(user_id):
     """Generates a table component with forecast days by year and month
 
@@ -223,7 +248,10 @@ def forecasts_table(user_id):
     rows = forecasts_all()
     if user_id != "":
         rows = forecasts_by_user(user_id)
-    return html.div({"class": "flex w-full"}, SimpleTable(rows=rows))
+    return Column(
+        H3("Selected forecasts"),
+        html.div({"class": "flex w-full"}, SimpleTable(rows=rows)),
+    )
 
 
 @component

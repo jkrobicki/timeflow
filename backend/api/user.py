@@ -91,6 +91,27 @@ async def get_users(
     return result
 
 
+@router.get("/{user_id}")
+async def get_user_by_id(user_id: int, session: Session = Depends(get_session)):
+    statement = (
+        select(
+            AppUser.id,
+            AppUser.username,
+            AppUser.first_name,
+            AppUser.last_name,
+            Role.name.label("role_name"),
+            Team.short_name.label("main_team"),
+            AppUser.start_date,
+            AppUser.is_active,
+        )
+        .select_from(AppUser)
+        .join(Role, AppUser.role_id == Role.id, isouter=True)
+        .join(Team, AppUser.team_id == Team.id, isouter=True)
+    ).where(AppUser.id == user_id)
+    result = session.exec(statement).all()
+    return result
+
+
 @router.put("/{user_id}/")
 async def update_user(
     user_id: int,
