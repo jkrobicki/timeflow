@@ -43,41 +43,56 @@ def timeflow():
 
     if current_page == "Users":
         if user_role == "admin" or user_role == None:
-            current_page_component = users_page(key="users_page")
+            current_page_component = users_page(key="users_page", key_attr="users_page")
     elif current_page == "Roles":
         if user_role == "admin" or user_role == None:
-            current_page_component = roles_page(key="roles_page")
+            current_page_component = roles_page(key="roles_page", key_attr="roles_page")
     elif current_page == "Epics":
         if user_role == "admin" or user_role == None:
-            current_page_component = epics_page(key="epics_page")
+            current_page_component = epics_page(key="epics_page", key_attr="epics_page")
     elif current_page == "Epic Areas":
         if user_role == "admin" or user_role == None:
-            current_page_component = epic_areas_page(key="epic_areas_page")
+            current_page_component = epic_areas_page(
+                key="epic_areas_page", key_attr="epic_areas_page"
+            )
     elif current_page == "Timelogs":
         current_page_component = timelogs_page(
-            key="timelogs_page", app_role=user_role, github_username=github_username
+            key="timelogs_page",
+            key_attr="timelogs_page",
+            app_role=user_role,
+            github_username=github_username,
         )
     elif current_page == "Clients":
         if user_role == "admin" or user_role == None:
-            current_page_component = clients_page(key="clients_page")
+            current_page_component = clients_page(
+                key="clients_page", key_attr="clients_page"
+            )
     elif current_page == "Forecasts":
         if user_role == "admin" or user_role == None:
-            current_page_component = forecasts_page(key="forecasts_page")
+            current_page_component = forecasts_page(
+                key="forecasts_page", key_attr="forecasts_page"
+            )
     elif current_page == "Rates":
         if user_role == "admin" or user_role == None:
-            current_page_component = rates_page(key="rates_page")
+            current_page_component = rates_page(key="rates_page", key_attr="rates_page")
     elif current_page == "Teams":
         if user_role == "admin" or user_role == None:
-            current_page_component = teams_page(key="teams_page")
+            current_page_component = teams_page(key="teams_page", key_attr="teams_page")
     elif current_page == "Sponsors":
         if user_role == "admin" or user_role == None:
-            current_page_component = sponsors_page(key="sponsors_page")
+            current_page_component = sponsors_page(
+                key="sponsors_page", key_attr="sponsors_page"
+            )
     elif current_page == "Capacities":
         if user_role == "admin" or user_role == None:
-            current_page_component = capacities_page(key="capacities_page")
+            current_page_component = capacities_page(
+                key="capacities_page", key_attr="capacities_page"
+            )
     elif current_page == "Demands":
         if user_role == "admin" or user_role == None:
-            current_page_component = demands_page(key="demands_page")
+            current_page_component = demands_page(
+                key="demands_page", key_attr="demands_page"
+            )
     return html.div(
         {"class": "xl:flex w-full"},
         html.meta(

@@ -29,7 +29,7 @@ from .utils import switch_state
 
 
 @component
-def page(app_role: str, github_username: str):
+def page(app_role: str, github_username: str, key_attr: str):
     """
     Timelogs page.
 
@@ -52,7 +52,7 @@ def page(app_role: str, github_username: str):
     admin = True if app_role == "admin" or app_role == None else False
 
     return html.div(
-        {"class": "w-full"},
+        {"class": "w-full", "key": key_attr},
         Row(
             Container(
                 create_timelog_form(
