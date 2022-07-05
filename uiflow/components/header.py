@@ -4,7 +4,9 @@ from .sidebar import Sidebar
 
 
 @component
-def Header(current_page, set_current_page, pages, user_role, title, user_welcome, menu_items):
+def Header(
+    current_page, set_current_page, pages, user_role, title, user_welcome, menu_items
+):
 
     isOpen, set_isOpen = use_state(False)
 
@@ -18,7 +20,10 @@ def Header(current_page, set_current_page, pages, user_role, title, user_welcome
             },
             html.div(
                 {"class": "w-full px-4 flex justify-between items-center py-4 xl:py-6"},
-                html.img({"src": "../static/img/svg/logo.svg"}),
+                html.a(
+                    {"href": "/timeflow"},
+                    html.img({"src": "../static/img/svg/logo.svg"}),
+                ),
                 html.a(
                     {
                         "href": "javascript:void(0)",
@@ -38,7 +43,7 @@ def Header(current_page, set_current_page, pages, user_role, title, user_welcome
                 html.a({"href": "/logout"}, "Log Out"),
                 title,
                 user_welcome,
-                menu_items
+                menu_items,
             ),
         )
     )
