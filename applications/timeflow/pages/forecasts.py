@@ -24,15 +24,12 @@ from ..data.epics import client_name_by_epic_id, epics_names
 
 
 @component
-def page(app_role: str, github_username: str):
+def page():
     year_month, set_year_month = use_state("")
     days, set_days = use_state("")
     user_id, set_user_id = use_state("")
     epic_id, set_epic_id = use_state("")
     is_event, set_is_event = use_state(False)
-    admin = True if app_role == "admin" or app_role == None else False
-    if not admin:
-        user_id = get_user_id_by_username(github_username)
     return html.div(
         {"class": "w-full"},
         Row(
@@ -48,8 +45,6 @@ def page(app_role: str, github_username: str):
                     set_epic_id,
                     is_event,
                     set_is_event,
-                    admin,
-                    github_username,
                 ),
             ),
             bg="bg-filter-block-bg",
@@ -78,8 +73,6 @@ def create_forecast_form(
     set_epic_id,
     is_event,
     set_is_event,
-    admin,
-    github_username,
 ):
     """Generates forecast form to submit forecasts and filter forecast by month user and epic
 
@@ -129,17 +122,13 @@ def create_forecast_form(
         set_post_response(response)
         set_is_event(not is_event)
 
-    if admin:
-        selector_user_id = Selector(
-            set_value=set_user_id,
-            set_sel_value2=set_post_response,
-            sel_value2="",
-            data=user_full_name(),
-            width="16%",
-        )
-    else:
-        user_id = get_user_id_by_username(github_username)
-        selector_user_id = display_value(user_id, github_username)
+    selector_user_id = Selector(
+        set_value=set_user_id,
+        set_sel_value2=set_post_response,
+        sel_value2="",
+        data=user_full_name(),
+        width="16%",
+    )
 
     selector_epic_id = Selector(
         set_value=set_epic_id,
