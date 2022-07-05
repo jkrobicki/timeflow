@@ -5,13 +5,13 @@ from sqlmodel import SQLModel, Session, create_engine
 from sqlmodel.pool import StaticPool
 from ..api.client import get_session
 
+
 @pytest.mark.order(12)
 def test_post_capacity(client):
     response = client.post(
         "/api/capacities/",
         json={
             "user_id": 1,
-            "team_id": 1,
             "year": 2022,
             "month": 3,
             "days": 18,
@@ -25,7 +25,6 @@ def test_post_capacity(client):
     assert data == {
         "id": 1,
         "user_id": 1,
-        "team_id": 1,
         "year": 2022,
         "month": 3,
         "days": 18,
@@ -42,7 +41,6 @@ def test_get_capacities(client):
         {
             "id": 1,
             "user_id": 1,
-            "team_id": 1,
             "year": 2022,
             "month": 3,
             "days": 18,
