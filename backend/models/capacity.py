@@ -8,7 +8,6 @@ class Capacity(SQLModel, table=True):
 
     id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
     user_id: int = Field(foreign_key="app_db.appuser.id")
-    team_id: int = Field(foreign_key="app_db.team.id")
     year: int
     month: int
     days: int
