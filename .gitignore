@@ -160,5 +160,3 @@ certs
 # Files
 *.parquet
 
-# Migrations
-versions/
