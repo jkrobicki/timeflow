@@ -2,7 +2,7 @@ from idom import html, use_state, component, event
 
 from .utils import switch_state
 
-from uiflow.components.input import Input, Selector, display_value
+from uiflow.components.input import Input, Selector, display_value, InputMonth
 from uiflow.components.layout import Row, Column, Container
 
 from uiflow.components.table import SimpleTable
@@ -97,11 +97,8 @@ def create_capacity_form(
         user_id = get_user_id_by_username(github_username)
         selector_user_id = display_value(user_id, github_username)
 
-    selector_year_month = Selector(
+    input_year_month = InputMonth(
         set_value=set_year_month,
-        data=year_month_dict_list(),
-        width="24%",
-        md_width="24%",
     )
 
     selector_days = Selector(
@@ -118,7 +115,7 @@ def create_capacity_form(
         Column(
             Row(
                 selector_user_id,
-                selector_year_month,
+                input_year_month,
                 selector_days,
                 justify="justify-between",
             ),
