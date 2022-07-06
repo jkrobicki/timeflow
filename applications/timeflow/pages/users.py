@@ -19,11 +19,11 @@ from ..data.common import year_month_dict_list, days_in_month
 
 
 @component
-def page():
+def page(key_attr: str):
     # Used for refreshing page on event
     is_event, set_is_event = use_state(True)
     return html.div(
-        {"class": "w-full"},
+        {"class": "w-full", "key": key_attr},
         Container(
             Column(list_users(is_event)),
             Column(

@@ -25,7 +25,7 @@ from ..data.common import year_month_dict_list, days_in_month
 
 
 @component
-def page():
+def page(key_attr: str):
     short_name, set_short_name = use_state("")
     name, set_name = use_state("")
     team_id, set_team_id = use_state("")
@@ -36,7 +36,7 @@ def page():
     activ_epic, set_activ_epic = use_state("")
     is_event, set_is_event = use_state(True)
     return html.div(
-        {"class": "w-full"},
+        {"class": "w-full", "key": key_attr},
         Row(
             Container(
                 create_epic_form(

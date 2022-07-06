@@ -25,7 +25,7 @@ from .utils import month_start_to_str, far_date, date_str_to_date
 
 
 @component
-def page():
+def page(key_attr: str):
     user_id, set_user_id = use_state("")
     client_id, set_client_id = use_state("")
     month_start, set_month_start = use_state("")
@@ -33,7 +33,7 @@ def page():
     updated_rate, set_updated_rate = use_state("")
     on_submit, set_on_submit = use_state(True)
     return html.div(
-        {"class": "w-full"},
+        {"class": "w-full", "key": key_attr},
         Row(
             Container(
                 create_rates_form(

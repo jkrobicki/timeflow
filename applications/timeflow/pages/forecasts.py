@@ -24,7 +24,7 @@ from ..config import base_url
 
 
 @component
-def page():
+def page(key_attr: str):
     year_month, set_year_month = use_state("")
     days, set_days = use_state("")
     user_id, set_user_id = use_state("")
@@ -32,7 +32,7 @@ def page():
     deleted_forecast, set_deleted_forecast = use_state("")
     on_submit, set_on_submit = use_state(True)
     return html.div(
-        {"class": "w-full"},
+        {"class": "w-full", "key": key_attr},
         Row(
             Container(
                 create_forecast_form(

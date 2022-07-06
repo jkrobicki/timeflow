@@ -9,7 +9,6 @@ from datetime import datetime
 
 class Capacity(TypedDict):
     user_id: int
-    team_id: int
     year: int
     month: int
     days: int
@@ -18,10 +17,9 @@ class Capacity(TypedDict):
     is_locked: bool
 
 
-def to_capacity(user_id: int, team_id: int, year_month: str, days: int) -> bool:
+def to_capacity(user_id: int, year_month: str, days: int) -> bool:
     data = Capacity(
         user_id=user_id,
-        team_id=team_id,
         year=int(year_month[:4]),
         month=int(year_month[5:7]),
         days=days,
@@ -46,7 +44,6 @@ def capacities_all():
         d = {
             "capacity id": item["capacity_id"],
             "user": item["last_name"] + " " + item["first_name"],
-            "team": item["team_name"],
             "year": item["year"],
             "month": item["month"],
             "capacity days": item["days"],
@@ -63,72 +60,12 @@ def capacities_by_user(user_id: int) -> List[Dict]:
         d = {
             "capacity id": item["capacity_id"],
             "user": item["last_name"] + " " + item["first_name"],
-            "team": item["team_name"],
             "year": item["year"],
             "month": item["month"],
             "capacity days": item["days"],
         }
         rows.append(d)
     return rows
-
-
-def capacities_by_user_team(user_id: int, team_id: int) -> List[Dict]:
-    api = f"{base_url}/api/capacities/users/{user_id}/teams/{team_id}/"
-    response = requests.get(api)
-    rows = []
-    for item in response.json():
-        d = {
-            "capacity id": item["capacity_id"],
-            "user": item["last_name"] + " " + item["first_name"],
-            "team": item["team_name"],
-            "year": item["year"],
-            "month": item["month"],
-            "capacity days": item["days"],
-        }
-        rows.append(d)
-    return rows
-
-
-def capacities_by_team(team_id: int) -> List[Dict]:
-    api = f"{base_url}/api/capacities/teams/{team_id}/"
-    response = requests.get(api)
-    rows = []
-    for item in response.json():
-        d = {
-            "capacity id": item["capacity_id"],
-            "user": item["last_name"] + " " + item["first_name"],
-            "team": item["team_name"],
-            "year": item["year"],
-            "month": item["month"],
-            "capacity days": item["days"],
-        }
-        rows.append(d)
-    return rows
-
-
-def capacities_by_user_team_year_month(user_id, team_id, year_month) -> List[Dict]:
-    if user_id != "" and team_id != "" and year_month != "":
-        api = f"{base_url}/api/capacities/users/{user_id}/teams/{team_id}/years_months/{year_month}/"
-        params = {
-            "user_id": user_id,
-            "team_id": team_id,
-            "year": int(year_month[:4]),
-            "month": int(year_month[5:7]),
-        }
-
-        response = requests.get(api, params=params)
-        rows = []
-        for item in response.json():
-            d = {
-                "capacity id": item["capacity_id"],
-                "user": item["user_username"],
-                "team": item["team_name"],
-                "year": item["year"],
-                "month": item["month"],
-                "capacity days": item["days"],
-            }
-            rows.append(d)
-        return rows
 
 
 def capacity_days() -> List[Dict]:

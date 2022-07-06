@@ -21,7 +21,7 @@ from ..data.users import users_names
 
 
 @component
-def page():
+def page(key_attr: str):
     name, set_name = use_state("")
     submitted_name, set_submitted_name = use_state("")
     short_name, set_short_name = use_state("")
@@ -31,7 +31,7 @@ def page():
     _, set_activ_name = use_state("")
 
     return html.div(
-        {"class": "w-full"},
+        {"class": "w-full", "key": key_attr},
         Row(
             create_team_form(
                 name,
