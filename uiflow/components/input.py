@@ -198,6 +198,28 @@ def InputDate(set_value):
 
 
 @component
+def InputMonth(
+    set_value,
+    set_sel_value: Callable = None,
+    sel_value: Any = None,
+):
+    @event()
+    async def on_change(event):
+        set_value(event["target"]["value"])
+        if (set_sel_value and sel_value) != None:
+            set_sel_value(sel_value)
+        return True
+
+    return html.input(
+        {
+            "class": "py-3 pl-3 w-full border-[1px] sm:w-[48%] md:w-[121px] bg-nav rounded-[3px] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-[14%]",
+            "type": "month",
+            "onChange": on_change,
+        },
+    )
+
+
+@component
 def display_value(id, value):
     """
     Display a value in a selector-like style.

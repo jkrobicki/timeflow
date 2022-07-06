@@ -68,6 +68,28 @@ def capacities_by_user(user_id: int) -> List[Dict]:
     return rows
 
 
+def capacities_by_user_year_month(user_id, year_month) -> List[Dict]:
+    if user_id != "" and year_month != "":
+        api = f"{base_url}/api/capacities/users/{user_id}"
+        params = {
+            "year": int(year_month[:4]),
+            "month": int(year_month[5:7]),
+        }
+
+        response = requests.get(api, params=params)
+        rows = []
+        for item in response.json():
+            d = {
+                "capacity id": item["capacity_id"],
+                "user": item["last_name"] + " " + item["first_name"],
+                "year": item["year"],
+                "month": item["month"],
+                "capacity days": item["days"],
+            }
+            rows.append(d)
+        return rows
+
+
 def capacity_days() -> List[Dict]:
     days = [Select(value="", display_value="select capacity days")]
     for item in capacity_days_list:

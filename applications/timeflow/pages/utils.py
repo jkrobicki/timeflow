@@ -35,7 +35,7 @@ for n in days_in_month_nr:
 
 
 capacity_days_list = []
-capacity_days_nr = range(1, 21)
+capacity_days_nr = range(1, 29)
 for n in capacity_days_nr:
     capacity_days_list.append(n)
 
