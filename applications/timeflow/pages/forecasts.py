@@ -12,6 +12,7 @@ from ..data.common import (
 from ..data.forecasts import (
     forecasts_all,
     forecasts_by_user,
+    forecasts_by_user_year_month,
     forecast_days,
     to_forecast,
     forecast_deletion,
@@ -52,7 +53,7 @@ def page(key_attr: str):
         Container(capacities_table(user_id, year_month)),
         Container(
             Column(
-                Row(forecasts_table(user_id)),
+                Row(forecasts_table(user_id, year_month)),
             )
         ),
         Container(
@@ -222,7 +223,7 @@ def capacities_table(user_id, year_month):
 
 
 @component
-def forecasts_table(user_id):
+def forecasts_table(user_id, year_month):
     """Generates a table component with forecast days by year and month
 
     Args:
@@ -235,7 +236,9 @@ def forecasts_table(user_id):
     """
 
     rows = forecasts_all()
-    if user_id != "":
+    if user_id != "" and year_month != "":
+        rows = forecasts_by_user_year_month(user_id, year_month)
+    elif user_id != "":
         rows = forecasts_by_user(user_id)
     return Column(
         H3("Selected forecasts"),

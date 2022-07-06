@@ -74,8 +74,10 @@ async def get_forecasts(session: Session = Depends(get_session)):
         .select_from(Forecast)
         .join(AppUser)
         .join(Epic)
-        .order_by(Forecast.year.desc())
-        .order_by(Forecast.month.desc())
+        .where(Forecast.year >= datetime.now().year)
+        .where(Forecast.month > datetime.now().month)
+        .order_by(Forecast.year.asc())
+        .order_by(Forecast.month.asc())
     )
     result = session.exec(statement).all()
     return result
@@ -83,7 +85,10 @@ async def get_forecasts(session: Session = Depends(get_session)):
 
 @router.get("/users/{user_id}")
 async def get_forecasts_by_user(
-    user_id: str = None, session: Session = Depends(get_session)
+    user_id: str = None,
+    session: Session = Depends(get_session),
+    year: str = None,
+    month: str = None,
 ):
     """
     Get forecasts from a given user.
@@ -111,10 +116,20 @@ async def get_forecasts_by_user(
         .join(AppUser)
         .join(Epic)
         .where(Forecast.user_id == user_id)
-        .order_by(Forecast.year.desc())
-        .order_by(Forecast.month.desc())
     )
-    result = session.exec(statement).all()
+    if year != None and month != None:
+        final_statement = statement.where(Forecast.year == year).where(
+            Forecast.month == month
+        )
+    else:
+        final_statement = (
+            statement.where(Forecast.year >= datetime.now().year)
+            .where(Forecast.month > datetime.now().month)
+            .order_by(Forecast.year.asc())
+            .order_by(Forecast.month.asc())
+        )
+
+    result = session.exec(final_statement).all()
     return result
 
 
