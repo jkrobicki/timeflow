@@ -24,14 +24,14 @@ from ..data.epics import client_name_by_epic_id, epics_names
 
 
 @component
-def page():
+def page(key_attr: str):
     year_month, set_year_month = use_state("")
     days, set_days = use_state("")
     user_id, set_user_id = use_state("")
     epic_id, set_epic_id = use_state("")
     is_event, set_is_event = use_state(False)
     return html.div(
-        {"class": "w-full"},
+        {"class": "w-full", "key": key_attr},
         Row(
             Container(
                 create_forecast_form(

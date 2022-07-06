@@ -88,7 +88,7 @@ async def organizations(request: Request):
     if redirect_info["is_authorized"] == True:
         to_user(
             username=username,
-            first_name="John",
+            first_name="John" + " " + f"{username}",
             last_name="Doe",
             email=email,
             role_id="0",

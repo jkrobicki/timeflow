@@ -10,35 +10,28 @@ from uiflow.components.controls import Button
 
 from ..data.common import year_month_dict_list
 from ..data.capacities import (
-    capacities_by_team,
     capacity_days,
     to_capacity,
     capacity_deletion,
     capacities_all,
     capacities_by_user,
-    capacities_by_user_team,
-    capacities_by_team,
 )
 from ..data.users import users_names
-from ..data.teams import teams_id_name
 
 
 @component
-def page():
+def page(key_attr: str):
     """Creates a page for capacities"""
     user_id, set_user_id = use_state("")
-    team_id, set_team_id = use_state("")
     year_month, set_year_month = use_state("")
     days, set_days = use_state("")
     is_event, set_is_event = use_state(False)
     return html.div(
-        {"class": "w-full"},
+        {"class": "w-full", "key": key_attr},
         Row(
             create_capacity_form(
                 user_id,
                 set_user_id,
-                team_id,
-                set_team_id,
                 year_month,
                 set_year_month,
                 days,
@@ -50,7 +43,7 @@ def page():
         ),
         Container(
             Column(
-                Row(capacities_table(user_id, team_id)),
+                Row(capacities_table(user_id)),
             ),
             Row(delete_capacity(is_event, set_is_event)),
         ),
@@ -61,8 +54,6 @@ def page():
 def create_capacity_form(
     user_id,
     set_user_id,
-    team_id,
-    set_team_id,
     year_month,
     set_year_month,
     days,
@@ -70,7 +61,7 @@ def create_capacity_form(
     is_event,
     set_is_event,
 ):
-    """Generates capacity form to submit capacities and filter capacity by month user and team"""
+    """Generates capacity form to submit capacities and filter capacity by month user."""
 
     @event(prevent_default=True)
     async def handle_submit(event):
@@ -78,7 +69,6 @@ def create_capacity_form(
         schema:
         {
             "user_id": 0,
-            "team_id": 0,
             "year": 0,
             "month": 0,
             "days": 0,
@@ -88,7 +78,6 @@ def create_capacity_form(
         }"""
         to_capacity(
             user_id=user_id,
-            team_id=team_id,
             year_month=year_month,
             days=days,
         )
@@ -98,9 +87,6 @@ def create_capacity_form(
         set_value=set_user_id, data=users_names(), width="24%", md_width="24%"
     )
 
-    selector_team_id = Selector(
-        set_value=set_team_id, data=teams_id_name(), width="24%", md_width="24%"
-    )
     selector_year_month = Selector(
         set_value=set_year_month,
         data=year_month_dict_list(),
@@ -113,7 +99,7 @@ def create_capacity_form(
     )
 
     is_disabled = True
-    if user_id != "" and team_id != "" and year_month != "" and days != "":
+    if user_id != "" and year_month != "" and days != "":
         is_disabled = False
 
     btn = Button(is_disabled, handle_submit, label="Submit")
@@ -122,7 +108,6 @@ def create_capacity_form(
         Column(
             Row(
                 selector_user_id,
-                selector_team_id,
                 selector_year_month,
                 selector_days,
                 justify="justify-between",
@@ -133,14 +118,10 @@ def create_capacity_form(
 
 
 @component
-def capacities_table(user_id, team_id):
-    """Generates a table component with capacity days by year month user and team"""
-    if (user_id and team_id) != "":
-        rows = capacities_by_user_team(user_id, team_id)
-    elif user_id != "":
+def capacities_table(user_id):
+    """Generates a table component with capacity days by year month user."""
+    if user_id != "":
         rows = capacities_by_user(user_id)
-    elif team_id != "":
-        rows = capacities_by_team(team_id)
     else:
         rows = capacities_all()
     return html.div({"class": "flex w-full"}, SimpleTable(rows=rows))

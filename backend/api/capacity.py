@@ -4,7 +4,6 @@ from ..models.capacity import Capacity
 from sqlmodel import Session, select, and_
 from sqlalchemy.exc import NoResultFound
 from ..models.user import AppUser
-from ..models.team import Team
 
 router = APIRouter(prefix="/api/capacities", tags=["capacity"])
 
@@ -25,7 +24,6 @@ async def post_capacity(*, capacity: Capacity, session: Session = Depends(get_se
     statement = select(Capacity).where(
         and_(
             Capacity.user_id == capacity.user_id,
-            Capacity.team_id == capacity.team_id,
             capacity.year == capacity.year,
             Capacity.month == capacity.month,
         )
@@ -60,26 +58,19 @@ async def get_capacities(
         Whether or not the capacity is locked or not.
     user_id : int
         User id of the user in question.
-    team_id : int
-        Team id of the user's team.
     month : int
         Month of capacity in question.
     year : int
         Year of capacity in question.
     """
-    statement = (
-        select(
-            Capacity.id.label("capacity_id"),
-            AppUser.last_name,
-            AppUser.first_name,
-            Team.name.label("team_name"),
-            Capacity.year,
-            Capacity.month,
-            Capacity.days,
-        )
-        .join(AppUser, Capacity.user_id == AppUser.id)
-        .join(Team, Capacity.team_id == Team.id)
-    )
+    statement = select(
+        Capacity.id.label("capacity_id"),
+        AppUser.last_name,
+        AppUser.first_name,
+        Capacity.year,
+        Capacity.month,
+        Capacity.days,
+    ).join(AppUser, Capacity.user_id == AppUser.id)
     if (user_id and month and year) != None:
         statement_final = (
             statement.where(Capacity.user_id == user_id)
@@ -112,88 +103,15 @@ async def get_capacities_user(user_id: int, session: Session = Depends(get_sessi
             Capacity.id.label("capacity_id"),
             AppUser.first_name,
             AppUser.last_name,
-            Team.name.label("team_name"),
             Capacity.year,
             Capacity.month,
             Capacity.days,
         )
         .select_from(Capacity)
         .join(AppUser, Capacity.user_id == AppUser.id)
-        .join(Team, Capacity.team_id == Team.id)
         .where(Capacity.user_id == user_id)
     )
 
-    result = session.exec(statement).all()
-    return result
-
-
-@router.get("/teams/{team_id}/")
-async def get_capacity_team(team_id: int, session: Session = Depends(get_session)):
-    """
-    Get list of capacities by team_id.
-
-    Parameters
-    ----------
-    session : Session
-        SQL session that is to be used to get a list of the epic areas.
-        Defaults to creating a dependency on the running SQL model session.
-    team_id : int
-        Team id of the user's team.
-    """
-
-    statement = (
-        select(
-            Capacity.id.label("capacity_id"),
-            AppUser.last_name,
-            AppUser.first_name,
-            Team.name.label("team_name"),
-            Capacity.year,
-            Capacity.month,
-            Capacity.days,
-        )
-        .select_from(Capacity)
-        .join(AppUser, Capacity.user_id == AppUser.id)
-        .join(Team, Capacity.team_id == Team.id)
-        .where(Capacity.team_id == team_id)
-    )
-    result = session.exec(statement).all()
-    return result
-
-
-@router.get("/users/{user_id}/teams/{team_id}/")
-async def get_capacities_user_team(
-    user_id: int, team_id: int, session: Session = Depends(get_session)
-):
-    """
-    Get list of capacities by user_id and team_id.
-
-    Parameters
-    ----------
-    session : Session
-        SQL session that is to be used to get a list of the epic areas.
-        Defaults to creating a dependency on the running SQL model session.
-    user_id : int
-        User id of the user in question.
-    team_id : int
-        Team id of the user's team.
-    """
-
-    statement = (
-        select(
-            Capacity.id.label("capacity_id"),
-            AppUser.last_name,
-            AppUser.first_name,
-            Team.name.label("team_name"),
-            Capacity.year,
-            Capacity.month,
-            Capacity.days,
-        )
-        .select_from(Capacity)
-        .join(AppUser, Capacity.user_id == AppUser.id)
-        .join(Team, Capacity.team_id == Team.id)
-        .where(Capacity.user_id == user_id)
-        .where(Capacity.team_id == team_id)
-    )
     result = session.exec(statement).all()
     return result
 

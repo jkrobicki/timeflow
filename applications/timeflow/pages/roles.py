@@ -18,7 +18,7 @@ from ..data.roles import (
 
 
 @component
-def page():
+def page(key_attr: str):
     name, set_name = use_state("")
     submitted_name, set_submitted_name = use_state("")
     short_name, set_short_name = use_state("")
@@ -27,7 +27,7 @@ def page():
     deact_role, set_deact_role = use_state("")
     activ_role, set_activ_role = use_state("")
     return html.div(
-        {"class": "w-full"},
+        {"class": "w-full", "key": key_attr},
         Row(
             create_role_form(
                 name,

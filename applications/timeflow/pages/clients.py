@@ -16,26 +16,26 @@ from .utils import switch_state
 
 
 @component
-def page():
+def page(key_attr: str):
     name, set_name = use_state("")
     submitted_name, set_submitted_name = use_state("")
     deleted_name, set_deleted_name = use_state("")
     is_event, set_is_event = use_state(True)
-    return FlexContainer(
-        Column(width="3/12"),
-        Column(
+    return html.div(
+        {"class": "w-full", "key": key_attr},
+        Container(
             Row(
                 create_client_form(name, set_name, set_submitted_name),
                 bg="bg-filter-block-bg",
             ),
-            Column(
-                Row(list_clients(submitted_name)),
+            Container(
+                Column(
+                    Row(list_clients(submitted_name)),
+                )
             ),
             Row(deactivate_client(is_event, set_is_event)),
             Row(activate_client(is_event, set_is_event)),
-            width="6/12",
         ),
-        Column(width="3/12"),
     )
 
 

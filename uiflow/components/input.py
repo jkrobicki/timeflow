@@ -81,6 +81,7 @@ def Selector(
     sel_value: Any = None,
     set_sel_value2: Callable = None,
     sel_value2: Any = None,
+    key_attr: str = None,
 ):
     options = []
     for row in data:
@@ -96,9 +97,11 @@ def Selector(
             set_sel_value2(sel_value2)
         return True
 
+    # changing key_attr value reloads the component
     return html.div(
         {
-            "class": f"block relative w-full sm:w-[48%] md:w-[{md_width}] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:border-t-appearance before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-[{width}] 2xl:mr-0"
+            "class": f"block relative w-full sm:w-[48%] md:w-[{md_width}] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:border-t-appearance before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-[{width}] 2xl:mr-0",
+            "key": key_attr,
         },
         html.select(
             {
