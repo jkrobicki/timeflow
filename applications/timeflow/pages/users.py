@@ -10,6 +10,7 @@ from ..data.users import (
     users_active,
     update_user,
     users_names,
+    users_names_str,
     activate_user,
     deactivate_user,
 )
@@ -51,6 +52,7 @@ def update_users(is_event, set_is_event):
     new_role_id, set_new_role_id = use_state("")
     new_team_id, set_new_team_id = use_state("")
     new_start_date, set_new_start_date = use_state("")
+    new_supervisor, set_new_supervisor = use_state("")
     update_user_id, set_update_user_id = use_state("")
 
     @event(prevent_default=True)
@@ -62,6 +64,7 @@ def update_users(is_event, set_is_event):
             new_first_name=new_first_name,
             new_last_name=new_last_name,
             new_start_date=new_start_date,
+            new_supervisor=new_supervisor,
         )
         # Changes state triggering refresh on update event
         switch_state(value=is_event, set_value=set_is_event)
@@ -95,6 +98,13 @@ def update_users(is_event, set_is_event):
         md_width="48%",
     )
 
+    selector_supervisor = Selector(
+        set_new_supervisor,
+        data=users_names_str(label="select new supervisor"),
+        width="48%",
+        md_width="48%",
+    )
+
     selector_date = InputDate(set_new_start_date)
 
     is_disabled = False
@@ -103,7 +113,7 @@ def update_users(is_event, set_is_event):
         Row(selector_user),
         Row(inp_first_name, inp_last_name, justify="justify-between"),
         Row(selector_role, selector_team, justify="justify-between"),
-        Row(selector_date),
+        Row(selector_date, selector_supervisor, justify="justify-between"),
         Row(btn),
     )
 

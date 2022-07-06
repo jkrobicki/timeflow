@@ -54,7 +54,6 @@ def SimpleTable(rows: List[Any]):
             {"class": "overflow-auto py-6 text-xs"},
             html.table({"class": "w-[905px] mx-auto xl:w-full"}, thead, tbody),
         )
-
         return html.div(
             {"class": "flex flex-col w-full space-y-2"},
             table,
@@ -75,32 +74,42 @@ def SimpleTable(rows: List[Any]):
 
 
 @component
-def SubmitTable(rows: List[Any]):
-    trs = []
-    for row in rows[-5:]:
-        tds = []
-        for k in row:
-            value = row[k]
-            tds.append(html.td({"class": "p-4 w-full"}, value))
-        trs.append(html.tr({"class": "flex w-full mb-4"}, tds))
+def DisplayTable(rows: List[Any]):
+    try:
+        trs = []
+        for row in rows:
+            tds = []
 
-    ths = [html.th({"class": thClass}, header) for header in rows[0].keys()]
-    thead = html.thead(
-        {"class": ""},
-        html.tr({"class": "bg-table-head"}, ths),
-    )
-    tbody = html.tbody(
-        {
-            "class": "flex flex-col bg-secondary-200 items-center justify-between overflow-y-scroll w-full"
-        },
-        trs,
-    )
-    table = html.table({"class": "w-[905px] mx-auto xl:w-full"}, thead, tbody)
+            for k in row:
+                value = row[k]
+                tds.append(html.td({"class": tdClassActive}, value))
 
-    return html.div(
-        {"class": "flex flex-col w-full space-y-2"},
-        table,
-    )
+            trs.append(
+                html.tr(
+                    {"class": trClass},
+                    tds,
+                )
+            )
+
+        ths = [html.th({"class": thClass}, header) for header in rows[0].keys()]
+        thead = html.thead(
+            html.tr({"class": "bg-table-head"}, ths),
+        )
+        tbody = html.tbody(
+            trs,
+        )
+        table = html.div(
+            {"class": "overflow-auto py-6 text-xs"},
+            html.table({"class": "w-[905px] mx-auto xl:w-full"}, thead, tbody),
+        )
+        return html.div(
+            {"class": "flex flex-col w-full space-y-2"},
+            table,
+        )
+    except TypeError:
+        return html.div()
+    except IndexError:
+        return html.div()
 
 
 @component

@@ -66,6 +66,7 @@ async def get_users(
             Role.name.label("role_name"),
             Team.short_name.label("main_team"),
             AppUser.start_date,
+            AppUser.supervisor,
             AppUser.is_active,
         )
         .select_from(AppUser)
@@ -91,6 +92,27 @@ async def get_users(
     return result
 
 
+@router.get("/{user_id}")
+async def get_user_by_id(user_id: int, session: Session = Depends(get_session)):
+    statement = (
+        select(
+            AppUser.id,
+            AppUser.username,
+            AppUser.first_name,
+            AppUser.last_name,
+            Role.name.label("role_name"),
+            Team.short_name.label("main_team"),
+            AppUser.start_date,
+            AppUser.is_active,
+        )
+        .select_from(AppUser)
+        .join(Role, AppUser.role_id == Role.id, isouter=True)
+        .join(Team, AppUser.team_id == Team.id, isouter=True)
+    ).where(AppUser.id == user_id)
+    result = session.exec(statement).all()
+    return result
+
+
 @router.put("/{user_id}/")
 async def update_user(
     user_id: int,
@@ -102,6 +124,7 @@ async def update_user(
     new_team_id: Optional[int] = None,
     new_role_id: Optional[int] = None,
     new_start_date: Optional[date] = None,
+    new_supervisor: Optional[str] = None,
     session: Session = Depends(get_session),
 ):
     """
@@ -149,6 +172,8 @@ async def update_user(
         user_to_update.role_id = new_role_id
     if new_start_date != None:
         user_to_update.start_date = new_start_date
+    if new_supervisor != None:
+        user_to_update.supervisor = new_supervisor
     user_to_update.updated_at = datetime.now()
     session.add(user_to_update)
     session.commit()

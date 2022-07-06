@@ -5,8 +5,8 @@ import requests
 from datetime import datetime
 
 from uiflow.components.input import Input, Selector
-from uiflow.components.layout import Row, Column, Container
-from uiflow.components.table import SimpleTable, SubmitTable
+from uiflow.components.layout import Row, Column, FlexContainer, Container
+from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
 
 from ..config import base_url
