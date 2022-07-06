@@ -1,26 +1,27 @@
 from idom import html, use_state, component, event
 
-from uiflow.components.input import Input, Selector
+from uiflow.components.input import Input, Selector, display_value, InputMonth
 from uiflow.components.layout import Row, Column, Container
-from uiflow.components.table import SimpleTable
+from uiflow.components.table import SimpleTable, DisplayTable
 from uiflow.components.controls import Button
+from uiflow.components.heading import H3, H4
 from ..data.common import (
     user_full_name,
-    year_month_dict_list,
 )
 
 from ..data.forecasts import (
     forecasts_all,
     forecasts_by_user,
+    forecasts_by_user_year_month,
     forecast_days,
     to_forecast,
     forecast_deletion,
 )
-from ..data.epics import client_name_by_epic_id
+from ..data.capacities import capacities_by_user_year_month
 
-from ..data.epics import epics_names
+from ..data.users import get_user_id_by_username, user_full_name_by_id
 
-from ..config import base_url
+from ..data.epics import client_name_by_epic_id, epics_names
 
 
 @component
@@ -29,8 +30,7 @@ def page(key_attr: str):
     days, set_days = use_state("")
     user_id, set_user_id = use_state("")
     epic_id, set_epic_id = use_state("")
-    deleted_forecast, set_deleted_forecast = use_state("")
-    on_submit, set_on_submit = use_state(True)
+    is_event, set_is_event = use_state(False)
     return html.div(
         {"class": "w-full", "key": key_attr},
         Row(
@@ -44,19 +44,20 @@ def page(key_attr: str):
                     set_user_id,
                     epic_id,
                     set_epic_id,
-                    on_submit,
-                    set_on_submit,
+                    is_event,
+                    set_is_event,
                 ),
             ),
             bg="bg-filter-block-bg",
         ),
+        Container(capacities_table(user_id, year_month)),
         Container(
             Column(
-                Row(forecasts_table(user_id)),
+                Row(forecasts_table(user_id, year_month)),
             )
         ),
         Container(
-            Row(delete_forecast(set_deleted_forecast)),
+            Row(delete_forecast(is_event, set_is_event)),
         ),
     )
 
@@ -71,8 +72,8 @@ def create_forecast_form(
     set_user_id,
     epic_id,
     set_epic_id,
-    on_submit,
-    set_on_submit,
+    is_event,
+    set_is_event,
 ):
     """Generates forecast form to submit forecasts and filter forecast by month user and epic
 
@@ -93,6 +94,7 @@ def create_forecast_form(
     Returns:
         _type_: _description_
     """
+    post_response, set_post_response = use_state("")
 
     @event(prevent_default=True)
     async def handle_submit(event):
@@ -111,36 +113,43 @@ def create_forecast_form(
         year = ym[:4]
         month = ym[5:7]
 
-        to_forecast(
+        response = to_forecast(
             user_id=user_id,
             epic_id=epic_id,
             days=days,
             month=month,
             year=year,
         )
-        if on_submit:
-            set_on_submit(False)
-        else:
-            set_on_submit(True)
+        set_post_response(response)
+        set_is_event(not is_event)
 
     selector_user_id = Selector(
-        set_value=set_user_id, data=user_full_name(), width="16%"
+        set_value=set_user_id,
+        set_sel_value2=set_post_response,
+        sel_value2="",
+        data=user_full_name(),
+        width="16%",
     )
 
     selector_epic_id = Selector(
         set_value=set_epic_id,
+        set_sel_value2=set_post_response,
+        sel_value2="",
         data=epics_names(is_active=True),
         width="16%",
     )
-    display_client = display_value(epic_id)
-    selector_year_month = Selector(
-        set_value=set_year_month,
-        data=year_month_dict_list(),
-        width="16%",
+    display_client = display_value_by_epic(epic_id)
+
+    input_date = InputMonth(
+        set_year_month,
+        set_post_response,
+        "",
     )
 
     selector_days = Selector(
         set_value=set_days,
+        set_sel_value2=set_post_response,
+        sel_value2="",
         data=forecast_days(),
         width="16%",
     )
@@ -152,6 +161,7 @@ def create_forecast_form(
     btn = Button(is_disabled, handle_submit, label="Submit")
 
     return Column(
+        H3("Submit forecast"),
         html.div(
             {
                 "class": "flex flex-wrap w-full justify-between items-center 2xl:justify-between"
@@ -159,15 +169,16 @@ def create_forecast_form(
             selector_user_id,
             selector_epic_id,
             display_client,
-            selector_year_month,
+            input_date,
             selector_days,
             btn,
-        )
+        ),
+        H4(post_response),
     )
 
 
 @component
-def display_value(epic_id):
+def display_value_by_epic(epic_id):
     client = client_name_by_epic_id(epic_id)
     if epic_id == "":
         return html.div(
@@ -189,7 +200,30 @@ def display_value(epic_id):
 
 
 @component
-def forecasts_table(user_id):
+def capacities_table(user_id, year_month):
+    rows = capacities_by_user_year_month(user_id, year_month)
+    displayed = H4("Select user and month to see a table")
+    if user_id != "" and year_month != "":
+        if rows == []:
+            full_user_name = user_full_name_by_id(user_id)
+            rows = []
+            d = {
+                "capacity id": "null",
+                "user": full_user_name,
+                "year": year_month[:4],
+                "month": year_month[5:7],
+                "capacity days": "null",
+            }
+            rows.append(d)
+        displayed = html.div({"class": "flex w-full"}, DisplayTable(rows=rows))
+    return Column(
+        H3("Users capacity per month"),
+        displayed,
+    )
+
+
+@component
+def forecasts_table(user_id, year_month):
     """Generates a table component with forecast days by year and month
 
     Args:
@@ -200,19 +234,25 @@ def forecasts_table(user_id):
     Returns:
         list of filtered forecasts
     """
+
     rows = forecasts_all()
-    if user_id != "":
+    if user_id != "" and year_month != "":
+        rows = forecasts_by_user_year_month(user_id, year_month)
+    elif user_id != "":
         rows = forecasts_by_user(user_id)
-    return html.div({"class": "flex w-full"}, SimpleTable(rows=rows))
+    return Column(
+        H3("Selected forecasts"),
+        html.div({"class": "flex w-full"}, SimpleTable(rows=rows)),
+    )
 
 
 @component
-def delete_forecast(set_deleted_forecast):
+def delete_forecast(is_event, set_is_event):
     forecast_to_delete, set_forecast_to_delete = use_state("")
 
     def handle_delete(event):
         forecast_deletion(forecast_to_delete)
-        set_deleted_forecast(forecast_to_delete)
+        set_is_event(not is_event)
 
     inp_forecast = Input(
         set_value=set_forecast_to_delete, label="forecast id to delete", width="full"

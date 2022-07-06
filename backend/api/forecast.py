@@ -6,6 +6,7 @@ from ..models.user import AppUser
 from ..models.epic_area import EpicArea
 from sqlmodel import Session, select, and_
 from sqlalchemy.exc import NoResultFound
+from datetime import datetime, date
 
 router = APIRouter(prefix="/api/forecasts", tags=["forecast"])
 
@@ -33,12 +34,19 @@ async def post_forecast(*, forecast: Forecast, session: Session = Depends(get_se
     )
     try:
         result = session.exec(statement).one()
-        return False
+        return "A forecast for selected user, month and epic already exists"
     except NoResultFound:
-        session.add(forecast)
-        session.commit()
-        session.refresh(forecast)
-        return forecast
+        if (
+            datetime.strptime(f"{forecast.month}:{forecast.year}", "%m:%Y").date()
+            < date.today()
+        ):
+            return "Unable to post forecast for previous months"
+        else:
+            session.add(forecast)
+            session.commit()
+            session.refresh(forecast)
+            print(type(forecast), "forecast_is")
+            return "Your forecast has been submitted"
 
 
 @router.get("/")
@@ -66,8 +74,10 @@ async def get_forecasts(session: Session = Depends(get_session)):
         .select_from(Forecast)
         .join(AppUser)
         .join(Epic)
-        .order_by(Forecast.year.desc())
-        .order_by(Forecast.month.desc())
+        .where(Forecast.year >= datetime.now().year)
+        .where(Forecast.month > datetime.now().month)
+        .order_by(Forecast.year.asc())
+        .order_by(Forecast.month.asc())
     )
     result = session.exec(statement).all()
     return result
@@ -75,7 +85,10 @@ async def get_forecasts(session: Session = Depends(get_session)):
 
 @router.get("/users/{user_id}")
 async def get_forecasts_by_user(
-    user_id: str = None, session: Session = Depends(get_session)
+    user_id: str = None,
+    session: Session = Depends(get_session),
+    year: str = None,
+    month: str = None,
 ):
     """
     Get forecasts from a given user.
@@ -103,10 +116,20 @@ async def get_forecasts_by_user(
         .join(AppUser)
         .join(Epic)
         .where(Forecast.user_id == user_id)
-        .order_by(Forecast.year.desc())
-        .order_by(Forecast.month.desc())
     )
-    result = session.exec(statement).all()
+    if year != None and month != None:
+        final_statement = statement.where(Forecast.year == year).where(
+            Forecast.month == month
+        )
+    else:
+        final_statement = (
+            statement.where(Forecast.year >= datetime.now().year)
+            .where(Forecast.month > datetime.now().month)
+            .order_by(Forecast.year.asc())
+            .order_by(Forecast.month.asc())
+        )
+
+    result = session.exec(final_statement).all()
     return result
 
 
