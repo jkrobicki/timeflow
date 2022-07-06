@@ -18,5 +18,6 @@ class Calendar(SQLModel, table=True):
     week_name: str
     week_day_number: int
     week_day_name: str
+    business_day: bool = True
 
     __table_args__ = {"schema": "app_db"}
