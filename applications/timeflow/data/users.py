@@ -131,6 +131,13 @@ def users_names(is_active: bool = None, label="select user") -> List[Select]:
     return rows
 
 
+def user_full_name_by_id(user_id):
+    api = f"{base_url}/api/users/{user_id}"
+    response = requests.get(api)
+    full_name = response.json()[0]["last_name"] + " " + response.json()[0]["first_name"]
+    return full_name
+
+
 def get_user_id_by_username(username):
     """
     Get user id by username.

@@ -4,7 +4,6 @@ from ..models.capacity import Capacity
 from sqlmodel import Session, select, and_
 from sqlalchemy.exc import NoResultFound
 from ..models.user import AppUser
-from ..models.team import Team
 
 router = APIRouter(prefix="/api/capacities", tags=["capacity"])
 
@@ -68,7 +67,6 @@ async def get_capacities(
         Capacity.id.label("capacity_id"),
         AppUser.last_name,
         AppUser.first_name,
-        Team.name.label("team_name"),
         Capacity.year,
         Capacity.month,
         Capacity.days,
@@ -88,7 +86,12 @@ async def get_capacities(
 
 
 @router.get("/users/{user_id}/")
-async def get_capacities_user(user_id: int, session: Session = Depends(get_session)):
+async def get_capacities_user(
+    user_id: int,
+    session: Session = Depends(get_session),
+    year: str = None,
+    month: str = None,
+):
     """
     Get list of capacities by user_id.
 
@@ -113,8 +116,14 @@ async def get_capacities_user(user_id: int, session: Session = Depends(get_sessi
         .join(AppUser, Capacity.user_id == AppUser.id)
         .where(Capacity.user_id == user_id)
     )
+    if year != None and month != None:
+        statement_final = statement.where(Capacity.year == year).where(
+            Capacity.month == month
+        )
+    else:
+        statement_final = statement
 
-    result = session.exec(statement).all()
+    result = session.exec(statement_final).all()
     return result
 
 

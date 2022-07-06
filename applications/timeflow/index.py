@@ -27,7 +27,6 @@ menu_items = {
     "Sponsors": "Sponsors",
     "Clients": "Clients",
     "Rates": "Rates",
-    "Capacities": "Capacities",
     "Demands": "Demands",
 }
 
@@ -39,7 +38,7 @@ def timeflow():
     # Get user's github username
     github_username = fetch_username()
     current_page, set_current_page = use_state("Timelogs")
-    pages = ["Timelogs"]
+    pages = ["Timelogs", "Capacities"]
 
     if current_page == "Users":
         if user_role == "admin" or user_role == None:
@@ -84,10 +83,12 @@ def timeflow():
                 key="sponsors_page", key_attr="sponsors_page"
             )
     elif current_page == "Capacities":
-        if user_role == "admin" or user_role == None:
-            current_page_component = capacities_page(
-                key="capacities_page", key_attr="capacities_page"
-            )
+        current_page_component = capacities_page(
+            key="capacities_page",
+            key_attr="capacities_page",
+            app_role=user_role,
+            github_username=github_username,
+        )
     elif current_page == "Demands":
         if user_role == "admin" or user_role == None:
             current_page_component = demands_page(
