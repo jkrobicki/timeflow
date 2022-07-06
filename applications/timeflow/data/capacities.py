@@ -70,9 +70,8 @@ def capacities_by_user(user_id: int) -> List[Dict]:
 
 def capacities_by_user_year_month(user_id, year_month) -> List[Dict]:
     if user_id != "" and year_month != "":
-        api = f"{base_url}/api/capacities/users/{user_id}/years_months/{year_month}/"
+        api = f"{base_url}/api/capacities/users/{user_id}"
         params = {
-            "user_id": user_id,
             "year": int(year_month[:4]),
             "month": int(year_month[5:7]),
         }
@@ -82,7 +81,7 @@ def capacities_by_user_year_month(user_id, year_month) -> List[Dict]:
         for item in response.json():
             d = {
                 "capacity id": item["capacity_id"],
-                "user": item["user_username"],
+                "user": item["last_name"] + " " + item["first_name"],
                 "year": item["year"],
                 "month": item["month"],
                 "capacity days": item["days"],
