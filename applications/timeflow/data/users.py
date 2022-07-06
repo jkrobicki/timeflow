@@ -68,6 +68,7 @@ def users_active():
             "role": item["role_name"],
             "main team": item["main_team"],
             "start date": item["start_date"],
+            "supervisor": item["supervisor"],
             "is active": item["is_active"],
         }
         rows.append(d)
@@ -81,6 +82,7 @@ def update_user(
     new_first_name: Optional[str] = None,
     new_last_name: Optional[str] = None,
     new_start_date: Optional[date] = None,
+    new_supervisor: Optional[str] = None,
 ):
     api = f"{base_url}/api/users/{user_id}/"
     func_params = {
@@ -89,6 +91,7 @@ def update_user(
         "new_first_name": new_first_name,
         "new_last_name": new_last_name,
         "new_start_date": new_start_date,
+        "new_supervisor": new_supervisor,
     }
 
     api_params = func_params.copy()
@@ -125,6 +128,21 @@ def users_names(is_active: bool = None, label="select user") -> List[Select]:
     for item in response.json():
         d = Select(
             value=item["id"],
+            display_value=(item["last_name"] + " " + item["first_name"]),
+        )
+        rows.append(d)
+    return rows
+
+
+def users_names_str(is_active: bool = None, label="select user") -> List[Select]:
+    # Connect to users list endpoint and return value as name
+    api = f"{base_url}/api/users"
+    params = {"is_active": is_active}
+    response = requests.get(api, params=params)
+    rows = [Select(value="", display_value=label)]
+    for item in response.json():
+        d = Select(
+            value=item["last_name"] + " " + item["first_name"],
             display_value=(item["last_name"] + " " + item["first_name"]),
         )
         rows.append(d)

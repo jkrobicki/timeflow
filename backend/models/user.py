@@ -17,7 +17,7 @@ class AppUser(SQLModel, table=True):
     role_id: int
     team_id: Optional[int] = None
     start_date: date
-    supervisor: str
+    supervisor: Optional[str] = None
     created_at: datetime
     updated_at: datetime
     is_active: bool
