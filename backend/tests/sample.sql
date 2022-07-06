@@ -105,12 +105,12 @@ VALUES
     (2, 1, 5.0, 4, 2022, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, FALSE),
     (3, 1, 5.0, 4, 2022, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, FALSE);
     
-INSERT INTO app_db.capacity (user_id, team_id, year, month, days, created_at, updated_at, is_locked)
+INSERT INTO app_db.capacity (user_id, year, month, days, created_at, updated_at, is_locked)
 VALUES
-    (1, 1, 2022, 1, 18, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, FALSE),
-    (2, 2, 2022, 2, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, FALSE),
-    (3, 2, 2022, 2, 12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, FALSE),
-    (5, 1, 2022, 1, 13, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, FALSE);
+    (1, 2022, 1, 18, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, FALSE),
+    (2, 2022, 2, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, FALSE),
+    (3, 2022, 2, 12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, FALSE),
+    (5, 2022, 1, 13, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, FALSE);
 
 INSERT INTO app_db.demand (team_id, epic_id, year, month, days, created_at, updated_at, is_locked)
 VALUES
