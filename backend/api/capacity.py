@@ -86,7 +86,12 @@ async def get_capacities(
 
 
 @router.get("/users/{user_id}/")
-async def get_capacities_user(user_id: int, session: Session = Depends(get_session), year_month: str = None):
+async def get_capacities_user(
+    user_id: int,
+    session: Session = Depends(get_session),
+    year: str = None,
+    month: str = None,
+):
     """
     Get list of capacities by user_id.
 
@@ -111,10 +116,10 @@ async def get_capacities_user(user_id: int, session: Session = Depends(get_sessi
         .join(AppUser, Capacity.user_id == AppUser.id)
         .where(Capacity.user_id == user_id)
     )
-    if year_month != None:
-        year = year_month[:4]
-        month = year_month[5:7]
-        statement_final = statement.where(Capacity.year == year).where(Capacity.month == month)
+    if year != None and month != None:
+        statement_final = statement.where(Capacity.year == year).where(
+            Capacity.month == month
+        )
     else:
         statement_final = statement
 

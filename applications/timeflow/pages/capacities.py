@@ -2,11 +2,12 @@ from idom import html, use_state, component, event
 
 from .utils import switch_state
 
-from uiflow.components.input import Input, Selector
+from uiflow.components.input import Input, Selector, display_value
 from uiflow.components.layout import Row, Column, Container
 
 from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
+
 
 from ..data.common import year_month_dict_list
 from ..data.capacities import (
@@ -16,16 +17,17 @@ from ..data.capacities import (
     capacities_all,
     capacities_by_user,
 )
-from ..data.users import users_names
+from ..data.users import users_names, get_user_id_by_username
 
 
 @component
-def page(key_attr: str):
+def page(app_role: str, github_username: str, key_attr: str):
     """Creates a page for capacities"""
     user_id, set_user_id = use_state("")
     year_month, set_year_month = use_state("")
     days, set_days = use_state("")
     is_event, set_is_event = use_state(False)
+    admin = True if app_role == "admin" or app_role == None else False
     return html.div(
         {"class": "w-full", "key": key_attr},
         Row(
@@ -38,12 +40,14 @@ def page(key_attr: str):
                 set_days,
                 is_event,
                 set_is_event,
+                admin,
+                github_username,
             ),
             bg="bg-filter-block-bg",
         ),
         Container(
             Column(
-                Row(capacities_table(user_id)),
+                Row(capacities_table(user_id, admin, github_username)),
             ),
             Row(delete_capacity(is_event, set_is_event)),
         ),
@@ -60,6 +64,8 @@ def create_capacity_form(
     set_days,
     is_event,
     set_is_event,
+    admin,
+    github_username,
 ):
     """Generates capacity form to submit capacities and filter capacity by month user."""
 
@@ -83,9 +89,13 @@ def create_capacity_form(
         )
         switch_state(is_event, set_is_event)
 
-    selector_user_id = Selector(
-        set_value=set_user_id, data=users_names(), width="24%", md_width="24%"
-    )
+    if admin == True:
+        selector_user_id = Selector(
+            set_value=set_user_id, data=users_names(), width="24%", md_width="24%"
+        )
+    elif admin == False:
+        user_id = get_user_id_by_username(github_username)
+        selector_user_id = display_value(user_id, github_username)
 
     selector_year_month = Selector(
         set_value=set_year_month,
@@ -118,8 +128,10 @@ def create_capacity_form(
 
 
 @component
-def capacities_table(user_id):
+def capacities_table(user_id, admin, github_username):
     """Generates a table component with capacity days by year month user."""
+    if admin == False:
+        user_id = get_user_id_by_username(github_username)
     if user_id != "":
         rows = capacities_by_user(user_id)
     else:
