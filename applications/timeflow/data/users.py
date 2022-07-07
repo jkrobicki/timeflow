@@ -142,7 +142,7 @@ def users_names_str(is_active: bool = None, label="select user") -> List[Select]
     api = f"{base_url}/api/users"
     params = {"is_active": is_active}
     response = requests.get(api, params=params)
-    rows = [Select(value="", display_value="select user")]
+    rows = [Select(value="", display_value=label)]
     for item in response.json():
         d = Select(
             value=(item["last_name"] + " " + item["first_name"]),
