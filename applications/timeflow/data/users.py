@@ -140,7 +140,7 @@ def users_names(is_active: bool = None, label="select user") -> List[Select]:
 def users_names_str(is_active: bool = None, label="select user") -> List[Select]:
     # Connect to users list endpoint and return value as name
     api = f"{base_url}/api/users"
-    params = {"is_active": True}
+    params = {"is_active": is_active}
     response = requests.get(api, params=params)
     rows = [Select(value="", display_value="select user")]
     for item in response.json():
