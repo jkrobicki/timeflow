@@ -7,6 +7,7 @@ from uiflow.components.layout import Row, Column, Container
 
 from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
+from uiflow.components.heading import H3
 
 
 from ..data.common import year_month_dict_list
@@ -112,15 +113,17 @@ def create_capacity_form(
     btn = Button(is_disabled, handle_submit, label="Submit")
 
     return Container(
+        H3("Submit capacity"),
         Column(
             Row(
                 selector_user_id,
                 input_year_month,
                 selector_days,
+                btn,
                 justify="justify-between",
+                items="items-center",
             ),
-            Row(btn),
-        )
+        ),
     )
 
 
@@ -133,7 +136,7 @@ def capacities_table(user_id, admin, github_username):
         rows = capacities_by_user(user_id)
     else:
         rows = capacities_all()
-    return html.div({"class": "flex w-full"}, SimpleTable(rows=rows))
+    return Column(H3("Selected capacities"), SimpleTable(rows=rows))
 
 
 @component
