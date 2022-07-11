@@ -30,12 +30,12 @@ async def post_capacity(*, capacity: Capacity, session: Session = Depends(get_se
     )
     try:
         result = session.exec(statement).one()
-        return False
+        return "Capacity for selected user and month already exists"
     except NoResultFound:
         session.add(capacity)
         session.commit()
         session.refresh(capacity)
-        return capacity
+        return "Your capacity has been submitted"
 
 
 @router.get("/")
