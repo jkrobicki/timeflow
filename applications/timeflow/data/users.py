@@ -119,7 +119,7 @@ def deactivate_user(user_id: int):
     return True
 
 
-def users_names(is_active: bool = True, label="select user") -> List[Select]:
+def users_names(is_active: bool = None, label="select user") -> List[Select]:
     # Connect to users list endpoint
     api = f"{base_url}/api/users"
     params = {"is_active": is_active}
