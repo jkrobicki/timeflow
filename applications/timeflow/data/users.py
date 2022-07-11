@@ -119,7 +119,7 @@ def deactivate_user(user_id: int):
     return True
 
 
-def users_names(is_active: bool = None, label="select user") -> List[Select]:
+def users_names(is_active: bool = True, label="select user") -> List[Select]:
     # Connect to users list endpoint
     api = f"{base_url}/api/users"
     params = {"is_active": is_active}
@@ -132,7 +132,7 @@ def users_names(is_active: bool = None, label="select user") -> List[Select]:
             display_value=(item["last_name"] + " " + item["first_name"]),
         )
         rows.append(d)
-    rows = sorted(rows[1:], key=lambda d: d["display_value"])
+    rows = sorted(rows[:], key=lambda d: d["display_value"])
     rows = label + rows
     return rows
 
