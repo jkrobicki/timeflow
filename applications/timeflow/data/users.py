@@ -132,7 +132,7 @@ def users_names(is_active: bool = None, label="select user") -> List[Select]:
             display_value=(item["last_name"] + " " + item["first_name"]),
         )
         rows.append(d)
-    rows = sorted(rows[:], key=lambda d: d["display_value"])
+    rows = sorted(rows, key=lambda d: d["display_value"])
     rows = label + rows
     return rows
 
