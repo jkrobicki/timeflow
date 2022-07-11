@@ -24,6 +24,7 @@ from .api import (
     sponsor,
     capacity,
     demand,
+    calendar,
 )
 import csv
 
@@ -41,6 +42,7 @@ app.include_router(role.router)
 app.include_router(sponsor.router)
 app.include_router(capacity.router)
 app.include_router(demand.router)
+app.include_router(calendar.router)
 
 
 @app.on_event("startup")
