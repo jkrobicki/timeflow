@@ -36,17 +36,10 @@ async def post_forecast(*, forecast: Forecast, session: Session = Depends(get_se
         result = session.exec(statement).one()
         return "A forecast for selected user, month and epic already exists"
     except NoResultFound:
-        if (
-            datetime.strptime(f"{forecast.month}:{forecast.year}", "%m:%Y").date()
-            < date.today()
-        ):
-            return "Unable to post forecast for previous months"
-        else:
-            session.add(forecast)
-            session.commit()
-            session.refresh(forecast)
-            print(type(forecast), "forecast_is")
-            return "Your forecast has been submitted"
+        session.add(forecast)
+        session.commit()
+        session.refresh(forecast)
+        return "Your forecast has been submitted"
 
 
 @router.get("/")
