@@ -2,14 +2,16 @@ from idom import html, use_state, component, event
 
 from .utils import switch_state
 
+from uiflow.components.heading import H3, H4
 from uiflow.components.input import Input, Selector, display_value, InputMonth
 from uiflow.components.layout import Row, Column, Container
 
-from uiflow.components.table import SimpleTable
+from uiflow.components.table import SimpleTable, DisplayTable
 from uiflow.components.controls import Button
 
 
 from ..data.common import year_month_dict_list
+from ..data.calendar import business_days_by_year_month
 from ..data.capacities import (
     capacity_days,
     to_capacity,
@@ -30,6 +32,7 @@ def page(app_role: str, github_username: str, key_attr: str):
     admin = True if app_role == "admin" or app_role == None else False
     return html.div(
         {"class": "w-full", "key": key_attr},
+        Container(business_days_table(year_month)),
         Row(
             create_capacity_form(
                 user_id,
@@ -51,6 +54,29 @@ def page(app_role: str, github_username: str, key_attr: str):
             ),
             Row(delete_capacity(is_event, set_is_event)),
         ),
+    )
+
+
+@component
+def business_days_table(year_month):
+    month = year_month[5:7]
+    year = year_month[:4]
+    displayed = H4("Select a month to see a table")
+    print("YEARRRRMONT", year_month)
+    if year_month != "":
+        rows = business_days_by_year_month(month, year)
+        if rows == []:
+            rows = []
+            d = {
+                "year": year,
+                "month": month,
+                "business days": "null",
+            }
+            rows.append(d)
+        displayed = html.div({"class": "flex w-full"}, DisplayTable(rows=rows))
+    return Column(
+        H3("Business days available per month"),
+        displayed,
     )
 
 
