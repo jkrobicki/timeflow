@@ -124,13 +124,16 @@ def users_names(is_active: bool = None, label="select user") -> List[Select]:
     api = f"{base_url}/api/users"
     params = {"is_active": is_active}
     response = requests.get(api, params=params)
-    rows = [Select(value="", display_value=label)]
+    label = [Select(value="", display_value=label)]
+    rows = []
     for item in response.json():
         d = Select(
             value=item["id"],
             display_value=(item["last_name"] + " " + item["first_name"]),
         )
         rows.append(d)
+    rows = sorted(rows[1:], key=lambda d: d["display_value"])
+    rows = label + rows
     return rows
 
 
@@ -142,11 +145,12 @@ def users_names_str(is_active: bool = None, label="select user") -> List[Select]
     rows = [Select(value="", display_value=label)]
     for item in response.json():
         d = Select(
-            value=item["last_name"] + " " + item["first_name"],
+            value=(item["last_name"] + " " + item["first_name"]),
             display_value=(item["last_name"] + " " + item["first_name"]),
         )
         rows.append(d)
     return rows
+
 
 def user_full_name_by_id(user_id):
     api = f"{base_url}/api/users/{user_id}"

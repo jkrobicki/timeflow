@@ -61,7 +61,6 @@ def on_startup():
                 create_db()
 
 
-
 @app.on_event("startup")
 def implement_calendar_table():
     with Session(engine) as session:
@@ -71,7 +70,7 @@ def implement_calendar_table():
         except Exception as e:
             print(e)
             values_sql = f"""INSERT INTO app_db.calendar (date, year_number, year_name, quarter_number, quarter_name
-                        , month_number, month_name, week_number, week_name, week_day_number, week_day_name)
+                        , month_number, month_name, week_number, week_name, week_day_number, week_day_name, business_day)
                         VALUES """
             with open("backend/calendar.csv") as csvfile:
                 reader = csv.reader(csvfile, delimiter=",", quotechar="|")
