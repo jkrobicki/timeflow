@@ -206,25 +206,22 @@ def create_timelog_form(
     ):
         is_disabled = False
     btn = Button(is_disabled, handle_submit, label="Submit")
-    return html.section(
-        {"class": "bg-filter-block-bg py-4 text-sm"},
-        Container(
-            H3("Select timelog"),
-            html.div(
-                {
-                    "class": "flex flex-wrap justify-between items-center md:justify-start 2xl:justify-between"
-                },
-                selector_user,
-                selector_epic_id,
-                selector_epic_area_id,
-                h_start,
-                input_start_datetime,
-                h_end,
-                input_end_datetime,
-                btn,
-            ),
-            H4(post_response),
+    return Column(
+        H3("Select timelog"),
+        html.div(
+            {
+                "class": "flex flex-wrap justify-between items-center md:justify-start 2xl:justify-between"
+            },
+            selector_user,
+            selector_epic_id,
+            selector_epic_area_id,
+            h_start,
+            input_start_datetime,
+            h_end,
+            input_end_datetime,
+            btn,
         ),
+        H4(post_response),
     )
 
 

@@ -8,6 +8,7 @@ from uiflow.components.layout import Row, Column, Container
 
 from uiflow.components.table import SimpleTable, DisplayTable
 from uiflow.components.controls import Button
+from uiflow.components.heading import H3
 
 
 from ..data.common import year_month_dict_list
@@ -93,6 +94,7 @@ def create_capacity_form(
     github_username,
 ):
     """Generates capacity form to submit capacities and filter capacity by month user."""
+    post_response, set_post_response = use_state("")
 
     @event(prevent_default=True)
     async def handle_submit(event):
@@ -107,27 +109,41 @@ def create_capacity_form(
             "updated_at": "2022-03-15T15:25:44.266Z",
             "is_locked": false
         }"""
-        to_capacity(
+        response = to_capacity(
             user_id=user_id,
             year_month=year_month,
             days=days,
         )
+        set_post_response(response)
+
         switch_state(is_event, set_is_event)
 
     if admin == True:
         selector_user_id = Selector(
-            set_value=set_user_id, data=users_names(), width="24%", md_width="24%"
+            set_value=set_user_id,
+            set_sel_value2=set_post_response,
+            sel_value2="",
+            data=users_names(),
+            width="24%",
+            md_width="24%",
         )
     elif admin == False:
         user_id = get_user_id_by_username(github_username)
         selector_user_id = display_value(user_id, github_username)
 
     input_year_month = InputMonth(
-        set_value=set_year_month,
+        set_year_month,
+        set_post_response,
+        "",
     )
 
     selector_days = Selector(
-        set_value=set_days, data=capacity_days(), width="24%", md_width="24%"
+        set_value=set_days,
+        set_sel_value2=set_post_response,
+        sel_value2="",
+        data=capacity_days(),
+        width="24%",
+        md_width="24%",
     )
 
     is_disabled = True
@@ -137,15 +153,18 @@ def create_capacity_form(
     btn = Button(is_disabled, handle_submit, label="Submit")
 
     return Container(
+        H3("Submit capacity"),
         Column(
             Row(
                 selector_user_id,
                 input_year_month,
                 selector_days,
+                btn,
                 justify="justify-between",
+                items="items-center",
             ),
-            Row(btn),
-        )
+            H4(post_response),
+        ),
     )
 
 
@@ -158,7 +177,7 @@ def capacities_table(user_id, admin, github_username):
         rows = capacities_by_user(user_id)
     else:
         rows = capacities_all()
-    return html.div({"class": "flex w-full"}, SimpleTable(rows=rows))
+    return Column(H3("Selected capacities"), SimpleTable(rows=rows))
 
 
 @component

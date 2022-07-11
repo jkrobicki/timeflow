@@ -15,8 +15,16 @@ def Column(*args: html, width: str = "full"):
 
 
 @component
-def Row(*args: html, justify: str = None, bg: str = None, wrap: str = None):
+def Row(
+    *args: html,
+    justify: str = None,
+    bg: str = None,
+    wrap: str = None,
+    items: str = None,
+):
     return html.div(
-        {"class": f"flex flex-col px-2 md:flex-row {justify} {bg} {wrap} space-x-4"},
+        {
+            "class": f"flex flex-col px-2 md:flex-row {justify} {bg} {wrap} {items} space-x-4"
+        },
         args,
     )

@@ -33,7 +33,7 @@ def to_capacity(user_id: int, year_month: str, days: int) -> bool:
         data=json.dumps(dict(data)),
         headers={"accept": "application/json", "Content-Type": "application/json"},
     )
-    return True
+    return response.json()
 
 
 def capacities_all():
