@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.12] - 2022-07-11
 ### Added
 - Added feature for users to add their own capacities
+- Added feature to view amount of business days available per month on `Capacities` page
 - Created `supervisor` column for `AppUser` model (database migration needed)
 - Created a CHANGELOG.md file
 - Created column `business_day` for `Calendar` model (database migration needed)
