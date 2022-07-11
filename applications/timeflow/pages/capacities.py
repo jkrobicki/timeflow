@@ -62,7 +62,6 @@ def business_days_table(year_month):
     month = year_month[5:7]
     year = year_month[:4]
     displayed = H4("Select a month to see a table")
-    print("YEARRRRMONT", year_month)
     if year_month != "":
         rows = business_days_by_year_month(month, year)
         if rows == []:
