@@ -1,10 +1,8 @@
 npm==0.1.1
-sanic==21.9.3
 black==21.10b0
 dominate==2.6.0
 uvicorn==0.17.4
 fastapi==0.73.0
-idom==0.38.1
 numpy==1.17.4
 pandas==0.25.3
 pydantic==1.8.2
@@ -13,7 +11,6 @@ SQLAlchemy==1.4.23
 sqlalchemy2-stubs==0.0.2a15
 sqlmodel==0.0.6
 watchdog==2.1.6
-Sanic-Cors==2.0.1
 xlrd==1.2.0
 pytest-order==1.0.1
 mkdocs-autorefs==0.3.0
@@ -27,3 +24,4 @@ python-multipart==0.0.5
 itsdangerous==2.1.2
 python-dotenv==0.20.0
 psycopg2==2.9.3
+alembic==1.8.0
