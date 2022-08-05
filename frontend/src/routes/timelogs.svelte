@@ -10,9 +10,9 @@
 		Pagination,
 		Toolbar,
 		ToolbarBatchActions
-	} from '../lib/carbon/components';
+	} from '../library/carbon/components';
 	import { DateInput } from 'date-picker-svelte';
-	import { TrashCan } from '../lib/carbon/icons';
+	import { TrashCan } from '../library/carbon/icons';
 	import AutoComplete from 'simple-svelte-autocomplete';
 	import { getTimelogs } from './data.js';
 	/**
