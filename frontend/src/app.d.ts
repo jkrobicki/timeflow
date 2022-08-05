@@ -9,3 +9,8 @@ declare namespace App {
 	// interface Session {}
 	// interface Stuff {}
 }
+declare module 'simple-svelte-autocomplete' {
+	interface AutoComplete {
+
+	}
+}
