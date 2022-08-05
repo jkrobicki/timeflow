@@ -14,3 +14,7 @@ declare module 'simple-svelte-autocomplete' {
 
 	}
 }
+declare module 'carbon-components-svelte/src/Button'
+declare module 'carbon-components-svelte/src/DataTable'
+declare module 'carbon-components-svelte/src/Grid'
+declare module 'carbon-components-svelte/src/Pagination' 
