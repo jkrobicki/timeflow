@@ -51,3 +51,20 @@ services:
     networks:
       static-network:
         ipv4_address: 172.28.1.2
+
+  # svelte:
+  #   image: sveltekit-docker:latest
+  #   # restart: always
+  #   volumes:
+  #     - ./frontend/:/frontend/
+  #   command:
+  #     npm run dev -- --host
+  #   ports:
+  #     - 5173:5173
+  #   depends_on:
+  #     - "fastapi"
+  #   env_file:
+  #     - .env
+  #   stdin_open: true # docker run -i
+  #   tty: true # docker run -t
+
