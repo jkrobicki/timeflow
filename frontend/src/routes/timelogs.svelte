@@ -38,15 +38,8 @@
 	let countHours = '';
 	let countDays = '';
 	let result: any = null;
-	/**
-	 * @type {any}
-	 */
-	let selectedUser: any;
-
-	/**
-	 * @type {any[]}
-	 */
-	let selectedRowIds = [];
+	let selectedUser: any = [];
+	let selectedRowIds: any = [];
 
 	onMount(async () => {
 		users = await getUsers(users);
@@ -57,7 +50,6 @@
 	onMount(async () => {
 		epics = await getEpics(epics);
 	});
-
 	onMount(async () => {
 		timelogs = await getTimelogs(timelogs);
 	});
