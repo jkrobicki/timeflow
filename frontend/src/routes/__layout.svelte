@@ -27,7 +27,7 @@
 <SideNav bind:isOpen={isSideNavOpen}>
 	<SideNavItems>
 		<SideNavLink href="/timelogs" text="Timelogs" />
-		<SideNavLink text="Capacities" />
+		<SideNavLink href="/capacities" text="Capacities" />
 		<SideNavMenu text="Admin">
 			<SideNavMenuItem href="/" text="Link 1" />
 		</SideNavMenu>

@@ -14,7 +14,7 @@
 	import { DateInput } from 'date-picker-svelte';
 	import { TrashCan } from '../library/carbon/icons';
 	import AutoComplete from 'simple-svelte-autocomplete';
-	import { getTimelogs } from './data.js';
+	import { getTimelogs, getUsers, getEpics, getEpicAreas } from './data.js';
 
 	let users: any[];
 	let epics: any[];
@@ -38,40 +38,17 @@
 	let countHours = '';
 	let countDays = '';
 	let result: any = null;
-	/**
-	 * @type {any}
-	 */
-	let selectedUser: any;
-
-	/**
-	 * @type {any[]}
-	 */
-	let selectedRowIds: any;
-
-	getTimelogs(timelogs);
+	let selectedUser: any = [];
+	let selectedRowIds: any = [];
 
 	onMount(async () => {
-		const response = await fetch('http://localhost:8002/api/users', {
-			method: 'GET',
-			headers: { 'Content-type': 'application/json' }
-		});
-		users = await response.json();
+		users = await getUsers(users);
 	});
-
 	onMount(async () => {
-		const response = await fetch('http://localhost:8002/api/epics', {
-			method: 'GET',
-			headers: { 'Content-type': 'application/json' }
-		});
-		epics = await response.json();
+		epicAreas = await getEpicAreas(epicAreas);
 	});
-
 	onMount(async () => {
-		const response = await fetch('http://localhost:8002/api/epic_areas', {
-			method: 'GET',
-			headers: { 'Content-type': 'application/json' }
-		});
-		epicAreas = await response.json();
+		epics = await getEpics(epics);
 	});
 	onMount(async () => {
 		timelogs = await getTimelogs(timelogs);
