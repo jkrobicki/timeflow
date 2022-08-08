@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import 'carbon-components-svelte/css/white.css';
 	import { onMount } from 'svelte';
 	import {
@@ -15,22 +15,11 @@
 	import { TrashCan } from '../library/carbon/icons';
 	import AutoComplete from 'simple-svelte-autocomplete';
 	import { getTimelogs } from './data.js';
-	/**
-	 * @type {any[]}
-	 */
-	let users = [];
-	/**
-	 * @type {any[]}
-	 */
-	let epics = [];
-	/**
-	 * @type {any[]}
-	 */
-	let epicAreas = [];
-	/**
-	 * @type {any[]}
-	 */
-	let timelogs = [];
+
+	let users: any[];
+	let epics: any[];
+	let epicAreas: any[];
+	let timelogs: any = [];
 
 	let timelog = {
 		username: '',
@@ -42,28 +31,22 @@
 	let userId = '';
 	let epicId = '';
 	let epicAreaId = '';
-	/**
-	 * @type {any}
-	 */
-	let selectedEpic;
-	/**
-	 * @type {any}
-	 */
-	let selectedEpicArea;
+	let selectedEpic: any;
+	let selectedEpicArea: any;
 	let startTime = new Date();
 	let endTime = new Date();
 	let countHours = '';
 	let countDays = '';
-	let result = null;
+	let result: any = null;
 	/**
 	 * @type {any}
 	 */
-	let selectedUser;
+	let selectedUser: any;
 
 	/**
 	 * @type {any[]}
 	 */
-	let selectedRowIds = [];
+	let selectedRowIds: any;
 
 	getTimelogs(timelogs);
 
@@ -120,10 +103,7 @@
 
 	async function onRemove() {
 		console.log('array is:', selectedRowIds);
-		/**
-		 * @param {any} id
-		 */
-		async function DeleteApi(id) {
+		async function DeleteApi(id: number) {
 			const response = await fetch('http://localhost:8002/api/timelogs/' + id, {
 				method: 'DELETE',
 				headers: {
