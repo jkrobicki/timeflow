@@ -13,12 +13,13 @@
 	} from '../library/carbon/components';
 	import { DateInput } from 'date-picker-svelte';
 	import { TrashCan } from '../library/carbon/icons';
-	import AutoComplete from 'simple-svelte-autocomplete';
 	import { getTimelogs, getUsers, getEpics, getEpicAreas } from './data.js';
+	import Autocomplete from '../library/components/autocomplete.svelte';
+	import { SelectItem } from 'carbon-components-svelte';
 
 	let users: any[];
 	let epics: any[];
-	let epicAreas: any[];
+	let epicAreas: any;
 	let timelogs: any = [];
 
 	let timelog = {
@@ -31,15 +32,17 @@
 	let userId = '';
 	let epicId = '';
 	let epicAreaId = '';
-	let selectedEpic: any;
-	let selectedEpicArea: any;
+	let selectedEpic = { epic_id: '', epic_name: '' };
+	let selectedEpicArea: { id: ''; epic_area_name: '' };
 	let startTime = new Date();
 	let endTime = new Date();
 	let countHours = '';
 	let countDays = '';
 	let result: any = null;
-	let selectedUser: any = [];
+	let selectedUser = { id: '', username: '' };
 	let selectedRowIds: any = [];
+	let selectedItemDisplay = '';
+	let selectedItemValue = '';
 
 	onMount(async () => {
 		users = await getUsers(users);
@@ -92,38 +95,60 @@
 		}
 		selectedRowIds.map(DeleteApi);
 	}
+
+	async function handleSelect(selectedItem: any) {
+		selectedUser = selectedItem;
+	}
+
+	async function handleSelectEpic(selectedItem: any) {
+		selectedEpic = selectedItem;
+		epicAreas = epicAreasByEpic(selectedEpic);
+	}
+	async function handleSelectEpicArea(selectedItem: any) {
+		selectedEpicArea = selectedItem;
+		console.log('selected epic area name is', selectedEpicArea.epic_area_name);
+		return selectedEpicArea;
+	}
+	async function epicAreasByEpic(selectedEpic: any) {
+		console.log('epic id is', selectedEpic.epic_id);
+		const response = await fetch(
+			'http://localhost:8002/api/epic_areas/?epic_id=' + selectedEpic.epic_id,
+			{
+				method: 'GET',
+				headers: { 'Content-type': 'application/json' }
+			}
+		);
+		epicAreas = await response.json();
+		console.log('epicAreas are', epicAreas);
+		return epicAreas;
+	}
 </script>
 
+{@debug selectedEpic}
 <Grid>
 	<Row>
 		<Column>
-			<AutoComplete
-				className="auto_complete"
-				inputClassName="inp_autocomplete"
-				items={users}
-				labelFieldName="username"
-				valueFieldName="id"
-				bind:selectedItem={selectedUser}
+			<Autocomplete
+				onChange={handleSelect}
+				options={users}
+				selectDisplay="username"
+				placeholder="search user"
 			/>
 		</Column>
 		<Column>
-			<AutoComplete
-				className="auto_complete"
-				inputClassName="inp_autocomplete"
-				items={epics}
-				labelFieldName="epic_name"
-				valueFieldName="id"
-				bind:selectedItem={selectedEpic}
+			<Autocomplete
+				onChange={handleSelectEpic}
+				options={epics}
+				selectDisplay="epic_name"
+				placeholder="search epic"
 			/>
 		</Column>
 		<Column>
-			<AutoComplete
-				className="auto_complete"
-				inputClassName="inp_autocomplete"
-				items={epicAreas}
-				labelFieldName="epic_area_name"
-				valueFieldName="id"
-				bind:selectedItem={selectedEpicArea}
+			<Autocomplete
+				onChange={handleSelectEpicArea}
+				options={epicAreas}
+				selectDisplay="epic_area_name"
+				placeholder="search epic area"
 			/>
 		</Column>
 
@@ -140,6 +165,14 @@
 	<Row />
 	<br />
 	<Row />
+	<Row>
+		<Column
+			><p>
+				You selected user <b>{selectedUser.username}</b> and Epic <b>{selectedEpic.epic_name}</b>
+				<!-- and Epic Area {selectedEpicArea['id']} -->
+			</p></Column
+		>
+	</Row>
 	<Row>
 		<Column>
 			<DataTable
@@ -207,5 +240,9 @@
 		font-family: inherit;
 		opacity: 1;
 		transition: outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+	}
+
+	b {
+		font-weight: bold;
 	}
 </style>

@@ -18,6 +18,7 @@ async function getUsers(users) {
         headers: { 'Content-type': 'application/json' }
     });
     users = await response.json()
+    console.log(users)
     return users
 };
 /**
