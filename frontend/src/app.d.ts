@@ -14,7 +14,14 @@ declare module 'simple-svelte-autocomplete' {
 
 	}
 }
+declare module 'simple-svelte-autocomplete' {
+	interface AutoComplete {
+
+	}
+}
 declare module 'carbon-components-svelte/src/Button'
 declare module 'carbon-components-svelte/src/DataTable'
 declare module 'carbon-components-svelte/src/Grid'
-declare module 'carbon-components-svelte/src/Pagination' 
+declare module 'carbon-components-svelte/src/Pagination'
+declare module 'carbon-components-svelte/src/Select'
+declare module 'carbon-components-svelte/src/UIShell' 

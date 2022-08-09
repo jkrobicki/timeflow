@@ -64,7 +64,7 @@ async def get_capacities(
         Year of capacity in question.
     """
     statement = select(
-        Capacity.id.label("capacity_id"),
+        Capacity.id,
         AppUser.last_name,
         AppUser.first_name,
         Capacity.year,
