@@ -32,7 +32,7 @@
 	let epicId = '';
 	let epicAreaId = '';
 	let selectedEpic = { epic_id: '', epic_name: '' };
-	let selectedEpicArea: { id: ''; epic_area_name: '' };
+	let selectedEpicArea = { id: '', epic_area_name: '' };
 	let startTime = new Date();
 	let endTime = new Date();
 	let countHours = '';
@@ -139,12 +139,14 @@
 			/>
 		</Column>
 		<Column>
-			<Autocomplete
-				onChange={handleSelectEpicArea}
-				options={epicAreas}
-				selectDisplay="epic_area_name"
-				placeholder="search epic area"
-			/>
+			{#key selectedEpic.epic_id}
+				<Autocomplete
+					onChange={handleSelectEpicArea}
+					options={epicAreas}
+					selectDisplay="epic_area_name"
+					placeholder="search epic area"
+				/>
+			{/key}
 		</Column>
 
 		<Column>
@@ -164,7 +166,7 @@
 		<Column
 			><p>
 				You selected user <b>{selectedUser.username}</b> and Epic <b>{selectedEpic.epic_name}</b>
-				<!-- and Epic Area {selectedEpicArea['id']} -->
+				and Epic Area <b>{selectedEpicArea.epic_area_name}</b>
 			</p></Column
 		>
 	</Row>
