@@ -10,7 +10,8 @@
 		Pagination,
 		Toolbar,
 		ToolbarBatchActions,
-		Select
+		Select,
+		NumberInput
 	} from '../library/carbon/components';
 	import { DateInput } from 'date-picker-svelte';
 	import { TrashCan } from '../library/carbon/icons';
@@ -54,6 +55,30 @@
 		capacities = fullName;
 	});
 
+	async function onSubmit() {
+		const res = await fetch('http://localhost:8002/api/capacities/', {
+			method: 'POST',
+			headers: { 'Content-type': 'application/json' },
+			body: JSON.stringify({
+				user_id: selectedUser.id,
+				start_time: startTime,
+				end_time: endTime,
+				epic_id: selectedEpic.epic_id,
+				epic_area_id: selectedEpicArea.id,
+				count_hours: 1,
+				count_days: 2,
+				month: startTime.getMonth(),
+				year: startTime.getFullYear(),
+				created_at: Date.now(),
+				updated_at: Date.now(),
+				is_locked: false
+			})
+		});
+		const json = await res.json();
+		result = JSON.stringify(json);
+		capacities = await getCapacities(capacities);
+	}
+
 	async function handleSelect(selectedItem: any) {
 		selectedUser = selectedItem;
 	}
@@ -73,10 +98,10 @@
 			<DateInput format="yyyy-MM" bind:value={startTime} />
 		</Column>
 		<Column>
-			<Select size="sm" />
+			<NumberInput value={1} />
 		</Column>
 		<Column>
-			<Button class="button" size="small" kind="primary">Submit</Button>
+			<Button class="button" size="small" kind="primary" on:click={onSubmit}>Submit</Button>
 		</Column>
 	</Row>
 	<Row>
@@ -120,6 +145,25 @@
 		height: 2.5rem;
 	}
 
+	:global(input.s-PqcUnfQoZ78k) {
+		position: relative;
+		height: 2.5rem;
+		width: 100%;
+		border: 0;
+		border-bottom: solid 1px;
+		background-color: #f1f1f1;
+		padding-left: 0.5rem;
+		display: block;
+		font-size: 16px;
+		padding-bottom: 0px;
+	}
+
+	:global(.button) {
+		background-color: #9684e5;
+		height: 2.5rem;
+		font-size: 16px;
+		display: block;
+	}
 	:global(.autocomplete-input) {
 		font-size: 0.875rem;
 		font-weight: 400;
