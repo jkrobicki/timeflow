@@ -96,6 +96,7 @@ async def get_forecasts(
             statement.order_by(Forecast.year.asc())
             .where(Forecast.year >= datetime.now().year)
             .where(Forecast.month >= datetime.now().month)
+            .order_by(Forecast.year.asc())
             .order_by(Forecast.month.asc())
         )
 
