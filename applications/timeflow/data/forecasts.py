@@ -74,6 +74,26 @@ def forecasts_by_user_year_month(user_id: int, year_month: str) -> List[Dict]:
     return rows
 
 
+def forecasts_days_sum_by_epic_month_year(epic_id: int, year_month: str) -> List[Dict]:
+    api = f"{base_url}/api/forecasts"
+    params = {
+        "epic_id": epic_id,
+        "year": int(year_month[:4]),
+        "month": int(year_month[5:7]),
+    }
+    response = requests.get(api, params)
+    rows = []
+    for item in response.json():
+        d = {
+            "EPIC NAME": item["epic_name"],
+            "YEAR": item["year"],
+            "MONTH": item["month"],
+            "TOTAL DAYS": item["forecast_days_sum"],
+        }
+        rows.append(d)
+    return rows
+
+
 def forecast_days() -> List[Dict]:
     days = [Select(value="", display_value="select days")]
     for item in forecast_days_list:
