@@ -1,3 +1,3 @@
 import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte'
-
-export { TrashCan }
+import UpdateNow from 'carbon-icons-svelte/lib/UpdateNow.svelte'
+export { TrashCan, UpdateNow }
