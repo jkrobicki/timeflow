@@ -6,6 +6,7 @@ from ..models.user import AppUser
 from ..models.epic_area import EpicArea
 from sqlmodel import Session, select, and_
 from sqlalchemy.exc import NoResultFound
+from sqlalchemy import func
 from datetime import datetime, date
 
 router = APIRouter(prefix="/api/forecasts", tags=["forecast"])
@@ -43,7 +44,12 @@ async def post_forecast(*, forecast: Forecast, session: Session = Depends(get_se
 
 
 @router.get("/")
-async def get_forecasts(session: Session = Depends(get_session)):
+async def get_forecasts(
+    epic_id: int = None,
+    month: int = None,
+    year: int = None,
+    session: Session = Depends(get_session),
+):
     """
     Get list of forecasts.
 
@@ -60,6 +66,7 @@ async def get_forecasts(session: Session = Depends(get_session)):
             AppUser.first_name,
             AppUser.last_name,
             Epic.name.label("epic_name"),
+            Epic.id.label("epic_id"),
             Forecast.year,
             Forecast.month,
             Forecast.days.label("forecast_days"),
@@ -67,12 +74,32 @@ async def get_forecasts(session: Session = Depends(get_session)):
         .select_from(Forecast)
         .join(AppUser)
         .join(Epic)
-        .where(Forecast.year >= datetime.now().year)
-        .where(Forecast.month > datetime.now().month)
-        .order_by(Forecast.year.asc())
-        .order_by(Forecast.month.asc())
     )
-    result = session.exec(statement).all()
+    if month != None and year != None and epic_id != None:
+        final_statement = (
+            select(
+                Epic.name.label("epic_name"),
+                Forecast.year,
+                Forecast.month,
+                func.sum(Forecast.days).label("forecast_days_sum"),
+            )
+            .select_from(Forecast)
+            .join(Epic)
+            .where(Epic.id == epic_id)
+            .where(Forecast.month == month)
+            .where(Forecast.year == year)
+            .group_by(Epic.name, Forecast.month, Forecast.year)
+        )
+
+    else:
+        final_statement = (
+            statement.order_by(Forecast.year.asc())
+            .where(Forecast.year >= datetime.now().year)
+            .where(Forecast.month >= datetime.now().month)
+            .order_by(Forecast.month.asc())
+        )
+
+    result = session.exec(final_statement).all()
     return result
 
 
@@ -117,7 +144,7 @@ async def get_forecasts_by_user(
     else:
         final_statement = (
             statement.where(Forecast.year >= datetime.now().year)
-            .where(Forecast.month > datetime.now().month)
+            .where(Forecast.month >= datetime.now().month)
             .order_by(Forecast.year.asc())
             .order_by(Forecast.month.asc())
         )

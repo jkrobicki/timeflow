@@ -16,6 +16,7 @@ from ..data.forecasts import (
     forecast_days,
     to_forecast,
     forecast_deletion,
+    forecasts_days_sum_by_epic_month_year,
 )
 from ..data.capacities import capacities_by_user_year_month
 
@@ -53,7 +54,7 @@ def page(key_attr: str):
         Container(capacities_table(user_id, year_month)),
         Container(
             Column(
-                Row(forecasts_table(user_id, year_month)),
+                Row(forecasts_table(user_id, epic_id, year_month)),
             )
         ),
         Container(
@@ -223,7 +224,7 @@ def capacities_table(user_id, year_month):
 
 
 @component
-def forecasts_table(user_id, year_month):
+def forecasts_table(user_id, epic_id, year_month):
     """Generates a table component with forecast days by year and month
 
     Args:
@@ -238,8 +239,10 @@ def forecasts_table(user_id, year_month):
     rows = forecasts_all()
     if user_id != "" and year_month != "":
         rows = forecasts_by_user_year_month(user_id, year_month)
-    elif user_id != "":
+    elif user_id != "" and year_month == "":
         rows = forecasts_by_user(user_id)
+    elif user_id == "" and year_month != "" and epic_id != "":
+        rows = forecasts_days_sum_by_epic_month_year(epic_id, year_month)
     return Column(
         H3("Selected forecasts"),
         html.div({"class": "flex w-full"}, SimpleTable(rows=rows)),
