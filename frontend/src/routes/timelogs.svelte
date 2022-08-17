@@ -16,7 +16,6 @@
 	import { getTimelogs, getUsers, getEpics, getEpicAreas } from './data.js';
 	import Autocomplete from '../library/components/autocomplete.svelte';
 	import { SelectItem } from 'carbon-components-svelte';
-	import { CellTower } from 'carbon-icons-svelte';
 	import Index from './index.svelte';
 
 	let users: any[];
