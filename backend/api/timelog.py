@@ -1,3 +1,4 @@
+import string
 from fastapi import APIRouter, Depends
 from ..utils import get_session
 from sqlmodel import Session, select
@@ -5,6 +6,9 @@ from ..models.user import AppUser
 from ..models.timelog import TimeLog
 from ..models.epic import Epic
 from ..models.epic_area import EpicArea
+from datetime import datetime
+from typing import List
+from pydantic import BaseModel, root_validator
 
 router = APIRouter(prefix="/api/timelogs", tags=["timelog"])
 
@@ -245,3 +249,65 @@ async def delete_timelogs(
     session.delete(timelog_to_delete)
     session.commit()
     return True
+
+
+class UpdateTimeLog(BaseModel):
+    """
+    Pydantic model for timelogs post-update method.
+    Class arguments equal frontend table headers"""
+    id: int
+    username: str
+    first_name: str
+    last_name: str
+    user_email: str
+    epic_name: str
+    epic_area_name: str
+    start_time: datetime
+    end_time: datetime
+    count_hours: float
+    count_days: float
+    
+    @root_validator(pre=True)
+    def check_time_delta(cls, values):
+        assert (
+            values["start_time"] < values["end_time"]
+        ), "start_time must be smaller then end_time"
+        return values
+
+    # @validator("count_hours", always=True)
+    def daily_hours(cls, hours_input):
+        assert hours_input < 12, "user worked over 12 hours"
+        return hours_input
+
+    # @validator("year", always=True)
+    def valid_year(cls, year_input):
+        assert year_input in range(
+            2021, datetime.now().year + 1
+        ), "year value not in range [2021, current year]"
+        return year_input
+
+
+@router.post("/update")
+async def update_timelogs(timelogs: List[UpdateTimeLog], session: Session = Depends(get_session),
+):
+    l = []
+    for timelog in timelogs:
+        statement = select(TimeLog).where(TimeLog.id == timelog.id)
+        timelog_to_update = session.exec(statement).one()
+        timelog_to_update.start_time = timelog.start_time
+        timelog_to_update.end_time = timelog.end_time
+        
+        time_delta = timelog.end_time - timelog.start_time
+        work_delta_hours = time_delta.total_seconds() / 3600
+        work_hours = "{:.3f}".format(work_delta_hours)
+        work_delta_days = time_delta.total_seconds() / 3600 / 8
+        work_days = "{:.3f}".format(work_delta_days)
+        
+        timelog_to_update.count_hours = work_hours
+        timelog_to_update.count_days = work_days
+        timelog_to_update.updated_at = datetime.now()
+        session.add(timelog_to_update)
+        # session.refresh(timelog_to_update)
+    session.commit()
+        # l.append(timelog_to_update)
+    return l
