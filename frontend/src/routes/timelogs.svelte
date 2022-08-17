@@ -16,6 +16,8 @@
 	import { getTimelogs, getUsers, getEpics, getEpicAreas } from './data.js';
 	import Autocomplete from '../library/components/autocomplete.svelte';
 	import { SelectItem } from 'carbon-components-svelte';
+	import { CellTower } from 'carbon-icons-svelte';
+	import Index from './index.svelte';
 
 	let users: any[];
 	let epics: any[];
@@ -43,6 +45,10 @@
 	let selectedRowIds: any = [];
 	let selectedItemDisplay = '';
 	let selectedItemValue = '';
+
+	let upData: Array<object> = [];
+	let editColumnsNames: Array<string> = ['start_time', 'end_time'];
+	let updateRes: any;
 
 	onMount(async () => {
 		users = await getUsers(users);
@@ -119,12 +125,35 @@
 			}
 		);
 		epicAreas = await response.json();
-		console.log('epicAreas are', epicAreas);
 		return epicAreas;
+	}
+	//@ts-ignore
+	function updateData(e, r, c) {
+		let columnKey: any = c.cell.key;
+		let value = c.cell.value;
+		let id = r.row.id;
+		let row = r.row;
+		let i = timelogs.findIndex((e) => e.id == r.id);
+		// console.log(e, e.srcElement.value);
+		if (!(upData.filter((obj) => obj.id === r.row.id).length > 0)) {
+			upData = [...upData, row];
+		}
+		let objIndex: number = upData.findIndex((obj) => obj.id == id);
+		upData[objIndex][columnKey] = e.srcElement.value;
+	}
+	async function onUpdate() {
+		const updateRes = await fetch('http://localhost:8002/api/timelogs/update', {
+			method: 'POST',
+			headers: { 'Content-type': 'application/json' },
+			body: JSON.stringify(upData)
+		});
+		timelogs = await getTimelogs(timelogs);
+		upData = [];
+		selectedRowIds = [];
+		console.log('update res', updateRes);
 	}
 </script>
 
-{@debug selectedEpic}
 <Grid>
 	<Row>
 		<Column>
@@ -161,7 +190,11 @@
 			<DateInput format="yyyy-MM-dd HH:mm" bind:value={endTime} />
 		</Column>
 		<Column>
-			<Button class="button" on:click={onSubmit} size="small" kind="primary">Submit</Button>
+			<input type="datetime-local" class="datetime-input" />
+		</Column>
+		<Column>
+			<Button class="button-timelogs" on:click={onSubmit} size="small" kind="primary">Submit</Button
+			>
 		</Column>
 	</Row>
 	<Row />
@@ -172,14 +205,21 @@
 			><p>
 				You selected user <b>{selectedUser.username}</b> and Epic <b>{selectedEpic.epic_name}</b>
 				and Epic Area <b>{selectedEpicArea.epic_area_name}</b>
+				and updateRes: {updateRes}
 			</p></Column
+		>
+		<Column>
+			<pre>
+				<!-- upData is
+				{JSON.stringify(upData, null, 2)} -->
+			</pre></Column
 		>
 	</Row>
 	<Row>
 		<Column>
 			<DataTable
 				sortable
-				batchSelection
+				selectable
 				bind:selectedRowIds
 				headers={[
 					{ key: 'id', value: 'ID' },
@@ -198,9 +238,27 @@
 				<Toolbar>
 					<ToolbarBatchActions>
 						<Button icon={TrashCan} on:click={onRemove}>Remove</Button>
+						<Button on:click={onUpdate}>Update</Button>
 					</ToolbarBatchActions>
 				</Toolbar>
+
+				<svelte:fragment slot="cell" let:cell let:row let:rowIndex let:cellIndex>
+					{#if selectedRowIds.includes(row.id)}
+						{#if editColumnsNames.includes(cell.key)}
+							<input
+								type="text"
+								value={cell.value}
+								on:blur={(e) => updateData(e, { row }, { cell })}
+							/>
+						{:else}
+							{cell.value}
+						{/if}
+					{:else}
+						{cell.value}
+					{/if}
+				</svelte:fragment>
 			</DataTable>
+
 			<Pagination
 				bind:pageSize={Pagination.pageSize}
 				bind:page={Pagination.page}
@@ -211,14 +269,37 @@
 </Grid>
 
 <style>
-	:global(.button) {
+	:global(.button-timelogs) {
 		background-color: #9684e5;
 	}
 
 	:global(.auto_complete) {
 		height: 2.5rem;
 	}
-
+	.datetime-input {
+		font-size: 0.875rem;
+		font-weight: 400;
+		line-height: 1.28572;
+		letter-spacing: 0.16px;
+		outline: 2px solid rgba(0, 0, 0, 0);
+		outline-offset: -2px;
+		display: block;
+		width: 100%;
+		cursor: pointer;
+		height: 2.5rem;
+		padding: 0 1rem 0 0.5rem;
+		border: none;
+		border-bottom: 1px solid #8d8d8d;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+		background-color: #f4f4f4;
+		border-radius: 0;
+		color: #161616;
+		font-family: inherit;
+		opacity: 1;
+		transition: outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+	}
 	:global(.autocomplete-input) {
 		font-size: 0.875rem;
 		font-weight: 400;
@@ -246,5 +327,9 @@
 
 	b {
 		font-weight: bold;
+	}
+	input[type='text'] {
+		background-color: #f1f1f1;
+		width: 100%;
 	}
 </style>
