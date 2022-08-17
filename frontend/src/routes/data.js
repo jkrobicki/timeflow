@@ -18,7 +18,6 @@ async function getUsers(users) {
         headers: { 'Content-type': 'application/json' }
     });
     users = await response.json()
-    console.log(users)
     return users
 };
 /**
@@ -43,5 +42,16 @@ async function getEpicAreas(epicAreas) {
     epicAreas = await response.json()
     return epicAreas
 };
+/**
+ * @param {any} capacities
+ */
+async function getCapacities(capacities) {
+    const response = await fetch('http://localhost:8002/api/capacities/', {
+        method: 'GET',
+        headers: { 'Content-type': 'application/json' }
+    });
+    capacities = await response.json()
+    return capacities
+};
 
-export { getTimelogs, getUsers, getEpics, getEpicAreas }
+export { getTimelogs, getUsers, getEpics, getEpicAreas, getCapacities }

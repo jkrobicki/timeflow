@@ -64,12 +64,13 @@ async def get_capacities(
         Year of capacity in question.
     """
     statement = select(
-        Capacity.id.label("capacity_id"),
+        Capacity.id,
         AppUser.last_name,
         AppUser.first_name,
         Capacity.year,
         Capacity.month,
         Capacity.days,
+        (AppUser.first_name + ' ' + AppUser.last_name).label("full_name"),
     ).join(AppUser, Capacity.user_id == AppUser.id)
     if (user_id and month and year) != None:
         statement_final = (

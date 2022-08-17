@@ -15,7 +15,6 @@
 	import { TrashCan } from '../library/carbon/icons';
 	import { getTimelogs, getUsers, getEpics, getEpicAreas } from './data.js';
 	import Autocomplete from '../library/components/autocomplete.svelte';
-	import { SelectItem } from 'carbon-components-svelte';
 
 	let users: any[];
 	let epics: any[];
@@ -48,6 +47,7 @@
 	});
 	onMount(async () => {
 		timelogs = await getTimelogs(timelogs);
+		console.log('timelogs: ', timelogs);
 	});
 
 	async function onSubmit() {
@@ -98,11 +98,9 @@
 	}
 	async function handleSelectEpicArea(selectedItem: any) {
 		selectedEpicArea = selectedItem;
-		console.log('selected epic area name is', selectedEpicArea.epic_area_name);
 		return selectedEpicArea;
 	}
 	async function epicAreasByEpic(selectedEpic: any) {
-		console.log('epic id is', selectedEpic.epic_id);
 		const response = await fetch(
 			'http://localhost:8002/api/epic_areas/?epic_id=' + selectedEpic.epic_id,
 			{
@@ -111,7 +109,6 @@
 			}
 		);
 		epicAreas = await response.json();
-		console.log('epicAreas are', epicAreas);
 		return epicAreas;
 	}
 </script>
@@ -204,6 +201,22 @@
 <style>
 	:global(.button) {
 		background-color: #9684e5;
+		height: 2.5rem;
+		font-size: 16px;
+		display: block;
+	}
+
+	:global(input.s-PqcUnfQoZ78k) {
+		position: relative;
+		height: 2.5rem;
+		width: 100%;
+		border: 0;
+		border-bottom: solid 1px;
+		background-color: #f1f1f1;
+		padding-left: 0.5rem;
+		display: block;
+		font-size: 16px;
+		padding-bottom: 0px;
 	}
 
 	:global(.auto_complete) {
