@@ -14,5 +14,5 @@ export {
     Pagination,
     Select,
     Header, SideNav, SideNavItems, SideNavMenu, SideNavMenuItem, SideNavLink, SkipToContent, Content,
-    NumberInput
+    NumberInput,
 };
