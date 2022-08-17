@@ -11,6 +11,12 @@
 	} from '../library/carbon/components';
 
 	let isSideNavOpen = false;
+	let selectedNavLink = '';
+
+	function handleClick(event) {
+		selectedNavLink = event.target.outerText;
+		console.log('event', event);
+	}
 </script>
 
 <Header company="dyvenia" platformName="timeflow" bind:isSideNavOpen persistentHamburgerMenu>
@@ -20,10 +26,33 @@
 </Header>
 <SideNav bind:isOpen={isSideNavOpen}>
 	<SideNavItems>
-		<SideNavLink href="/timelogs" text="Timelogs" />
-		<SideNavLink href="/capacities" text="Capacities" />
+		<SideNavLink
+			id="1"
+			href="/timelogs"
+			text="Timelogs"
+			isSelected={selectedNavLink == 'Timelogs'}
+			on:click={handleClick}
+		/>
+		<SideNavLink
+			href="/capacities"
+			text="Capacities"
+			isSelected={selectedNavLink == 'Capacities'}
+			on:click={handleClick}
+		/>
+		<SideNavLink
+			href="/editable_datatable"
+			text="editDT"
+			isSelected={selectedNavLink == 'editDT'}
+			on:click={handleClick}
+		/>
+
 		<SideNavMenu text="Admin">
-			<SideNavMenuItem href="/" text="Link 1" />
+			<SideNavMenuItem
+				href="/users"
+				text="Users"
+				on:click={handleClick}
+				isSelected={selectedNavLink == 'Users'}
+			/>
 		</SideNavMenu>
 	</SideNavItems>
 </SideNav>

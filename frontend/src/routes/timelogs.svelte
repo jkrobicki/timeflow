@@ -28,20 +28,13 @@
 		startTime: new Date(),
 		endTime: new Date()
 	};
-	let userId = '';
-	let epicId = '';
-	let epicAreaId = '';
 	let selectedEpic = { epic_id: '', epic_name: '' };
 	let selectedEpicArea = { id: '', epic_area_name: '' };
 	let startTime = new Date();
 	let endTime = new Date();
-	let countHours = '';
-	let countDays = '';
 	let result: any = null;
 	let selectedUser = { id: '', username: '' };
 	let selectedRowIds: any = [];
-	let selectedItemDisplay = '';
-	let selectedItemValue = '';
 
 	onMount(async () => {
 		users = await getUsers(users);
@@ -87,8 +80,8 @@
 				method: 'DELETE',
 				headers: {
 					'Content-type': 'application/json'
-				},
-				body: JSON.stringify({ timelog })
+				}
+				// body: JSON.stringify({ timelog })
 			});
 			timelogs = await getTimelogs(timelogs);
 		}
@@ -174,7 +167,7 @@
 		<Column>
 			<DataTable
 				sortable
-				batchSelection
+				selectable
 				bind:selectedRowIds
 				headers={[
 					{ key: 'id', value: 'ID' },
