@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.17] - 2022-08-12
+### Added
+- Added feature for admins to see total forecasts days per selected month & year 
+    for selected epic on `Forecasts` page
 ## [0.1.12] - 2022-07-11
 ### Added
 - Added feature for users to see response message on submit click on `Capacities` page
