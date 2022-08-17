@@ -28,31 +28,33 @@
 		data[i][c.cell.key] = e.srcElement.value;
 		data[i].updated = true;
 	}
+	newData.push(obj.id);
 
-	// @ts-ignore
-	function selection(e, r, c) {
-		let i = data.findIndex((e) => e.id == r.id);
-		// @ts-ignore
-		data[i][c.key] = e.detail.selectedId;
+	function updateData(e, r, c) {
+		let columnKey = c.cell.key;
+		let value = c.cell.value;
+		let id = r.row.id;
+		data.forEach((obj) => {
+			if (!(obj.id in newData)) {
+				newData = 0;
+				console.log('newData', newData);
+			}
+		});
 	}
 </script>
 
-<DataTable bind:rows={data} headers={hdrs}>
-	<svelte:fragment slot="cell" let:cell let:row>
+<DataTable selectable bind:rows={data} headers={hdrs}>
+	<svelte:fragment slot="cell" let:cell let:row let:rowIndex let:cellIndex>
+		(row index = {rowIndex}, cell index = {cellIndex} cell={cell.key})
 		{#if cell.key === 'action'}
-			<input value={row.message} on:blur={(e) => updateData(e, { row }, { cell })} />
+			<input value={row.action} on:blur={(e) => updateData(e, { row }, { cell })} />
 		{:else if cell.key === 'message'}
-			<div
-				spellcheck="false"
-				contenteditable="true"
-				on:blur={(e) => updateData(e, { row }, { cell })}
-			>
-				{#if cell.value.length > 0}
-					{cell.value}
-				{:else}
-					✏️
-				{/if}
-			</div>
+			<input value={row.message} on:blur={(e) => updateData(e, { row }, { cell })} />
+			{#if cell.value.length > 0}
+				{cell.value}
+			{:else}
+				✏️
+			{/if}
 		{:else}
 			{cell.value}
 		{/if}
