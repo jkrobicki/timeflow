@@ -95,7 +95,7 @@
 			<input class="month-picker" type="month" bind:value={time} />
 		</Column>
 		<Column>
-			<NumberInput class="ccs-0" bind:value={numberInput} />
+			<NumberInput bind:value={numberInput} />
 		</Column>
 		<Column>
 			<Button class="button" size="small" kind="primary" on:click={onSubmit}>Submit</Button>
@@ -105,7 +105,7 @@
 		<Column>
 			<DataTable
 				sortable
-				batchSelection
+				selectable
 				bind:selectedRowIds
 				headers={[
 					{ key: 'id', value: 'capacity ID' },
@@ -198,6 +198,15 @@
 		height: 2.5rem;
 	}
 
+	:global(.bx--number input[type='number']) {
+		border-bottom: 0.0625rem solid #161616;
+		font-size: 16px;
+	}
+
+	:global(.bx--number__control-btn) {
+		border-bottom: 0.0625rem solid #161616;
+	}
+
 	:global(input.s-PqcUnfQoZ78k) {
 		position: relative;
 		height: 2.5rem;
@@ -209,6 +218,14 @@
 		display: block;
 		font-size: 16px;
 		padding-bottom: 0px;
+	}
+
+	:global(.bx--checkbox:focus
+			+ .bx--checkbox-label::before, .bx--checkbox-label__focus::before, .bx--checkbox:checked:focus
+			+ .bx--checkbox-label::before, .bx--checkbox-label[data-contained-checkbox-state='true'].bx--checkbox-label__focus::before, .bx--checkbox:indeterminate:focus
+			+ .bx--checkbox-label::before, .bx--checkbox-label[data-contained-checkbox-state='mixed'].bx--checkbox-label__focus::before) {
+		outline: 2px solid #9684e5;
+		outline-offset: 1px;
 	}
 
 	:global(.button) {
@@ -242,7 +259,7 @@
 		transition: outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
 	}
 
-	.month-picker {
+	:global(.month-picker) {
 		position: relative;
 		height: 2.5rem;
 		width: 100%;
