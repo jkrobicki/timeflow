@@ -11,7 +11,6 @@
 		Toolbar,
 		ToolbarBatchActions
 	} from '../library/carbon/components';
-	import { DateInput } from 'date-picker-svelte';
 	import { TrashCan } from '../library/carbon/icons';
 	import { getTimelogs, getUsers, getEpics, getEpicAreas } from './data.js';
 	import Autocomplete from '../library/components/autocomplete.svelte';
@@ -81,7 +80,6 @@
 				headers: {
 					'Content-type': 'application/json'
 				}
-				// body: JSON.stringify({ timelog })
 			});
 			timelogs = await getTimelogs(timelogs);
 		}
@@ -143,13 +141,13 @@
 		</Column>
 
 		<Column>
-			<DateInput format="yyyy-MM-dd HH:mm" bind:value={startTime} />
+			<input class="month-picker" type="datetime-local" bind:value={startTime} />
 		</Column>
 		<Column>
-			<DateInput format="yyyy-MM-dd HH:mm" bind:value={endTime} />
+			<input class="month-picker" type="datetime-local" bind:value={endTime} />
 		</Column>
 		<Column>
-			<Button class="button" on:click={onSubmit} size="small" kind="primary">Submit</Button>
+			<Button on:click={onSubmit} size="small" kind="primary">Submit</Button>
 		</Column>
 	</Row>
 	<Row />
@@ -197,58 +195,3 @@
 		</Column>
 	</Row>
 </Grid>
-
-<style>
-	:global(.button) {
-		background-color: #9684e5;
-		height: 2.5rem;
-		font-size: 16px;
-		display: block;
-	}
-
-	:global(input.s-PqcUnfQoZ78k) {
-		position: relative;
-		height: 2.5rem;
-		width: 100%;
-		border: 0;
-		border-bottom: solid 1px;
-		background-color: #f1f1f1;
-		padding-left: 0.5rem;
-		display: block;
-		font-size: 16px;
-		padding-bottom: 0px;
-	}
-
-	:global(.auto_complete) {
-		height: 2.5rem;
-	}
-
-	:global(.autocomplete-input) {
-		font-size: 0.875rem;
-		font-weight: 400;
-		line-height: 1.28572;
-		letter-spacing: 0.16px;
-		outline: 2px solid rgba(0, 0, 0, 0);
-		outline-offset: -2px;
-		display: block;
-		width: 100%;
-		cursor: pointer;
-		height: 2.5rem;
-		padding: 0 3rem 0 1rem;
-		border: none;
-		border-bottom: 1px solid #8d8d8d;
-		-webkit-appearance: none;
-		-moz-appearance: none;
-		appearance: none;
-		background-color: #f4f4f4;
-		border-radius: 0;
-		color: #161616;
-		font-family: inherit;
-		opacity: 1;
-		transition: outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
-	}
-
-	b {
-		font-weight: bold;
-	}
-</style>

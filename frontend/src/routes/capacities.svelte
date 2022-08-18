@@ -26,7 +26,6 @@
 	let selectedItemValue = '';
 	let numberInput = 0;
 	let time = '';
-	let emptyOpen = false;
 
 	onMount(async () => {
 		users = await getUsers(users);
@@ -98,7 +97,7 @@
 			<NumberInput bind:value={numberInput} />
 		</Column>
 		<Column>
-			<Button class="button" size="small" kind="primary" on:click={onSubmit}>Submit</Button>
+			<Button size="small" kind="primary" on:click={onSubmit}>Submit</Button>
 		</Column>
 	</Row>
 	<Row>
@@ -132,143 +131,3 @@
 		</Column>
 	</Row>
 </Grid>
-
-<style>
-	:global(section.bx--table-toolbar) {
-		position: relative;
-		display: flex;
-		width: 100%;
-		min-height: 3rem;
-		background-color: #ffff;
-	}
-
-	:global(div.bx--batch-actions--active) {
-		overflow: auto hidden;
-		clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-		pointer-events: all;
-		transform: translate3d(0, 0, 0);
-		background-color: #9684e5;
-	}
-
-	:global(div.bx--batch-summary) {
-		position: sticky;
-		z-index: 100000;
-		left: 0;
-		display: flex;
-		min-height: 3rem;
-		align-items: center;
-		padding: 0 1rem;
-		background-color: #9684e5;
-		color: #fff;
-	}
-
-	:global(button.bx--batch-summary) {
-		position: sticky;
-		z-index: 100000;
-		left: 0;
-		display: flex;
-		min-height: 3rem;
-		align-items: center;
-		padding: 0 1rem;
-		background-color: #9684e5;
-		color: #fff;
-	}
-
-	:global(button.bx--btn--primary:hover) {
-		background-color: #9684e5;
-	}
-
-	:global(div.bx--batch-actions) {
-		background-color: #9684e5;
-	}
-
-	:global(button.bx--btn--primary) {
-		border-width: 1px;
-		border-style: solid;
-		border-color: rgba(0, 0, 0, 0);
-		background-color: #9684e5;
-		color: #fff;
-	}
-
-	:global(.button) {
-		background-color: #9684e5;
-	}
-
-	:global(.auto_complete) {
-		height: 2.5rem;
-	}
-
-	:global(.bx--number input[type='number']) {
-		border-bottom: 0.0625rem solid #161616;
-		font-size: 16px;
-	}
-
-	:global(.bx--number__control-btn) {
-		border-bottom: 0.0625rem solid #161616;
-	}
-
-	:global(input.s-PqcUnfQoZ78k) {
-		position: relative;
-		height: 2.5rem;
-		width: 100%;
-		border: 0;
-		border-bottom: solid 1px;
-		background-color: #f1f1f1;
-		padding-left: 0.5rem;
-		display: block;
-		font-size: 16px;
-		padding-bottom: 0px;
-	}
-
-	:global(.bx--checkbox:focus
-			+ .bx--checkbox-label::before, .bx--checkbox-label__focus::before, .bx--checkbox:checked:focus
-			+ .bx--checkbox-label::before, .bx--checkbox-label[data-contained-checkbox-state='true'].bx--checkbox-label__focus::before, .bx--checkbox:indeterminate:focus
-			+ .bx--checkbox-label::before, .bx--checkbox-label[data-contained-checkbox-state='mixed'].bx--checkbox-label__focus::before) {
-		outline: 2px solid #9684e5;
-		outline-offset: 1px;
-	}
-
-	:global(.button) {
-		background-color: #9684e5;
-		height: 2.5rem;
-		font-size: 16px;
-		display: block;
-	}
-	:global(.autocomplete-input) {
-		font-size: 0.875rem;
-		font-weight: 400;
-		line-height: 1.28572;
-		letter-spacing: 0.16px;
-		outline: 2px solid rgba(0, 0, 0, 0);
-		outline-offset: -2px;
-		display: block;
-		width: 100%;
-		cursor: pointer;
-		height: 2.5rem;
-		padding: 0 3rem 0 1rem;
-		border: none;
-		border-bottom: 1px solid #8d8d8d;
-		-webkit-appearance: none;
-		-moz-appearance: none;
-		appearance: none;
-		background-color: #f4f4f4;
-		border-radius: 0;
-		color: #161616;
-		font-family: inherit;
-		opacity: 1;
-		transition: outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
-	}
-
-	:global(.month-picker) {
-		position: relative;
-		height: 2.5rem;
-		width: 100%;
-		border: 0;
-		border-bottom: solid 1px;
-		background-color: #f1f1f1;
-		padding-left: 0.5rem;
-		display: block;
-		font-size: 16px;
-		padding-bottom: 0px;
-	}
-</style>
