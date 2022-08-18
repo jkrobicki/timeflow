@@ -9,7 +9,7 @@
 		SkipToContent,
 		Content
 	} from '../library/carbon/components';
-
+	import '../app.css';
 	let isSideNavOpen = false;
 	let selectedNavLink = '';
 
