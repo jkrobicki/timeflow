@@ -11,11 +11,9 @@
 		Toolbar,
 		ToolbarBatchActions
 	} from '../library/carbon/components';
-	import { DateInput } from 'date-picker-svelte';
 	import { TrashCan } from '../library/carbon/icons';
 	import { getTimelogs, getUsers, getEpics, getEpicAreas } from './data.js';
 	import Autocomplete from '../library/components/autocomplete.svelte';
-	import Index from './index.svelte';
 
 	let users: any[];
 	let epics: any[];
@@ -29,20 +27,13 @@
 		startTime: new Date(),
 		endTime: new Date()
 	};
-	let userId = '';
-	let epicId = '';
-	let epicAreaId = '';
 	let selectedEpic = { epic_id: '', epic_name: '' };
 	let selectedEpicArea = { id: '', epic_area_name: '' };
 	let startTime = new Date();
 	let endTime = new Date();
-	let countHours = '';
-	let countDays = '';
 	let result: any = null;
 	let selectedUser = { id: '', username: '' };
 	let selectedRowIds: any = [];
-	let selectedItemDisplay = '';
-	let selectedItemValue = '';
 
 	let upData: Array<object> = [];
 	let editColumnsNames: Array<string> = ['start_time', 'end_time'];
@@ -86,7 +77,6 @@
 	}
 
 	async function onRemove() {
-		console.log('array is:', selectedRowIds);
 		async function DeleteApi(id: number) {
 			const response = await fetch('http://localhost:8002/api/timelogs/' + id, {
 				method: 'DELETE',
@@ -110,11 +100,9 @@
 	}
 	async function handleSelectEpicArea(selectedItem: any) {
 		selectedEpicArea = selectedItem;
-		console.log('selected epic area name is', selectedEpicArea.epic_area_name);
 		return selectedEpicArea;
 	}
 	async function epicAreasByEpic(selectedEpic: any) {
-		console.log('epic id is', selectedEpic.epic_id);
 		const response = await fetch(
 			'http://localhost:8002/api/epic_areas/?epic_id=' + selectedEpic.epic_id,
 			{
@@ -131,12 +119,14 @@
 		let value = c.cell.value;
 		let id = r.row.id;
 		let row = r.row;
+		//@ts-ignore
 		let i = timelogs.findIndex((e) => e.id == r.id);
-		// console.log(e, e.srcElement.value);
+		//@ts-ignore
 		if (!(upData.filter((obj) => obj.id === r.row.id).length > 0)) {
 			upData = [...upData, row];
 		}
 		let objIndex: number = upData.findIndex((obj) => obj.id == id);
+		//@ts-ignore
 		upData[objIndex][columnKey] = e.srcElement.value;
 	}
 	async function onUpdate() {
@@ -148,7 +138,6 @@
 		timelogs = await getTimelogs(timelogs);
 		upData = [];
 		selectedRowIds = [];
-		console.log('update res', updateRes);
 	}
 </script>
 
@@ -182,14 +171,13 @@
 		</Column>
 
 		<Column>
-			<DateInput format="yyyy-MM-dd HH:mm" bind:value={startTime} />
+			<input class="month-picker" type="datetime-local" bind:value={startTime} />
 		</Column>
 		<Column>
-			<DateInput format="yyyy-MM-dd HH:mm" bind:value={endTime} />
+			<input class="month-picker" type="datetime-local" bind:value={endTime} />
 		</Column>
 		<Column>
-			<Button class="button-timelogs" on:click={onSubmit} size="small" kind="primary">Submit</Button
-			>
+			<Button on:click={onSubmit} size="small" kind="primary">Submit</Button>
 		</Column>
 	</Row>
 	<Row>
@@ -244,66 +232,3 @@
 		</Column>
 	</Row>
 </Grid>
-
-<style>
-	:global(.button-timelogs) {
-		background-color: #9684e5;
-	}
-
-	:global(.auto_complete) {
-		height: 2.5rem;
-	}
-	.datetime-input {
-		font-size: 0.875rem;
-		font-weight: 400;
-		line-height: 1.28572;
-		letter-spacing: 0.16px;
-		outline: 2px solid rgba(0, 0, 0, 0);
-		outline-offset: -2px;
-		display: block;
-		width: 100%;
-		cursor: pointer;
-		height: 2.5rem;
-		padding: 0 1rem 0 0.5rem;
-		border: none;
-		border-bottom: 1px solid #8d8d8d;
-		-webkit-appearance: none;
-		-moz-appearance: none;
-		appearance: none;
-		background-color: #f4f4f4;
-		border-radius: 0;
-		color: #161616;
-		font-family: inherit;
-		opacity: 1;
-		transition: outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
-	}
-	:global(.autocomplete-input) {
-		font-size: 0.875rem;
-		font-weight: 400;
-		line-height: 1.28572;
-		letter-spacing: 0.16px;
-		outline: 2px solid rgba(0, 0, 0, 0);
-		outline-offset: -2px;
-		display: block;
-		width: 100%;
-		cursor: pointer;
-		height: 2.5rem;
-		padding: 0 3rem 0 1rem;
-		border: none;
-		border-bottom: 1px solid #8d8d8d;
-		-webkit-appearance: none;
-		-moz-appearance: none;
-		appearance: none;
-		background-color: #f4f4f4;
-		border-radius: 0;
-		color: #161616;
-		font-family: inherit;
-		opacity: 1;
-		transition: outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
-	}
-
-	input[type='text'] {
-		background-color: #f1f1f1;
-		width: 100%;
-	}
-</style>
