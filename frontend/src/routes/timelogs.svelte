@@ -15,7 +15,6 @@
 	import { TrashCan } from '../library/carbon/icons';
 	import { getTimelogs, getUsers, getEpics, getEpicAreas } from './data.js';
 	import Autocomplete from '../library/components/autocomplete.svelte';
-	import { SelectItem } from 'carbon-components-svelte';
 	import Index from './index.svelte';
 
 	let users: any[];
@@ -189,30 +188,9 @@
 			<DateInput format="yyyy-MM-dd HH:mm" bind:value={endTime} />
 		</Column>
 		<Column>
-			<input type="datetime-local" class="datetime-input" />
-		</Column>
-		<Column>
 			<Button class="button-timelogs" on:click={onSubmit} size="small" kind="primary">Submit</Button
 			>
 		</Column>
-	</Row>
-	<Row />
-	<br />
-	<Row />
-	<Row>
-		<Column
-			><p>
-				You selected user <b>{selectedUser.username}</b> and Epic <b>{selectedEpic.epic_name}</b>
-				and Epic Area <b>{selectedEpicArea.epic_area_name}</b>
-				and updateRes: {updateRes}
-			</p></Column
-		>
-		<Column>
-			<pre>
-				<!-- upData is
-				{JSON.stringify(upData, null, 2)} -->
-			</pre></Column
-		>
 	</Row>
 	<Row>
 		<Column>
@@ -324,9 +302,6 @@
 		transition: outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
 	}
 
-	b {
-		font-weight: bold;
-	}
 	input[type='text'] {
 		background-color: #f1f1f1;
 		width: 100%;
