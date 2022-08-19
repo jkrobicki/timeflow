@@ -19,7 +19,6 @@
 	let epics: any[];
 	let epicAreas: any;
 	let timelogs: any = [];
-
 	let timelog = {
 		username: '',
 		epicName: '',
@@ -29,8 +28,8 @@
 	};
 	let selectedEpic = { epic_id: '', epic_name: '' };
 	let selectedEpicArea = { id: '', epic_area_name: '' };
-	let startTime = new Date();
-	let endTime = new Date();
+	let startTimeRaw: string;
+	let endTimeRaw: string;
 	let result: any = null;
 	let selectedUser = { id: '', username: '' };
 	let selectedRowIds: any = [];
@@ -50,6 +49,9 @@
 	});
 
 	async function onSubmit() {
+		let startTime = new Date(startTimeRaw);
+		let endTime = new Date(endTimeRaw);
+
 		const res = await fetch('http://localhost:8002/api/timelogs/', {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
@@ -68,6 +70,23 @@
 				is_locked: false
 			})
 		});
+		console.log(
+			JSON.stringify({
+				user_id: selectedUser.id,
+				start_time: startTime,
+				end_time: endTime,
+				epic_id: selectedEpic.epic_id,
+				epic_area_id: selectedEpicArea.id,
+				count_hours: 1,
+				count_days: 2,
+				month: startTime.getMonth() + 1,
+				year: startTime.getFullYear(),
+				created_at: Date.now(),
+				updated_at: Date.now(),
+				is_locked: false
+			})
+		);
+
 		const json = await res.json();
 		result = JSON.stringify(json);
 		timelogs = await getTimelogs(timelogs);
@@ -109,6 +128,14 @@
 		epicAreas = await response.json();
 		return epicAreas;
 	}
+	async function consoleStartTime() {
+		console.log(startTimeRaw);
+		let datest = new Date(startTimeRaw);
+		console.log('datest is', datest);
+	}
+	async function consoleEndTime() {
+		console.log(endTimeRaw);
+	}
 </script>
 
 <Grid>
@@ -141,10 +168,20 @@
 		</Column>
 
 		<Column>
-			<input class="month-picker" type="datetime-local" bind:value={startTime} />
+			<input
+				class="month-picker"
+				type="datetime-local"
+				bind:value={startTimeRaw}
+				on:blur={consoleStartTime}
+			/>
 		</Column>
 		<Column>
-			<input class="month-picker" type="datetime-local" bind:value={endTime} />
+			<input
+				class="month-picker"
+				type="datetime-local"
+				bind:value={endTimeRaw}
+				on:blur={consoleEndTime}
+			/>
 		</Column>
 		<Column>
 			<Button on:click={onSubmit} size="small" kind="primary">Submit</Button>
@@ -158,6 +195,8 @@
 			><p>
 				You selected user <b>{selectedUser.username}</b> and Epic <b>{selectedEpic.epic_name}</b>
 				and Epic Area <b>{selectedEpicArea.epic_area_name}</b>
+				and start time is {startTimeRaw}
+				end time is {endTimeRaw}
 			</p></Column
 		>
 	</Row>
