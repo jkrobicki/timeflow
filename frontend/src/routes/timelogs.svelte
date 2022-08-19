@@ -131,7 +131,7 @@
 		upData[objIndex][columnKey] = e.srcElement.value;
 	}
 	async function onUpdate() {
-		const updateRes = await fetch('http://localhost:8002/api/timelogs/update', {
+		const updateRes = await fetch('http://localhost:8002/api/timelogs/bulk_update', {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify(upData)
