@@ -45,13 +45,6 @@
 			isSelected={selectedNavLink == 'Capacities'}
 			on:click={handleClick}
 		/>
-		<SideNavLink
-			href="/editable_datatable"
-			text="editDT"
-			isSelected={selectedNavLink == 'editDT'}
-			on:click={handleClick}
-		/>
-
 		<SideNavMenu text="Admin">
 			<SideNavMenuItem
 				href="/users"

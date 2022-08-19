@@ -15,8 +15,7 @@
 	import { TrashCan } from '../library/carbon/icons';
 	import { getTimelogs, getUsers, getEpics, getEpicAreas } from './data.js';
 	import Autocomplete from '../library/components/autocomplete.svelte';
-	import { SelectItem } from 'carbon-components-svelte';
-	import Index from './index.svelte';
+	import EditableDatatable, { upData3 } from '../library/components/editableDatatable.svelte';
 
 	let users: any[];
 	let epics: any[];
@@ -44,10 +43,13 @@
 	let selectedRowIds: any = [];
 	let selectedItemDisplay = '';
 	let selectedItemValue = '';
+	let selectIds: Array<number> = [];
 
 	let upData: Array<object> = [];
 	let editColumnsNames: Array<string> = ['start_time', 'end_time'];
 	let updateRes: any;
+	let ColumnsToEdit = ['start_time'];
+	let upData2: Array<object> = [];
 
 	onMount(async () => {
 		users = await getUsers(users);
@@ -100,6 +102,20 @@
 		}
 		selectedRowIds.map(DeleteApi);
 	}
+	async function onRemove2() {
+		console.log('array is:', selectIds);
+		async function DeleteApi(id: number) {
+			const response = await fetch('http://localhost:8002/api/timelogs/' + id, {
+				method: 'DELETE',
+				headers: {
+					'Content-type': 'application/json'
+				},
+				body: JSON.stringify({ timelog })
+			});
+			timelogs = await getTimelogs(timelogs);
+		}
+		selectIds.map(DeleteApi);
+	}
 
 	async function handleSelect(selectedItem: any) {
 		selectedUser = selectedItem;
@@ -132,6 +148,7 @@
 		let value = c.cell.value;
 		let id = r.row.id;
 		let row = r.row;
+		//@ts-ignore
 		let i = timelogs.findIndex((e) => e.id == r.id);
 		// console.log(e, e.srcElement.value);
 		if (!(upData.filter((obj) => obj.id === r.row.id).length > 0)) {
@@ -149,6 +166,18 @@
 		timelogs = await getTimelogs(timelogs);
 		upData = [];
 		selectedRowIds = [];
+		console.log('update res', updateRes);
+	}
+	async function onUpdate2() {
+		const updateRes = await fetch('http://localhost:8002/api/timelogs/update', {
+			method: 'POST',
+			headers: { 'Content-type': 'application/json' },
+			body: JSON.stringify(upData2)
+		});
+
+		timelogs = await getTimelogs(timelogs);
+		upData = [];
+		selectIds = [];
 		console.log('update res', updateRes);
 	}
 </script>
@@ -189,33 +218,30 @@
 			<DateInput format="yyyy-MM-dd HH:mm" bind:value={endTime} />
 		</Column>
 		<Column>
-			<input type="datetime-local" class="datetime-input" />
-		</Column>
-		<Column>
 			<Button class="button-timelogs" on:click={onSubmit} size="small" kind="primary">Submit</Button
 			>
 		</Column>
 	</Row>
-	<Row />
-	<br />
-	<Row />
-	<Row>
-		<Column
-			><p>
-				You selected user <b>{selectedUser.username}</b> and Epic <b>{selectedEpic.epic_name}</b>
-				and Epic Area <b>{selectedEpicArea.epic_area_name}</b>
-				and updateRes: {updateRes}
-			</p></Column
-		>
-		<Column>
-			<pre>
-				<!-- upData is
-				{JSON.stringify(upData, null, 2)} -->
-			</pre></Column
-		>
-	</Row>
 	<Row>
 		<Column>
+			<EditableDatatable
+				headers={[
+					{ key: 'id', value: 'ID' },
+					{ key: 'username', value: 'USERAME' },
+					{ key: 'epic_name', value: 'EPIC NAME' },
+					{ key: 'epic_area_name', value: 'EPIC AREA NAME' },
+					{ key: 'start_time', value: 'START TIME' },
+					{ key: 'end_time', value: 'END TIME' },
+					{ key: 'count_hours', value: 'COUNT HOURS' },
+					{ key: 'count_days', value: 'COUNT DAYS' }
+				]}
+				rows={timelogs}
+				{ColumnsToEdit}
+				bind:selectedRowIds={selectIds}
+				onRemove={onRemove2}
+				onUpdate={onUpdate2}
+				{upData2}
+			/>
 			<DataTable
 				sortable
 				selectable
@@ -324,9 +350,6 @@
 		transition: outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
 	}
 
-	b {
-		font-weight: bold;
-	}
 	input[type='text'] {
 		background-color: #f1f1f1;
 		width: 100%;
