@@ -11,6 +11,7 @@
 		Toolbar,
 		ToolbarBatchActions
 	} from '../library/carbon/components';
+	import { DateInput } from 'date-picker-svelte';
 	import { TrashCan } from '../library/carbon/icons';
 	import { getTimelogs, getUsers, getEpics, getEpicAreas } from './data.js';
 	import Autocomplete from '../library/components/autocomplete.svelte';
@@ -171,10 +172,10 @@
 		</Column>
 
 		<Column>
-			<input class="month-picker" type="datetime-local" bind:value={startTime} />
+			<DateInput bind:value={startTime} />
 		</Column>
 		<Column>
-			<input class="month-picker" type="datetime-local" bind:value={endTime} />
+			<DateInput bind:value={endTime} />
 		</Column>
 		<Column>
 			<Button on:click={onSubmit} size="small" kind="primary">Submit</Button>
