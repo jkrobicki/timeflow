@@ -36,6 +36,10 @@
 	let selectedUser = { id: '', username: '' };
 	let selectedRowIds: any = [];
 
+	let upData: Array<object> = [];
+	let editColumnsNames: Array<string> = ['start_time', 'end_time'];
+	let updateRes: any;
+
 	onMount(async () => {
 		users = await getUsers(users);
 	});
@@ -47,7 +51,6 @@
 	});
 	onMount(async () => {
 		timelogs = await getTimelogs(timelogs);
-		console.log('timelogs: ', timelogs);
 	});
 
 	async function onSubmit() {
@@ -80,7 +83,8 @@
 				method: 'DELETE',
 				headers: {
 					'Content-type': 'application/json'
-				}
+				},
+				body: JSON.stringify({ timelog })
 			});
 			timelogs = await getTimelogs(timelogs);
 		}
@@ -109,6 +113,32 @@
 		);
 		epicAreas = await response.json();
 		return epicAreas;
+	}
+	//@ts-ignore
+	function updateData(e, r, c) {
+		let columnKey: any = c.cell.key;
+		let value = c.cell.value;
+		let id = r.row.id;
+		let row = r.row;
+		//@ts-ignore
+		let i = timelogs.findIndex((e) => e.id == r.id);
+		//@ts-ignore
+		if (!(upData.filter((obj) => obj.id === r.row.id).length > 0)) {
+			upData = [...upData, row];
+		}
+		let objIndex: number = upData.findIndex((obj) => obj.id == id);
+		//@ts-ignore
+		upData[objIndex][columnKey] = e.srcElement.value;
+	}
+	async function onUpdate() {
+		const updateRes = await fetch('http://localhost:8002/api/timelogs/bulk_update', {
+			method: 'POST',
+			headers: { 'Content-type': 'application/json' },
+			body: JSON.stringify(upData)
+		});
+		timelogs = await getTimelogs(timelogs);
+		upData = [];
+		selectedRowIds = [];
 	}
 </script>
 
@@ -151,17 +181,6 @@
 			<Button on:click={onSubmit} size="small" kind="primary">Submit</Button>
 		</Column>
 	</Row>
-	<Row />
-	<br />
-	<Row />
-	<Row>
-		<Column
-			><p>
-				You selected user <b>{selectedUser.username}</b> and Epic <b>{selectedEpic.epic_name}</b>
-				and Epic Area <b>{selectedEpicArea.epic_area_name}</b>
-			</p></Column
-		>
-	</Row>
 	<Row>
 		<Column>
 			<DataTable
@@ -185,9 +204,27 @@
 				<Toolbar>
 					<ToolbarBatchActions>
 						<Button icon={TrashCan} on:click={onRemove}>Remove</Button>
+						<Button on:click={onUpdate}>Update</Button>
 					</ToolbarBatchActions>
 				</Toolbar>
+
+				<svelte:fragment slot="cell" let:cell let:row let:rowIndex let:cellIndex>
+					{#if selectedRowIds.includes(row.id)}
+						{#if editColumnsNames.includes(cell.key)}
+							<input
+								type="text"
+								value={cell.value}
+								on:blur={(e) => updateData(e, { row }, { cell })}
+							/>
+						{:else}
+							{cell.value}
+						{/if}
+					{:else}
+						{cell.value}
+					{/if}
+				</svelte:fragment>
 			</DataTable>
+
 			<Pagination
 				bind:pageSize={Pagination.pageSize}
 				bind:page={Pagination.page}
