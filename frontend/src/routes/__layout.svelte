@@ -39,6 +39,15 @@
 			isSelected={selectedNavLink == 'Capacities'}
 			on:click={handleClick}
 		/>
+
+		<SideNavMenu text="Admin">
+			<SideNavMenuItem
+				href="/users"
+				text="Users"
+				on:click={handleClick}
+				isSelected={selectedNavLink == 'Users'}
+			/>
+		</SideNavMenu>
 	</SideNavItems>
 </SideNav>
 
