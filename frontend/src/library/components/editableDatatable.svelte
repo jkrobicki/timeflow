@@ -1,7 +1,3 @@
-<script lang="ts" context="module">
-	export let upData3: Array<object>;
-</script>
-
 <!-- update functionality not working yet! -->
 <script lang="ts">
 	import {
@@ -18,7 +14,8 @@
 	export let selectedRowIds: Array<number>;
 	export let onRemove: Function;
 	export let onUpdate: Function;
-	export let upData2: Array<object>;
+	export let upData: Array<object> = [];
+
 	//@ts-ignore
 	function updateData(e, r, c) {
 		let columnKey: any = c.cell.key;
@@ -27,17 +24,14 @@
 		let row = r.row;
 		//@ts-ignore
 		let i = rows.findIndex((e) => e.id == r.id);
-		// console.log(e, e.srcElement.value);
 		//@ts-ignore
-		if (!(upData2.filter((obj) => obj.id === r.row.id).length > 0)) {
-			upData2 = [...upData2, row];
+		if (!(upData.filter((obj) => obj.id === r.row.id).length > 0)) {
+			upData = [...upData, row];
 		}
-		let objIndex: number = upData2.findIndex((obj) => obj.id == id);
+		let objIndex: number = upData.findIndex((obj) => obj.id == id);
 		//@ts-ignore
-		upData2[objIndex][columnKey] = e.srcElement.value;
-		console.log('upData2 inside component', upData2);
-		upData3 = upData2;
-		console.log('upData3 inside component', upData3);
+		upData[objIndex][columnKey] = e.srcElement.value;
+		console.log('upData inside component', upData);
 	}
 </script>
 

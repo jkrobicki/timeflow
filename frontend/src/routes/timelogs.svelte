@@ -15,7 +15,7 @@
 	import { TrashCan } from '../library/carbon/icons';
 	import { getTimelogs, getUsers, getEpics, getEpicAreas } from './data.js';
 	import Autocomplete from '../library/components/autocomplete.svelte';
-	import EditableDatatable, { upData3 } from '../library/components/editableDatatable.svelte';
+	import EditableDatatable from '../library/components/editableDatatable.svelte';
 
 	let users: any[];
 	let epics: any[];
@@ -49,7 +49,6 @@
 	let editColumnsNames: Array<string> = ['start_time', 'end_time'];
 	let updateRes: any;
 	let ColumnsToEdit = ['start_time'];
-	let upData2: Array<object> = [];
 
 	onMount(async () => {
 		users = await getUsers(users);
@@ -102,20 +101,6 @@
 		}
 		selectedRowIds.map(DeleteApi);
 	}
-	async function onRemove2() {
-		console.log('array is:', selectIds);
-		async function DeleteApi(id: number) {
-			const response = await fetch('http://localhost:8002/api/timelogs/' + id, {
-				method: 'DELETE',
-				headers: {
-					'Content-type': 'application/json'
-				},
-				body: JSON.stringify({ timelog })
-			});
-			timelogs = await getTimelogs(timelogs);
-		}
-		selectIds.map(DeleteApi);
-	}
 
 	async function handleSelect(selectedItem: any) {
 		selectedUser = selectedItem;
@@ -142,21 +127,7 @@
 		epicAreas = await response.json();
 		return epicAreas;
 	}
-	//@ts-ignore
-	function updateData(e, r, c) {
-		let columnKey: any = c.cell.key;
-		let value = c.cell.value;
-		let id = r.row.id;
-		let row = r.row;
-		//@ts-ignore
-		let i = timelogs.findIndex((e) => e.id == r.id);
-		// console.log(e, e.srcElement.value);
-		if (!(upData.filter((obj) => obj.id === r.row.id).length > 0)) {
-			upData = [...upData, row];
-		}
-		let objIndex: number = upData.findIndex((obj) => obj.id == id);
-		upData[objIndex][columnKey] = e.srcElement.value;
-	}
+
 	async function onUpdate() {
 		const updateRes = await fetch('http://localhost:8002/api/timelogs/update', {
 			method: 'POST',
@@ -168,20 +139,9 @@
 		selectedRowIds = [];
 		console.log('update res', updateRes);
 	}
-	async function onUpdate2() {
-		const updateRes = await fetch('http://localhost:8002/api/timelogs/update', {
-			method: 'POST',
-			headers: { 'Content-type': 'application/json' },
-			body: JSON.stringify(upData2)
-		});
-
-		timelogs = await getTimelogs(timelogs);
-		upData = [];
-		selectIds = [];
-		console.log('update res', updateRes);
-	}
 </script>
 
+upData in parent is {JSON.stringify(upData)}
 <Grid>
 	<Row>
 		<Column>
@@ -237,57 +197,10 @@
 				]}
 				rows={timelogs}
 				{ColumnsToEdit}
-				bind:selectedRowIds={selectIds}
-				onRemove={onRemove2}
-				onUpdate={onUpdate2}
-				{upData2}
-			/>
-			<DataTable
-				sortable
-				selectable
 				bind:selectedRowIds
-				headers={[
-					{ key: 'id', value: 'ID' },
-					{ key: 'username', value: 'USERAME' },
-					{ key: 'epic_name', value: 'EPIC NAME' },
-					{ key: 'epic_area_name', value: 'EPIC AREA NAME' },
-					{ key: 'start_time', value: 'START TIME' },
-					{ key: 'end_time', value: 'END TIME' },
-					{ key: 'count_hours', value: 'COUNT HOURS' },
-					{ key: 'count_days', value: 'COUNT DAYS' }
-				]}
-				pageSize={Pagination.pageSize}
-				page={Pagination.page}
-				rows={timelogs}
-			>
-				<Toolbar>
-					<ToolbarBatchActions>
-						<Button icon={TrashCan} on:click={onRemove}>Remove</Button>
-						<Button on:click={onUpdate}>Update</Button>
-					</ToolbarBatchActions>
-				</Toolbar>
-
-				<svelte:fragment slot="cell" let:cell let:row let:rowIndex let:cellIndex>
-					{#if selectedRowIds.includes(row.id)}
-						{#if editColumnsNames.includes(cell.key)}
-							<input
-								type="text"
-								value={cell.value}
-								on:blur={(e) => updateData(e, { row }, { cell })}
-							/>
-						{:else}
-							{cell.value}
-						{/if}
-					{:else}
-						{cell.value}
-					{/if}
-				</svelte:fragment>
-			</DataTable>
-
-			<Pagination
-				bind:pageSize={Pagination.pageSize}
-				bind:page={Pagination.page}
-				totalItems={timelogs.length}
+				{onRemove}
+				{onUpdate}
+				bind:upData
 			/>
 		</Column>
 	</Row>
