@@ -29,13 +29,12 @@
 	};
 	let selectedEpic = { epic_id: '', epic_name: '' };
 	let selectedEpicArea = { id: '', epic_area_name: '' };
-	let startTimeRaw: string;
-	let endTimeRaw: string;
+	let startTimeInput: string;
+	let endTimeInput: string;
 	let result: any = null;
 	let selectedUser = { id: '', username: '' };
 	let selectedRowIds: any = [];
 	let upData: Array<object> = [];
-	let editColumnsNames: Array<string> = ['start_time', 'end_time'];
 	let updateRes: any;
 	let ColumnsToEdit = ['start_time'];
 
@@ -53,9 +52,9 @@
 	});
 
 	async function onSubmit() {
-		let startTime = new Date(startTimeRaw);
-		let endTime = new Date(endTimeRaw);
-
+		let startTime = startTimeInput.replace('T', ' ');
+		let endTime = endTimeInput.replace('T', ' ');
+		let startTimeDate = new Date(startTimeInput);
 		const res = await fetch('http://localhost:8002/api/timelogs/', {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
@@ -66,14 +65,30 @@
 				epic_id: selectedEpic.epic_id,
 				epic_area_id: selectedEpicArea.id,
 				count_hours: 1,
-				count_days: 2,
-				month: startTime.getMonth(),
-				year: startTime.getFullYear(),
+				count_days: 1,
+				month: startTimeDate.getMonth() + 1,
+				year: startTimeDate.getFullYear(),
 				created_at: Date.now(),
 				updated_at: Date.now(),
 				is_locked: false
 			})
 		});
+		console.log(
+			JSON.stringify({
+				user_id: selectedUser.id,
+				start_time: startTime,
+				end_time: endTime,
+				epic_id: selectedEpic.epic_id,
+				epic_area_id: selectedEpicArea.id,
+				count_hours: 1,
+				count_days: 1,
+				month: startTimeDate.getMonth() + 1,
+				year: startTimeDate.getFullYear(),
+				created_at: Date.now(),
+				updated_at: Date.now(),
+				is_locked: false
+			})
+		);
 		const json = await res.json();
 		result = JSON.stringify(json);
 		timelogs = await getTimelogs(timelogs);
@@ -157,10 +172,10 @@
 		</Column>
 
 		<Column>
-			<input class="month-picker" type="datetime-local" bind:value={startTimeRaw} />
+			<input class="month-picker" type="datetime-local" bind:value={startTimeInput} />
 		</Column>
 		<Column>
-			<input class="month-picker" type="datetime-local" bind:value={endTimeRaw} />
+			<input class="month-picker" type="datetime-local" bind:value={endTimeInput} />
 		</Column>
 		<Column>
 			<Button on:click={onSubmit} size="small" kind="primary">Submit</Button>
