@@ -29,22 +29,13 @@
 		startTime: new Date(),
 		endTime: new Date()
 	};
-	let userId = '';
-	let epicId = '';
-	let epicAreaId = '';
 	let selectedEpic = { epic_id: '', epic_name: '' };
 	let selectedEpicArea = { id: '', epic_area_name: '' };
 	let startTime = new Date();
 	let endTime = new Date();
-	let countHours = '';
-	let countDays = '';
 	let result: any = null;
 	let selectedUser = { id: '', username: '' };
 	let selectedRowIds: any = [];
-	let selectedItemDisplay = '';
-	let selectedItemValue = '';
-	let selectIds: Array<number> = [];
-
 	let upData: Array<object> = [];
 	let editColumnsNames: Array<string> = ['start_time', 'end_time'];
 	let updateRes: any;
@@ -88,7 +79,6 @@
 	}
 
 	async function onRemove() {
-		console.log('array is:', selectedRowIds);
 		async function DeleteApi(id: number) {
 			const response = await fetch('http://localhost:8002/api/timelogs/' + id, {
 				method: 'DELETE',
@@ -112,11 +102,9 @@
 	}
 	async function handleSelectEpicArea(selectedItem: any) {
 		selectedEpicArea = selectedItem;
-		console.log('selected epic area name is', selectedEpicArea.epic_area_name);
 		return selectedEpicArea;
 	}
 	async function epicAreasByEpic(selectedEpic: any) {
-		console.log('epic id is', selectedEpic.epic_id);
 		const response = await fetch(
 			'http://localhost:8002/api/epic_areas/?epic_id=' + selectedEpic.epic_id,
 			{
@@ -127,9 +115,8 @@
 		epicAreas = await response.json();
 		return epicAreas;
 	}
-
 	async function onUpdate() {
-		const updateRes = await fetch('http://localhost:8002/api/timelogs/update', {
+		const updateRes = await fetch('http://localhost:8002/api/timelogs/bulk_update', {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify(upData)
@@ -137,11 +124,9 @@
 		timelogs = await getTimelogs(timelogs);
 		upData = [];
 		selectedRowIds = [];
-		console.log('update res', updateRes);
 	}
 </script>
 
-upData in parent is {JSON.stringify(upData)}
 <Grid>
 	<Row>
 		<Column>
@@ -172,14 +157,13 @@ upData in parent is {JSON.stringify(upData)}
 		</Column>
 
 		<Column>
-			<DateInput format="yyyy-MM-dd HH:mm" bind:value={startTime} />
+			<DateInput bind:value={startTime} />
 		</Column>
 		<Column>
-			<DateInput format="yyyy-MM-dd HH:mm" bind:value={endTime} />
+			<DateInput bind:value={endTime} />
 		</Column>
 		<Column>
-			<Button class="button-timelogs" on:click={onSubmit} size="small" kind="primary">Submit</Button
-			>
+			<Button on:click={onSubmit} size="small" kind="primary">Submit</Button>
 		</Column>
 	</Row>
 	<Row>
@@ -205,66 +189,3 @@ upData in parent is {JSON.stringify(upData)}
 		</Column>
 	</Row>
 </Grid>
-
-<style>
-	:global(.button-timelogs) {
-		background-color: #9684e5;
-	}
-
-	:global(.auto_complete) {
-		height: 2.5rem;
-	}
-	.datetime-input {
-		font-size: 0.875rem;
-		font-weight: 400;
-		line-height: 1.28572;
-		letter-spacing: 0.16px;
-		outline: 2px solid rgba(0, 0, 0, 0);
-		outline-offset: -2px;
-		display: block;
-		width: 100%;
-		cursor: pointer;
-		height: 2.5rem;
-		padding: 0 1rem 0 0.5rem;
-		border: none;
-		border-bottom: 1px solid #8d8d8d;
-		-webkit-appearance: none;
-		-moz-appearance: none;
-		appearance: none;
-		background-color: #f4f4f4;
-		border-radius: 0;
-		color: #161616;
-		font-family: inherit;
-		opacity: 1;
-		transition: outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
-	}
-	:global(.autocomplete-input) {
-		font-size: 0.875rem;
-		font-weight: 400;
-		line-height: 1.28572;
-		letter-spacing: 0.16px;
-		outline: 2px solid rgba(0, 0, 0, 0);
-		outline-offset: -2px;
-		display: block;
-		width: 100%;
-		cursor: pointer;
-		height: 2.5rem;
-		padding: 0 3rem 0 1rem;
-		border: none;
-		border-bottom: 1px solid #8d8d8d;
-		-webkit-appearance: none;
-		-moz-appearance: none;
-		appearance: none;
-		background-color: #f4f4f4;
-		border-radius: 0;
-		color: #161616;
-		font-family: inherit;
-		opacity: 1;
-		transition: outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
-	}
-
-	input[type='text'] {
-		background-color: #f1f1f1;
-		width: 100%;
-	}
-</style>

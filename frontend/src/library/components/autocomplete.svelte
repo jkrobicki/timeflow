@@ -1,8 +1,4 @@
 <script lang="ts">
-	import { SelectItem } from 'carbon-components-svelte';
-
-	import Arrow from './arrow.svelte';
-
 	let changed = 'not changed';
 	export let options: any;
 	export let selectDisplay: any;
@@ -91,7 +87,7 @@
 	div.autocomplete {
 		/*the container must be positioned relative:*/
 		position: relative;
-		display: inline-block;
+		display: block;
 		background-color: #f1f1f1;
 		padding-bottom: 0px;
 		vertical-align: middle;
@@ -101,6 +97,8 @@
 		border: 1px solid transparent;
 		background-color: #f1f1f1;
 		font-size: 16px;
+		height: 2.5rem;
+		padding-left: 0.5rem;
 	}
 	input[type='text'] {
 		background-color: #f1f1f1;

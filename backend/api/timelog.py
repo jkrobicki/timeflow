@@ -1,4 +1,3 @@
-import string
 from fastapi import APIRouter, Depends
 from ..utils import get_session
 from sqlmodel import Session, select
@@ -287,7 +286,7 @@ class UpdateTimeLog(BaseModel):
         return year_input
 
 
-@router.post("/update")
+@router.post("/bulk_update")
 async def update_timelogs(timelogs: List[UpdateTimeLog], session: Session = Depends(get_session),
 ):
     l = []
