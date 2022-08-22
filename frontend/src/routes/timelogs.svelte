@@ -14,6 +14,7 @@
 	import { TrashCan } from '../library/carbon/icons';
 	import { getTimelogs, getUsers, getEpics, getEpicAreas } from './data.js';
 	import Autocomplete from '../library/components/autocomplete.svelte';
+	import EditableDatatable from '../library/components/editableDatatable.svelte';
 
 	let users: any[];
 	let epics: any[];
@@ -33,6 +34,10 @@
 	let result: any = null;
 	let selectedUser = { id: '', username: '' };
 	let selectedRowIds: any = [];
+	let upData: Array<object> = [];
+	let editColumnsNames: Array<string> = ['start_time', 'end_time'];
+	let updateRes: any;
+	let ColumnsToEdit = ['start_time'];
 
 	onMount(async () => {
 		users = await getUsers(users);
@@ -45,7 +50,6 @@
 	});
 	onMount(async () => {
 		timelogs = await getTimelogs(timelogs);
-		console.log('timelogs: ', timelogs);
 	});
 
 	async function onSubmit() {
@@ -70,23 +74,6 @@
 				is_locked: false
 			})
 		});
-		console.log(
-			JSON.stringify({
-				user_id: selectedUser.id,
-				start_time: startTime,
-				end_time: endTime,
-				epic_id: selectedEpic.epic_id,
-				epic_area_id: selectedEpicArea.id,
-				count_hours: 1,
-				count_days: 2,
-				month: startTime.getMonth() + 1,
-				year: startTime.getFullYear(),
-				created_at: Date.now(),
-				updated_at: Date.now(),
-				is_locked: false
-			})
-		);
-
 		const json = await res.json();
 		result = JSON.stringify(json);
 		timelogs = await getTimelogs(timelogs);
@@ -128,13 +115,15 @@
 		epicAreas = await response.json();
 		return epicAreas;
 	}
-	async function consoleStartTime() {
-		console.log(startTimeRaw);
-		let datest = new Date(startTimeRaw);
-		console.log('datest is', datest);
-	}
-	async function consoleEndTime() {
-		console.log(endTimeRaw);
+	async function onUpdate() {
+		const updateRes = await fetch('http://localhost:8002/api/timelogs/bulk_update', {
+			method: 'POST',
+			headers: { 'Content-type': 'application/json' },
+			body: JSON.stringify(upData)
+		});
+		timelogs = await getTimelogs(timelogs);
+		upData = [];
+		selectedRowIds = [];
 	}
 </script>
 
@@ -168,44 +157,18 @@
 		</Column>
 
 		<Column>
-			<input
-				class="month-picker"
-				type="datetime-local"
-				bind:value={startTimeRaw}
-				on:blur={consoleStartTime}
-			/>
+			<input class="month-picker" type="datetime-local" bind:value={startTimeRaw} />
 		</Column>
 		<Column>
-			<input
-				class="month-picker"
-				type="datetime-local"
-				bind:value={endTimeRaw}
-				on:blur={consoleEndTime}
-			/>
+			<input class="month-picker" type="datetime-local" bind:value={endTimeRaw} />
 		</Column>
 		<Column>
 			<Button on:click={onSubmit} size="small" kind="primary">Submit</Button>
 		</Column>
 	</Row>
-	<Row />
-	<br />
-	<Row />
-	<Row>
-		<Column
-			><p>
-				You selected user <b>{selectedUser.username}</b> and Epic <b>{selectedEpic.epic_name}</b>
-				and Epic Area <b>{selectedEpicArea.epic_area_name}</b>
-				and start time is {startTimeRaw}
-				end time is {endTimeRaw}
-			</p></Column
-		>
-	</Row>
 	<Row>
 		<Column>
-			<DataTable
-				sortable
-				selectable
-				bind:selectedRowIds
+			<EditableDatatable
 				headers={[
 					{ key: 'id', value: 'ID' },
 					{ key: 'username', value: 'USERAME' },
@@ -216,20 +179,12 @@
 					{ key: 'count_hours', value: 'COUNT HOURS' },
 					{ key: 'count_days', value: 'COUNT DAYS' }
 				]}
-				pageSize={Pagination.pageSize}
-				page={Pagination.page}
 				rows={timelogs}
-			>
-				<Toolbar>
-					<ToolbarBatchActions>
-						<Button icon={TrashCan} on:click={onRemove}>Remove</Button>
-					</ToolbarBatchActions>
-				</Toolbar>
-			</DataTable>
-			<Pagination
-				bind:pageSize={Pagination.pageSize}
-				bind:page={Pagination.page}
-				totalItems={timelogs.length}
+				{ColumnsToEdit}
+				bind:selectedRowIds
+				{onRemove}
+				{onUpdate}
+				bind:upData
 			/>
 		</Column>
 	</Row>
