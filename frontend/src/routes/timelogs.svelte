@@ -5,7 +5,7 @@
 	import { getTimelogs, getUsers, getEpics, getEpicAreas } from './data.js';
 	import Autocomplete from '../library/components/autocomplete.svelte';
 	import EditableDatatable from '../library/components/editableDatatable.svelte';
-	import DateTimePicker from '../library/components/dateTimePicker.svelte';
+	import DateTimePicker from '../library/components/DateTimePicker.svelte';
 	let users: any[];
 	let epics: any[];
 	let epicAreas: any;
