@@ -1,21 +1,11 @@
 <script lang="ts">
 	import 'carbon-components-svelte/css/white.css';
 	import { onMount } from 'svelte';
-	import {
-		DataTable,
-		Grid,
-		Column,
-		Row,
-		Button,
-		Pagination,
-		Toolbar,
-		ToolbarBatchActions
-	} from '../library/carbon/components';
-	import { TrashCan } from '../library/carbon/icons';
+	import { Grid, Column, Row, Button } from '../library/carbon/components';
 	import { getTimelogs, getUsers, getEpics, getEpicAreas } from './data.js';
 	import Autocomplete from '../library/components/autocomplete.svelte';
 	import EditableDatatable from '../library/components/editableDatatable.svelte';
-
+	import DateTimePicker from '../library/components/dateTimePicker.svelte';
 	let users: any[];
 	let epics: any[];
 	let epicAreas: any;
@@ -36,7 +26,7 @@
 	let selectedRowIds: any = [];
 	let upData: Array<object> = [];
 	let updateRes: any;
-	let ColumnsToEdit = ['start_time'];
+	let ColumnsToEdit = ['start_time', 'end_time'];
 
 	onMount(async () => {
 		users = await getUsers(users);
@@ -73,22 +63,6 @@
 				is_locked: false
 			})
 		});
-		console.log(
-			JSON.stringify({
-				user_id: selectedUser.id,
-				start_time: startTime,
-				end_time: endTime,
-				epic_id: selectedEpic.epic_id,
-				epic_area_id: selectedEpicArea.id,
-				count_hours: 1,
-				count_days: 1,
-				month: startTimeDate.getMonth() + 1,
-				year: startTimeDate.getFullYear(),
-				created_at: Date.now(),
-				updated_at: Date.now(),
-				is_locked: false
-			})
-		);
 		const json = await res.json();
 		result = JSON.stringify(json);
 		timelogs = await getTimelogs(timelogs);
@@ -172,10 +146,10 @@
 		</Column>
 
 		<Column>
-			<input class="month-picker" type="datetime-local" bind:value={startTimeInput} />
+			<DateTimePicker bind:value={startTimeInput} />
 		</Column>
 		<Column>
-			<input class="month-picker" type="datetime-local" bind:value={endTimeInput} />
+			<DateTimePicker bind:value={endTimeInput} />
 		</Column>
 		<Column>
 			<Button on:click={onSubmit} size="small" kind="primary">Submit</Button>
