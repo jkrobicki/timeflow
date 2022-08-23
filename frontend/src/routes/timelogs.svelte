@@ -19,8 +19,8 @@
 	};
 	let selectedEpic = { epic_id: '', epic_name: '' };
 	let selectedEpicArea = { id: '', epic_area_name: '' };
-	let startTimeInput: string;
-	let endTimeInput: string;
+	let startTime: string;
+	let endTime: string;
 	let result: any = null;
 	let selectedUser = { id: '', username: '' };
 	let selectedRowIds: any = [];
@@ -42,9 +42,7 @@
 	});
 
 	async function onSubmit() {
-		let startTime = startTimeInput.replace('T', ' ');
-		let endTime = endTimeInput.replace('T', ' ');
-		let startTimeDate = new Date(startTimeInput);
+		let startTimeDate = new Date(startTime);
 		const res = await fetch('http://localhost:8002/api/timelogs/', {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
@@ -146,10 +144,10 @@
 		</Column>
 
 		<Column>
-			<DateTimePicker bind:value={startTimeInput} />
+			<DateTimePicker bind:value={startTime} />
 		</Column>
 		<Column>
-			<DateTimePicker bind:value={endTimeInput} />
+			<DateTimePicker bind:value={endTime} />
 		</Column>
 		<Column>
 			<Button on:click={onSubmit} size="small" kind="primary">Submit</Button>
