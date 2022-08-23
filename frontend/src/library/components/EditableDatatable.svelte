@@ -7,6 +7,7 @@
 		Pagination,
 		ToolbarBatchActions
 	} from '../carbon/components';
+	import DateTimePicker from '../components/DateTimePicker.svelte';
 
 	export let headers: Array<Object> = [];
 	export let rows: any;
@@ -54,7 +55,23 @@
 	<svelte:fragment slot="cell" let:cell let:row let:rowIndex let:cellIndex>
 		{#if selectedRowIds.includes(row.id)}
 			{#if ColumnsToEdit.includes(cell.key)}
-				<input type="text" value={cell.value} on:blur={(e) => updateData(e, { row }, { cell })} />
+				{#if cell.key === 'start_time'}
+					<input
+						type="datetime-local"
+						class="month-picker"
+						value={cell.value}
+						on:blur={(e) => updateData(e, { row }, { cell })}
+					/>
+				{:else if cell.key === 'end_time'}
+					<input
+						type="datetime-local"
+						class="month-picker"
+						value={cell.value}
+						on:blur={(e) => updateData(e, { row }, { cell })}
+					/>
+				{:else}
+					<input type="text" on:blur={(e) => updateData(e, { row }, { cell })} />
+				{/if}
 			{:else}
 				{cell.value}
 			{/if}
