@@ -5,6 +5,8 @@ from sqlalchemy.exc import NoResultFound
 from ..models.client import Client
 from ..models.epic import Epic
 from datetime import datetime
+from pydantic import BaseModel
+from typing import List
 
 router = APIRouter(prefix="/api/clients", tags=["client"])
 
@@ -267,3 +269,27 @@ async def update_clients(
     session.commit()
     session.refresh(client_to_update)
     return client_to_update
+
+
+class UpdateClient(BaseModel):
+
+    id: int
+    name: str
+    is_active: bool
+
+
+@router.post("/bulk_update")
+async def update_clients(
+    clients: List[UpdateClient],
+    session: Session = Depends(get_session),
+):
+    for client in clients:
+        statement = select(Client).where(Client.id == client.id)
+        client_to_update = session.exec(statement).one()
+        client_to_update.name = client.name
+        client_to_update.is_active = client.is_active
+        client_to_update.updated_at = datetime.now()
+        session.add(client_to_update)
+        # session.refresh(timelog_to_update)
+    session.commit()
+    # l.append(timelog_to_update)

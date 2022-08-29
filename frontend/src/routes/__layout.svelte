@@ -42,10 +42,10 @@
 
 		<SideNavMenu text="Admin">
 			<SideNavMenuItem
-				href="/users"
-				text="Users"
+				href="/clients"
+				text="Clients"
 				on:click={handleClick}
-				isSelected={selectedNavLink == 'Users'}
+				isSelected={selectedNavLink == 'Clients'}
 			/>
 		</SideNavMenu>
 	</SideNavItems>
