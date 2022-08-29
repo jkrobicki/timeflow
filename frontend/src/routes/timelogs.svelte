@@ -26,7 +26,7 @@
 	let selectedRowIds: any = [];
 	let upData: Array<object> = [];
 	let updateRes: any;
-	let ColumnsToEdit = ['start_time', 'end_time'];
+	let columnsToEdit = ['start_time', 'end_time'];
 
 	onMount(async () => {
 		users = await getUsers(users);
@@ -167,7 +167,7 @@
 					{ key: 'count_days', value: 'COUNT DAYS' }
 				]}
 				rows={timelogs}
-				{ColumnsToEdit}
+				{columnsToEdit}
 				bind:selectedRowIds
 				{onRemove}
 				{onUpdate}

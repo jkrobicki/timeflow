@@ -5,8 +5,8 @@ import { Pagination } from 'carbon-components-svelte/src/Pagination';
 import { Select } from 'carbon-components-svelte/src/Select';
 import { Header, SideNav, SideNavItems, SideNavMenu, SideNavMenuItem, SideNavLink, SkipToContent, Content } from 'carbon-components-svelte/src/UIShell'
 import { NumberInput } from 'carbon-components-svelte/src/NumberInput'
-
-
+import { TextInput } from 'carbon-components-svelte/src/TextInput'
+import { Toggle } from 'carbon-components-svelte/src/Toggle'
 export {
     Button,
     DataTable, Toolbar, ToolbarBatchActions,
@@ -15,4 +15,6 @@ export {
     Select,
     Header, SideNav, SideNavItems, SideNavMenu, SideNavMenuItem, SideNavLink, SkipToContent, Content,
     NumberInput,
+    TextInput,
+    Toggle
 };
