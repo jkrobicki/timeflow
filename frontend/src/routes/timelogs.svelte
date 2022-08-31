@@ -35,7 +35,7 @@
 		epicAreas = await getEpicAreas(epicAreas);
 	});
 	onMount(async () => {
-		epics = await getEpics(epics);
+		epics = await getEpics();
 	});
 	onMount(async () => {
 		timelogs = await getTimelogs(timelogs);

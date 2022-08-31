@@ -56,7 +56,7 @@ async def get_epics_list(
     """
     statement = (
         select(
-            Epic.id.label("epic_id"),
+            Epic.id,
             Epic.short_name,
             Epic.name.label("epic_name"),
             Team.name.label("team_name"),

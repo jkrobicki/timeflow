@@ -18,15 +18,12 @@ async function getUsers() {
     let users = await response.json()
     return users
 };
-/**
- * @param {any} epics
- */
-async function getEpics(epics) {
+async function getEpics() {
     const response = await fetch('http://localhost:8002/api/epics/', {
         method: 'GET',
         headers: { 'Content-type': 'application/json' }
     });
-    epics = await response.json()
+    let epics = await response.json()
     return epics
 };
 /**
