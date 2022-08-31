@@ -1,70 +1,69 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { getSponsors } from './data.js';
-	import { getClients } from './data.js';
+	import { getTeams } from './data.js';
+	import { getUsers } from './data.js';
 	import EditableDatatable from '../library/components/EditableDatatable.svelte';
 	import Autocomplete from '../library/components/autocomplete.svelte';
 
 	import { Grid, Column, Row, Button, TextInput } from '../library/carbon/components';
-	let sponsors = [{}];
-	let clients: Array<object>;
+	let teams = [{}];
+	let users: Array<object>;
 	let selectedRowIds: Array<string> = [];
-	let newSponsorsFullName: string;
-	let newSponsorsShortName: string;
-	let columnsToEdit = ['sponsor_name', 'sponsor_short_name', 'is_active', 'client_name'];
-	let selectedClient: Object = {};
+	let newTeamsFullName: string;
+	let newTeamsShortName: string;
+	let columnsToEdit = ['team_name', 'team_short_name', 'is_active', 'username', 'full_lead_name'];
+	let selectedUser: Object = {};
 	let upData: Array<object> = [];
 
 	if (selectedRowIds === []) {
 		upData = [];
 	}
 	onMount(async () => {
-		sponsors = await getSponsors();
+		teams = await getTeams();
 	});
 	onMount(async () => {
-		clients = await getClients();
+		users = await getUsers();
 	});
 	async function onSubmit() {
-		const res = await fetch('http://localhost:8002/api/sponsors/', {
+		const res = await fetch('http://localhost:8002/api/teams/', {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify({
-				client_id: selectedClient.id,
-				name: newSponsorsFullName,
-				short_name: newSponsorsShortName,
+				lead_user_id: selectedUser.id,
+				name: newTeamsFullName,
+				short_name: newTeamsShortName,
 				is_active: true,
 				created_at: Date.now(),
 				updated_at: Date.now()
 			})
 		});
-		sponsors = await getSponsors();
+		teams = await getTeams();
 	}
 	async function onUpdate() {
-		const updateRes = await fetch('http://localhost:8002/api/sponsors/bulk_update', {
+		const updateRes = await fetch('http://localhost:8002/api/teams/bulk_update', {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify(upData)
 		});
-		sponsors = await getSponsors();
+		teams = await getTeams();
 		upData = [];
 		selectedRowIds = [];
 	}
 </script>
 
-clients are {clients}
 <Grid>
 	<Row>
 		<Column>
-			<TextInput placeholder="new sponsor's full name" bind:value={newSponsorsFullName} />
+			<TextInput placeholder="new team's full name" bind:value={newTeamsFullName} />
 		</Column>
 		<Column>
-			<TextInput placeholder="new sponsor's short name" bind:value={newSponsorsShortName} />
+			<TextInput placeholder="new team's short name" bind:value={newTeamsShortName} />
 		</Column>
 		<Autocomplete
-			options={clients}
-			selectDisplay="name"
-			bind:selectedOption={selectedClient}
-			placeholder="search client"
+			options={users}
+			selectDisplay="full_name"
+			bind:selectedOption={selectedUser}
+			placeholder="select user lead"
 		/>
 
 		<Column>
@@ -76,17 +75,17 @@ clients are {clients}
 			<EditableDatatable
 				headers={[
 					{ key: 'id', value: 'ID' },
-					{ key: 'sponsor_name', value: "FULL SPONSOR'S NAME" },
-					{ key: 'sponsor_short_name', value: "SHORT SPONSOR'S NAME" },
-					{ key: 'client_name', value: "CLIENT'S NAME" },
+					{ key: 'team_name', value: "FULL TEAM'S NAME" },
+					{ key: 'team_short_name', value: "SHORT TEAM'S NAME" },
+					{ key: 'full_lead_name', value: 'USER LEAD' },
 					{ key: 'is_active', value: 'IS ACTIVE' }
 				]}
-				rows={sponsors}
+				rows={teams}
 				{columnsToEdit}
 				bind:selectedRowIds
 				bind:upData
 				{onUpdate}
-				autocompleteOptions={clients}
+				autocompleteOptions={users}
 			/>
 		</Column>
 	</Row>
