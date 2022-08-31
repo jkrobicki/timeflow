@@ -4,6 +4,8 @@ from sqlmodel import Session, select
 from sqlalchemy.exc import NoResultFound
 from ..models.role import Role
 from datetime import datetime
+from typing import List
+from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/roles", tags=["role"])
 
@@ -154,3 +156,30 @@ async def update_role(
         return role_to_update
     else:
         return False
+
+
+class UpdateRole(BaseModel):
+    id: int
+    name: str
+    short_name: str
+    is_active: bool
+
+
+@router.post("/bulk_update")
+async def update_roles(
+    roles: List[UpdateRole],
+    session: Session = Depends(get_session),
+):
+    for role in roles:
+        statement = select(Role).where(Role.id == role.id)
+        role_to_update = session.exec(statement).one()
+
+        role_to_update.name = role.name
+        role_to_update.short_name = role.short_name
+        role_to_update.is_active = role.is_active
+        role_to_update.updated_at = datetime.now()
+        session.add(role_to_update)
+        # session.refresh(timelog_to_update)
+    session.commit()
+    return True
+    # l.append(timelog_to_update)

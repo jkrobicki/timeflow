@@ -78,5 +78,13 @@ async function getTeams() {
     return teams
 };
 
+async function getRoles() {
+    const response = await fetch('http://localhost:8002/api/roles/', {
+        method: 'GET',
+        headers: { 'Content-type': 'application/json' }
+    });
+    let roles = await response.json()
+    return roles
+};
 
-export { getTimelogs, getUsers, getEpics, getEpicAreas, getCapacities, getClients, getSponsors, getTeams }
+export { getTimelogs, getUsers, getEpics, getEpicAreas, getCapacities, getClients, getSponsors, getTeams, getRoles }

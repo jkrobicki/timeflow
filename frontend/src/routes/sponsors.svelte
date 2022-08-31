@@ -51,7 +51,6 @@
 	}
 </script>
 
-clients are {clients}
 <Grid>
 	<Row>
 		<Column>
