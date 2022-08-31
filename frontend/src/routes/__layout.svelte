@@ -59,6 +59,12 @@
 				on:click={handleClick}
 				isSelected={selectedNavLink == 'Sponsors'}
 			/>
+			<SideNavMenuItem
+				href="/roles"
+				text="Roles"
+				on:click={handleClick}
+				isSelected={selectedNavLink == 'Roles'}
+			/>
 		</SideNavMenu>
 	</SideNavItems>
 </SideNav>
