@@ -47,6 +47,12 @@
 				on:click={handleClick}
 				isSelected={selectedNavLink == 'Clients'}
 			/>
+			<SideNavMenuItem
+				href="/sponsors"
+				text="Sponsors"
+				on:click={handleClick}
+				isSelected={selectedNavLink == 'Sponsors'}
+			/>
 		</SideNavMenu>
 	</SideNavItems>
 </SideNav>

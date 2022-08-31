@@ -5,9 +5,12 @@
 		Toolbar,
 		Button,
 		Pagination,
-		ToolbarBatchActions
+		ToolbarBatchActions,
+		ToolbarContent,
+		ToolbarSearch
 	} from '../carbon/components';
 	import { Toggle } from '../carbon/components';
+	import Autocomplete from './autocomplete.svelte';
 
 	export let headers: Array<Object> = [];
 	export let rows: any = [{}];
@@ -15,7 +18,10 @@
 	export let selectedRowIds: Array<number> = [];
 	export let onRemove: Function = () => {};
 	export let onUpdate: Function = () => {};
-	export let upData: Array<object> = [{ id: 0 }];
+	export let upData: { id: number; name: string }[] = [];
+	export let autocompleteOptions: Array<object> = [];
+	export let onCancel = function () {};
+	let filteredRowIds: any = [];
 
 	//@ts-ignore
 	function updateData(e, r, c) {
@@ -23,19 +29,23 @@
 		let value = c.cell.value;
 		let id = r.row.id;
 		let row = r.row;
-		//@ts-ignore
-		let i = rows.findIndex((e) => e.id === r.id);
+		console.log(e);
+
 		//@ts-ignore
 		if (!(upData.filter((obj) => obj.id === r.row.id).length > 0)) {
 			upData = [...upData, row];
 		}
 		let objIndex: any = upData.findIndex((obj) => obj.id === id);
 		//@ts-ignore
+		console.log(e);
 		if (columnKey === 'is_active') {
 			upData[objIndex][columnKey] = e.srcElement.checked;
 		} else {
 			upData[objIndex][columnKey] = e.srcElement.value;
 		}
+	}
+	function updateClient(selectedClient: any) {
+		console.log('selected client', selectedClient);
 	}
 </script>
 
@@ -49,7 +59,10 @@
 	{rows}
 >
 	<Toolbar>
-		<ToolbarBatchActions>
+		<ToolbarContent>
+			<ToolbarSearch persistent shouldFilterRows bind:filteredRowIds />
+		</ToolbarContent>
+		<ToolbarBatchActions on:cancel={onCancel}>
 			<Button on:click={onRemove}>Remove</Button>
 			<Button on:click={onUpdate}>Update</Button>
 		</ToolbarBatchActions>
@@ -81,6 +94,13 @@
 						toggled={cell.value}
 						on:change={(e) => updateData(e, { row }, { cell })}
 					/>
+				{:else if cell.key === 'client_name'}
+					<Autocomplete
+						options={autocompleteOptions}
+						selectDisplay="name"
+						placeholder="client name"
+						onFocus={(event) => updateData(event, { row }, { cell })}
+					/>
 				{:else}
 					<input type="text" value={cell.value} on:blur={(e) => updateData(e, { row }, { cell })} />
 				{/if}
@@ -96,4 +116,5 @@
 	bind:pageSize={Pagination.pageSize}
 	bind:page={Pagination.page}
 	totalItems={rows.length}
+	pageSizeInputDisabled
 />

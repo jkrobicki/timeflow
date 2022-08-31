@@ -79,18 +79,6 @@
 		selectedRowIds.map(DeleteApi);
 	}
 
-	async function handleSelect(selectedItem: any) {
-		selectedUser = selectedItem;
-	}
-
-	async function handleSelectEpic(selectedItem: any) {
-		selectedEpic = selectedItem;
-		epicAreas = epicAreasByEpic(selectedEpic);
-	}
-	async function handleSelectEpicArea(selectedItem: any) {
-		selectedEpicArea = selectedItem;
-		return selectedEpicArea;
-	}
 	async function epicAreasByEpic(selectedEpic: any) {
 		const response = await fetch(
 			'http://localhost:8002/api/epic_areas/?epic_id=' + selectedEpic.epic_id,
@@ -118,7 +106,7 @@
 	<Row>
 		<Column>
 			<Autocomplete
-				onChange={handleSelect}
+				bind:selectedOption={selectedUser}
 				options={users}
 				selectDisplay="username"
 				placeholder="search user"
@@ -126,7 +114,7 @@
 		</Column>
 		<Column>
 			<Autocomplete
-				onChange={handleSelectEpic}
+				bind:selectedOption={selectedEpic}
 				options={epics}
 				selectDisplay="epic_name"
 				placeholder="search epic"
@@ -135,7 +123,7 @@
 		<Column>
 			{#key selectedEpic.epic_id}
 				<Autocomplete
-					onChange={handleSelectEpicArea}
+					bind:selectedOption={selectedEpicArea}
 					options={epicAreas}
 					selectDisplay="epic_area_name"
 					placeholder="search epic area"

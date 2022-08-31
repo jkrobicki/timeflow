@@ -1,3 +1,4 @@
+import string
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
 from sqlmodel import Session, select, or_
@@ -5,6 +6,9 @@ from ..models.client import Client
 from ..models.sponsor import Sponsor
 from sqlalchemy.exc import NoResultFound
 from datetime import datetime
+from typing import List
+from pydantic import BaseModel
+
 
 router = APIRouter(prefix="/api/sponsors", tags=["sponsor"])
 
@@ -209,3 +213,35 @@ async def update_sponsor(
     session.commit()
     session.refresh(sponsor_to_update)
     return sponsor_to_update
+
+
+class UpdateSponsor(BaseModel):
+    id: int
+    client_id: int
+    client_name: str
+    sponsor_name: str
+    sponsor_short_name: str
+    is_active: bool
+
+
+@router.post("/bulk_update")
+async def update_sponsors(
+    sponsors: List[UpdateSponsor],
+    session: Session = Depends(get_session),
+):
+    for sponsor in sponsors:
+        statement = select(Sponsor).where(Sponsor.id == sponsor.id)
+        sponsor_to_update = session.exec(statement).one()
+
+        statement2 = select(Client.id).where(Client.name == sponsor.client_name)
+        client_to_update_id = session.exec(statement2).one()
+
+        sponsor_to_update.client_id = client_to_update_id
+        sponsor_to_update.name = sponsor.sponsor_name
+        sponsor_to_update.short_name = sponsor.sponsor_short_name
+        sponsor_to_update.is_active = sponsor.is_active
+        sponsor_to_update.updated_at = datetime.now()
+        session.add(sponsor_to_update)
+        # session.refresh(timelog_to_update)
+    session.commit()
+    # l.append(timelog_to_update)

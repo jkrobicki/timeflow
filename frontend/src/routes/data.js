@@ -62,4 +62,13 @@ async function getClients() {
     return clients
 };
 
-export { getTimelogs, getUsers, getEpics, getEpicAreas, getCapacities, getClients }
+async function getSponsors() {
+    const response = await fetch('http://localhost:8002/api/sponsors/', {
+        method: 'GET',
+        headers: { 'Content-type': 'application/json' }
+    });
+    let sponsors = await response.json()
+    return sponsors
+};
+
+export { getTimelogs, getUsers, getEpics, getEpicAreas, getCapacities, getClients, getSponsors }
