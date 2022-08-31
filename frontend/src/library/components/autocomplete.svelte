@@ -10,17 +10,21 @@
 	export let onChange = function (selectedItem: any) {};
 	// export let bind = function (selectedItem: any) {};
 	let current = 0;
+	export let selectedOption: object = {};
+	export let onFocus = function (event: any) {};
 
 	function getValues() {
 		isSelectHidden = false;
 		changed = text;
 		selectedOptions = options.filter((item: any) => item[selectDisplay].includes(text));
+		console.log('selectedOptions are', selectedOptions);
 	}
 
 	function handleSelect(event: any) {
 		isSelectHidden = true;
 		text = event[selectDisplay];
 		selectedItem = event[selectDisplay];
+		selectedOption = event;
 		onChange(event);
 	}
 
@@ -64,6 +68,7 @@
 		on:input={getValues}
 		on:keydown={handleKeyDown}
 		{placeholder}
+		on:focus={onFocus}
 	/>
 	<!-- <Arrow {handleArrow} /> -->
 	<div class="autocomplete-items" hidden={isSelectHidden}>
