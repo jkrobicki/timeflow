@@ -28,7 +28,7 @@
 	let time = '';
 
 	onMount(async () => {
-		users = await getUsers(users);
+		users = await getUsers();
 	});
 	onMount(async () => {
 		capacities = await getCapacities(capacities);

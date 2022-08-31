@@ -101,6 +101,13 @@
 						placeholder="client name"
 						onFocus={(event) => updateData(event, { row }, { cell })}
 					/>
+				{:else if cell.key === 'full_lead_name'}
+					<Autocomplete
+						options={autocompleteOptions}
+						selectDisplay="full_name"
+						placeholder="lead name"
+						onFocus={(event) => updateData(event, { row }, { cell })}
+					/>
 				{:else}
 					<input type="text" value={cell.value} on:blur={(e) => updateData(e, { row }, { cell })} />
 				{/if}

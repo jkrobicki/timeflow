@@ -9,15 +9,13 @@ async function getTimelogs(timelogs) {
     timelogs = await response.json();
     return timelogs;
 }
-/**
- * @param {any} users
- */
-async function getUsers(users) {
+
+async function getUsers() {
     const response = await fetch('http://localhost:8002/api/users/', {
         method: 'GET',
         headers: { 'Content-type': 'application/json' }
     });
-    users = await response.json()
+    let users = await response.json()
     return users
 };
 /**
@@ -71,4 +69,14 @@ async function getSponsors() {
     return sponsors
 };
 
-export { getTimelogs, getUsers, getEpics, getEpicAreas, getCapacities, getClients, getSponsors }
+async function getTeams() {
+    const response = await fetch('http://localhost:8002/api/teams/', {
+        method: 'GET',
+        headers: { 'Content-type': 'application/json' }
+    });
+    let teams = await response.json()
+    return teams
+};
+
+
+export { getTimelogs, getUsers, getEpics, getEpicAreas, getCapacities, getClients, getSponsors, getTeams }

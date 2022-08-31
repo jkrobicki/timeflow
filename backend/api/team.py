@@ -5,6 +5,8 @@ from ..models.team import Team
 from ..models.user import AppUser
 from sqlalchemy.exc import NoResultFound
 from datetime import datetime
+from typing import List
+from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/teams", tags=["team"])
 
@@ -61,6 +63,7 @@ async def get_teams_list(
             AppUser.username.label("username"),
             AppUser.first_name,
             AppUser.last_name,
+            (AppUser.first_name + " " + AppUser.last_name).label("full_lead_name"),
         )
         .join(AppUser)
         .where(AppUser.id == Team.lead_user_id)
@@ -242,3 +245,37 @@ async def update_team(
     session.commit()
     session.refresh(team_to_update)
     return True
+
+
+class UpdateTeam(BaseModel):
+    id: int
+    lead_user_id: int
+    team_name: str
+    team_short_name: str
+    is_active: bool
+    full_lead_name: str
+
+
+@router.post("/bulk_update")
+async def update_sponsors(
+    teams: List[UpdateTeam],
+    session: Session = Depends(get_session),
+):
+    for team in teams:
+        statement = select(Team).where(Team.id == team.id)
+        team_to_update = session.exec(statement).one()
+
+        statement2 = select(AppUser.id).where(
+            (AppUser.first_name + " " + AppUser.last_name) == team.full_lead_name
+        )
+        user_lead_id_to_update = session.exec(statement2).one()
+
+        team_to_update.lead_user_id = user_lead_id_to_update
+        team_to_update.short_name = team.team_short_name
+        team_to_update.name = team.team_name
+        team_to_update.is_active = team.is_active
+        team_to_update.updated_at = datetime.now()
+        session.add(team_to_update)
+        # session.refresh(timelog_to_update)
+    session.commit()
+    # l.append(timelog_to_update)
