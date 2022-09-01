@@ -11,7 +11,6 @@
 	let selectedRowIds: Array<string> = [];
 	let newSponsorsFullName: string;
 	let newSponsorsShortName: string;
-	// let columnsToEdit = ['sponsor_name', 'sponsor_short_name', 'is_active', 'client_name'];
 	let selectedClient: Object = {};
 	let upData: Array<object> = [];
 	let columnsToEdit = {
