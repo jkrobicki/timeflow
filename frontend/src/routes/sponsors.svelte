@@ -63,6 +63,7 @@
 	}
 </script>
 
+upData {JSON.stringify(upData)}
 <Grid>
 	<Row>
 		<Column>

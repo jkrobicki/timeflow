@@ -23,24 +23,24 @@
 	export let filteredRowIds: any = [];
 
 	//@ts-ignore
-	function updateData(e, r, c) {
-		let columnKey: string = c.cell.key;
-		let value = c.cell.value;
-		let id = r.row.id;
-		let row = r.row;
-		console.log(e);
+	function updateData(event, event_row, event_cell, autocomplete: string = null) {
+		let columnKey: string = event_cell.cell.key;
+		let value = event_cell.cell.value;
+		let id = event_row.row.id;
+		let row = event_row.row;
 
 		//@ts-ignore
-		if (!(upData.filter((obj) => obj.id === r.row.id).length > 0)) {
+		if (!(upData.filter((obj) => obj.id === event_row.row.id).length > 0)) {
 			upData = [...upData, row];
 		}
 		let objIndex: any = upData.findIndex((obj) => obj.id === id);
 		//@ts-ignore
-		console.log(e);
 		if (columnKey === 'is_active') {
-			upData[objIndex][columnKey] = e.srcElement.checked;
+			upData[objIndex][columnKey] = event.srcElement.checked;
+		} else if (autocomplete === 'autocomplete') {
+			upData[objIndex][columnKey] = event.name;
 		} else {
-			upData[objIndex][columnKey] = e.srcElement.value;
+			upData[objIndex][columnKey] = event.srcElement.value;
 		}
 	}
 	function updateClient(selectedClient: any) {
@@ -76,14 +76,14 @@
 							<input
 								type="text"
 								value={cell.value}
-								on:blur={(e) => updateData(e, { row }, { cell })}
+								on:blur={(event) => updateData(event, { row }, { cell })}
 							/>
 						{:else if paragraph === 'datetime'}
 							<input
 								type="datetime-local"
 								class="month-picker"
 								value={cell.value}
-								on:blur={(e) => updateData(e, { row }, { cell })}
+								on:blur={(event) => updateData(event, { row }, { cell })}
 							/>
 						{:else if paragraph === 'toggle'}
 							<Toggle
@@ -92,14 +92,15 @@
 								labelA="Inactive"
 								labelB="Active"
 								toggled={cell.value}
-								on:change={(e) => updateData(e, { row }, { cell })}
+								on:change={(event) => updateData(event, { row }, { cell })}
 							/>
 						{:else if paragraph.input === 'autocomplete'}
 							<Autocomplete
 								options={paragraph.options}
 								selectDisplay={paragraph.selectDisplay}
 								placeholder={paragraph.placeholder}
-								onFocus={(event) => updateData(event, { row }, { cell })}
+								text={cell.value}
+								onChange={(event) => updateData(event, { row }, { cell }, 'autocomplete')}
 							/>
 						{/if}
 					{/if}
