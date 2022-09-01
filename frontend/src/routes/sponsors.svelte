@@ -7,13 +7,24 @@
 
 	import { Grid, Column, Row, Button, TextInput } from '../library/carbon/components';
 	let sponsors = [{}];
-	let clients: Array<object>;
+	let clients: Array<object> = [];
 	let selectedRowIds: Array<string> = [];
 	let newSponsorsFullName: string;
 	let newSponsorsShortName: string;
-	let columnsToEdit = ['sponsor_name', 'sponsor_short_name', 'is_active', 'client_name'];
+	// let columnsToEdit = ['sponsor_name', 'sponsor_short_name', 'is_active', 'client_name'];
 	let selectedClient: Object = {};
 	let upData: Array<object> = [];
+	let columnsToEdit = {
+		sponsor_name: 'input',
+		sponsor_short_name: 'input',
+		client_name: {
+			input: 'autocomplete',
+			selectDisplay: 'name',
+			options: clients,
+			placeholder: "client's name"
+		},
+		is_active: 'toggle'
+	};
 
 	if (selectedRowIds === []) {
 		upData = [];
@@ -23,7 +34,9 @@
 	});
 	onMount(async () => {
 		clients = await getClients();
+		columnsToEdit.client_name.options = clients;
 	});
+
 	async function onSubmit() {
 		const res = await fetch('http://localhost:8002/api/sponsors/', {
 			method: 'POST',
@@ -81,11 +94,10 @@
 					{ key: 'is_active', value: 'IS ACTIVE' }
 				]}
 				rows={sponsors}
-				{columnsToEdit}
 				bind:selectedRowIds
 				bind:upData
 				{onUpdate}
-				autocompleteOptions={clients}
+				bind:columnsToEdit
 			/>
 		</Column>
 	</Row>

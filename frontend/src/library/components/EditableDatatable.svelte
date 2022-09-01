@@ -14,14 +14,14 @@
 
 	export let headers: Array<Object> = [];
 	export let rows: any = [{}];
-	export let columnsToEdit: Array<string> = [];
 	export let selectedRowIds: Array<number> = [];
 	export let onRemove: Function = () => {};
 	export let onUpdate: Function = () => {};
 	export let upData: { id: number; name: string }[] = [];
-	export let autocompleteOptions: Array<object> = [];
+	// export let autocompleteOptions: Array<object> = [];
 	export let onCancel = function () {};
-	let filteredRowIds: any = [];
+	export let columnsToEdit: Object = {};
+	export let filteredRowIds: any = [];
 
 	//@ts-ignore
 	function updateData(e, r, c) {
@@ -70,47 +70,41 @@
 
 	<svelte:fragment slot="cell" let:cell let:row let:rowIndex let:cellIndex>
 		{#if selectedRowIds.includes(row.id)}
-			{#if columnsToEdit.includes(cell.key)}
-				{#if cell.key === 'start_time'}
-					<input
-						type="datetime-local"
-						class="month-picker"
-						value={cell.value}
-						on:blur={(e) => updateData(e, { row }, { cell })}
-					/>
-				{:else if cell.key === 'end_time'}
-					<input
-						type="datetime-local"
-						class="month-picker"
-						value={cell.value}
-						on:blur={(e) => updateData(e, { row }, { cell })}
-					/>
-				{:else if cell.key === 'is_active'}
-					<Toggle
-						hideLabel
-						size="sm"
-						labelA="Inactive"
-						labelB="Active"
-						toggled={cell.value}
-						on:change={(e) => updateData(e, { row }, { cell })}
-					/>
-				{:else if cell.key === 'client_name'}
-					<Autocomplete
-						options={autocompleteOptions}
-						selectDisplay="name"
-						placeholder="client name"
-						onFocus={(event) => updateData(event, { row }, { cell })}
-					/>
-				{:else if cell.key === 'full_lead_name'}
-					<Autocomplete
-						options={autocompleteOptions}
-						selectDisplay="full_name"
-						placeholder="lead name"
-						onFocus={(event) => updateData(event, { row }, { cell })}
-					/>
-				{:else}
-					<input type="text" value={cell.value} on:blur={(e) => updateData(e, { row }, { cell })} />
-				{/if}
+			{#if cell.key in columnsToEdit}
+				{#each Object.entries(columnsToEdit) as [title, paragraph]}
+					{#if cell.key === title}
+						{#if paragraph === 'input'}
+							<input
+								type="text"
+								value={cell.value}
+								on:blur={(e) => updateData(e, { row }, { cell })}
+							/>
+						{:else if paragraph === 'datetime'}
+							<input
+								type="datetime-local"
+								class="month-picker"
+								value={cell.value}
+								on:blur={(e) => updateData(e, { row }, { cell })}
+							/>
+						{:else if paragraph === 'toggle'}
+							<Toggle
+								hideLabel
+								size="sm"
+								labelA="Inactive"
+								labelB="Active"
+								toggled={cell.value}
+								on:change={(e) => updateData(e, { row }, { cell })}
+							/>
+						{:else if paragraph.input === 'autocomplete'}
+							<Autocomplete
+								options={paragraph.options}
+								selectDisplay={paragraph.selectDisplay}
+								placeholder={paragraph.placeholder}
+								onFocus={(event) => updateData(event, { row }, { cell })}
+							/>
+						{/if}
+					{/if}
+				{/each}
 			{:else}
 				{cell.value}
 			{/if}
