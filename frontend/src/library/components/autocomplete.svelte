@@ -5,7 +5,7 @@
 	export let placeholder: any;
 	let selectedOptions: any = [];
 	let isSelectHidden = true;
-	let text: any;
+	export let text: any = '';
 	export let selectedItem: any = '';
 	export let onChange = function (selectedItem: any) {};
 	// export let bind = function (selectedItem: any) {};
