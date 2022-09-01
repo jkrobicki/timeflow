@@ -18,7 +18,6 @@
 	export let onRemove: Function = () => {};
 	export let onUpdate: Function = () => {};
 	export let upData: { id: number; name: string }[] = [];
-	// export let autocompleteOptions: Array<object> = [];
 	export let onCancel = function () {};
 	export let columnsToEdit: Object = {};
 	export let filteredRowIds: any = [];
