@@ -9,7 +9,7 @@
 		ToolbarContent,
 		ToolbarSearch
 	} from '../carbon/components';
-	import { Toggle } from '../carbon/components';
+	import { Toggle, TextInput } from '../carbon/components';
 	import Autocomplete from './autocomplete.svelte';
 
 	export let headers: Array<Object> = [];
@@ -24,23 +24,23 @@
 
 	//@ts-ignore
 	function updateData(event, event_row, event_cell, autocomplete: string = null) {
-		let columnKey: string = event_cell.cell.key;
-		let value = event_cell.cell.value;
-		let id = event_row.row.id;
+		let columnName: string = event_cell.cell.key;
+		let cellValue = event_cell.cell.value;
+		let rowId = event_row.row.id;
 		let row = event_row.row;
-
+		console.log('event', event);
 		//@ts-ignore
-		if (!(upData.filter((obj) => obj.id === event_row.row.id).length > 0)) {
+		if (!(upData.filter((obj) => obj.id === rowId).length > 0)) {
 			upData = [...upData, row];
 		}
-		let objIndex: any = upData.findIndex((obj) => obj.id === id);
+		let objIndex: any = upData.findIndex((obj) => obj.id === rowId);
 		//@ts-ignore
-		if (columnKey === 'is_active') {
-			upData[objIndex][columnKey] = event.srcElement.checked;
+		if (columnName === 'is_active') {
+			upData[objIndex][columnName] = event.srcElement.checked;
 		} else if (autocomplete === 'autocomplete') {
-			upData[objIndex][columnKey] = event.name;
+			upData[objIndex][columnName] = event[columnName];
 		} else {
-			upData[objIndex][columnKey] = event.srcElement.value;
+			upData[objIndex][columnName] = event.srcElement.value;
 		}
 	}
 	function updateClient(selectedClient: any) {
@@ -75,6 +75,7 @@
 						{#if paragraph === 'input'}
 							<input
 								type="text"
+								class="month-picker"
 								value={cell.value}
 								on:blur={(event) => updateData(event, { row }, { cell })}
 							/>

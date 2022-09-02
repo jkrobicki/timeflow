@@ -7,11 +7,28 @@
 	import { Grid, Column, Row, Button, TextInput } from '../library/carbon/components';
 	let epics = [{}];
 	let teams = [{}];
-	let sponsors: Array<object>;
+	let sponsors: Array<object> = [{}];
 	let selectedRowIds: Array<string> = [];
 	let newEpicsFullName: string;
 	let newEpicsShortName: string;
-	let columnsToEdit = ['epic_name', 'short_name', 'team_name', 'start_date', 'is_active'];
+	let columnsToEdit = {
+		epic_name: 'input',
+		short_name: 'input',
+		is_active: 'toggle',
+		team_name: {
+			input: 'autocomplete',
+			selectDisplay: 'team_name',
+			options: teams,
+			placeholder: "team's name"
+		},
+		sponsor_name: {
+			input: 'autocomplete',
+			selectDisplay: 'sponsor_name',
+			options: sponsors,
+			placeholder: "sponsor's name"
+		}
+	};
+
 	let selectedTeam: Object = {};
 	let selectedSponsor: Object = {};
 	let startDate: string = '';
@@ -22,9 +39,11 @@
 
 	onMount(async () => {
 		sponsors = await getSponsors();
+		columnsToEdit.sponsor_name.options = sponsors;
 	});
 	onMount(async () => {
 		teams = await getTeams();
+		columnsToEdit.team_name.options = teams;
 	});
 	async function onSubmit() {
 		const res = await fetch('http://localhost:8002/api/epics/', {
@@ -56,7 +75,7 @@
 		epics = await getEpics();
 	}
 	async function onUpdate() {
-		const updateRes = await fetch('http://localhost:8002/api/sponsors/bulk_update', {
+		const updateRes = await fetch('http://localhost:8002/api/epics/bulk_update', {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify(upData)
@@ -67,7 +86,6 @@
 	}
 </script>
 
-start date is {startDate}
 <Grid>
 	<Row>
 		<Column>
@@ -101,18 +119,18 @@ start date is {startDate}
 			<EditableDatatable
 				headers={[
 					{ key: 'id', value: 'ID' },
-					{ key: 'epic_name', value: "FULL SPONSOR'S NAME" },
-					{ key: 'short_name', value: "SHORT SPONSOR'S NAME" },
+					{ key: 'epic_name', value: "FULL EPIC'S NAME" },
+					{ key: 'short_name', value: "SHORT EPIC'S NAME" },
 					{ key: 'team_name', value: "TEAM'S NAME" },
-					{ key: 'sponsor_short_name', value: "SPONSORS'S NAME" },
+					{ key: 'sponsor_name', value: "SPONSORS'S NAME" },
+					{ key: 'start_date', value: 'START DATE' },
 					{ key: 'is_active', value: 'IS ACTIVE' }
 				]}
 				rows={epics}
-				{columnsToEdit}
 				bind:selectedRowIds
 				bind:upData
 				{onUpdate}
-				autocompleteOptions={epics}
+				bind:columnsToEdit
 			/>
 		</Column>
 	</Row>
