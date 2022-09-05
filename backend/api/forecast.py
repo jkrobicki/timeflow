@@ -16,7 +16,6 @@ router = APIRouter(prefix="/api/forecasts", tags=["forecast"])
 async def post_forecast(*, forecast: Forecast, session: Session = Depends(get_session)):
     """
     Post a new forecast.
-
     Parameters
     ----------
     forecast : Forecast
@@ -52,7 +51,6 @@ async def get_forecasts(
 ):
     """
     Get list of forecasts.
-
     Parameters
     ----------
     session : Session
@@ -113,7 +111,6 @@ async def get_forecasts_by_user(
 ):
     """
     Get forecasts from a given user.
-
     Parameters
     ----------
     user_id : str
@@ -160,7 +157,6 @@ async def get_forecasts_by_user_year_epic(
 ):
     """
     Get forecast by user and epic
-
     Parameters
     ----------
     user_id : str
@@ -186,7 +182,6 @@ async def get_forecasts_by_user_year_epic(
 ):
     """
     Get forecast by user ID, month, and year.
-
     Parameters
     ----------
     user_id
@@ -225,7 +220,6 @@ async def get_forecasts_by_user_year_epic(
 ):
     """
     Get forecast by user, epic, year, month
-
     Parameters
     ----------
     user_id
@@ -268,7 +262,6 @@ async def delete_forecasts(
 ):
     """
     Delete a forecast
-
     Parameters
     ----------
     forecast_id : str

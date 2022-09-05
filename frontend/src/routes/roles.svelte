@@ -1,0 +1,74 @@
+<script lang="ts">
+	import { onMount } from 'svelte';
+	import { getRoles } from './data.js';
+	import EditableDatatable from '../library/components/EditableDatatable.svelte';
+	import Autocomplete from '../library/components/autocomplete.svelte';
+
+	import { Grid, Column, Row, Button, TextInput } from '../library/carbon/components';
+	let roles = [{}];
+	let selectedRowIds: Array<string> = [];
+	let newRolesFullName: string;
+	let newRolesShortName: string;
+	let columnsToEdit = ['name', 'short_name', 'is_active'];
+	let upData: Array<object> = [];
+
+	onMount(async () => {
+		roles = await getRoles();
+	});
+	async function onSubmit() {
+		const res = await fetch('http://localhost:8002/api/roles/', {
+			method: 'POST',
+			headers: { 'Content-type': 'application/json' },
+			body: JSON.stringify({
+				name: newRolesFullName,
+				short_name: newRolesShortName,
+				is_active: true,
+				created_at: Date.now(),
+				updated_at: Date.now()
+			})
+		});
+		roles = await getRoles();
+	}
+	async function onUpdate() {
+		const updateRes = await fetch('http://localhost:8002/api/roles/bulk_update', {
+			method: 'POST',
+			headers: { 'Content-type': 'application/json' },
+			body: JSON.stringify(upData)
+		});
+		roles = await getRoles();
+		upData = [];
+		selectedRowIds = [];
+	}
+</script>
+
+<Grid>
+	<Row>
+		<Column>
+			<TextInput placeholder="new role's full name" bind:value={newRolesFullName} />
+		</Column>
+		<Column>
+			<TextInput placeholder="new role's short name" bind:value={newRolesShortName} />
+		</Column>
+
+		<Column>
+			<Button size="small" kind="primary" on:click={onSubmit}>Submit</Button>
+		</Column>
+	</Row>
+	<Row>
+		<Column>
+			<EditableDatatable
+				headers={[
+					{ key: 'id', value: 'ID' },
+					{ key: 'name', value: "FULL ROLE'S NAME" },
+					{ key: 'short_name', value: "SHORT ROLE'S NAME" },
+					{ key: 'is_active', value: 'IS ACTIVE' }
+				]}
+				rows={roles}
+				{columnsToEdit}
+				bind:selectedRowIds
+				bind:upData
+				{onUpdate}
+			/>
+		</Column>
+	</Row>
+</Grid>
