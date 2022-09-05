@@ -43,9 +43,6 @@
 			upData[objIndex][columnName] = event.srcElement.value;
 		}
 	}
-	function updateClient(selectedClient: any) {
-		console.log('selected client', selectedClient);
-	}
 </script>
 
 <DataTable
