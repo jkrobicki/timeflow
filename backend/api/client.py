@@ -274,7 +274,7 @@ async def update_clients(
 class UpdateClient(BaseModel):
 
     id: int
-    name: str
+    client_name: str
     is_active: bool
 
 
@@ -286,7 +286,7 @@ async def update_clients(
     for client in clients:
         statement = select(Client).where(Client.id == client.id)
         client_to_update = session.exec(statement).one()
-        client_to_update.name = client.name
+        client_to_update.name = client.client_name
         client_to_update.is_active = client.is_active
         client_to_update.updated_at = datetime.now()
         session.add(client_to_update)

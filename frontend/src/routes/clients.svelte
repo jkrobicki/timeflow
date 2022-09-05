@@ -18,7 +18,10 @@
 	let newClientsName: string;
 	let clients = [{}];
 	let selectedRowIds: Array<string> = [];
-	let columnsToEdit = ['is_active', 'name'];
+	let columnsToEdit = {
+		is_active: 'toggle',
+		client_name: 'input'
+	};
 	let upData: Array<object> = [];
 
 	onMount(async () => {
@@ -64,7 +67,7 @@
 			<EditableDatatable
 				headers={[
 					{ key: 'id', value: 'ID' },
-					{ key: 'name', value: 'NAME' },
+					{ key: 'client_name', value: 'NAME' },
 					{ key: 'is_active', value: 'IS ACTIVE' }
 				]}
 				rows={clients}
