@@ -17,7 +17,7 @@
 		startTime: new Date(),
 		endTime: new Date()
 	};
-	let selectedEpic = { epic_id: '', epic_name: '' };
+	let selectedEpic = { id: '', epic_name: '' };
 	let selectedEpicArea = { id: '', epic_area_name: '' };
 	let startTime: string;
 	let endTime: string;
@@ -50,7 +50,7 @@
 				user_id: selectedUser.id,
 				start_time: startTime,
 				end_time: endTime,
-				epic_id: selectedEpic.epic_id,
+				epic_id: selectedEpic.id,
 				epic_area_id: selectedEpicArea.id,
 				count_hours: 1,
 				count_days: 1,
@@ -61,6 +61,23 @@
 				is_locked: false
 			})
 		});
+		console.log(
+			'post data is',
+			JSON.stringify({
+				user_id: selectedUser.id,
+				start_time: startTime,
+				end_time: endTime,
+				epic_id: selectedEpic.id,
+				epic_area_id: selectedEpicArea.id,
+				count_hours: 1,
+				count_days: 1,
+				month: startTimeDate.getMonth() + 1,
+				year: startTimeDate.getFullYear(),
+				created_at: Date.now(),
+				updated_at: Date.now(),
+				is_locked: false
+			})
+		);
 		const json = await res.json();
 		result = JSON.stringify(json);
 		timelogs = await getTimelogs(timelogs);
