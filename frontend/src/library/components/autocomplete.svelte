@@ -69,6 +69,7 @@
 		on:keydown={handleKeyDown}
 		{placeholder}
 		on:focus={onFocus}
+		on:click={getValues}
 	/>
 	<!-- <Arrow {handleArrow} /> -->
 	<div class="autocomplete-items" hidden={isSelectHidden}>

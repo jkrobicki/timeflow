@@ -7,7 +7,8 @@ from ..models.sponsor import Sponsor
 from ..models.team import Team
 from sqlalchemy.exc import NoResultFound
 from datetime import date, datetime
-from typing import Optional
+from typing import Optional, List
+from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/epics", tags=["epic"])
 
@@ -56,11 +57,11 @@ async def get_epics_list(
     """
     statement = (
         select(
-            Epic.id.label("epic_id"),
+            Epic.id,
             Epic.short_name,
             Epic.name.label("epic_name"),
             Team.name.label("team_name"),
-            Sponsor.short_name.label("sponsor_short_name"),
+            Sponsor.name.label("sponsor_name"),
             Epic.start_date,
             Epic.is_active,
         )
@@ -229,3 +230,38 @@ async def update_epic(
     session.commit()
     session.refresh(epic_to_update)
     return epic_to_update
+
+
+class UpdateEpic(BaseModel):
+    id: int
+    epic_name: str
+    short_name: str
+    team_name: str
+    sponsor_name: str
+    start_date: date
+    is_active: bool
+
+
+@router.post("/bulk_update")
+async def update_epics(
+    epics: List[UpdateEpic],
+    session: Session = Depends(get_session),
+):
+    for epic in epics:
+        statement = select(Epic).where(Epic.id == epic.id)
+        epic_to_update = session.exec(statement).one()
+
+        statement2 = select(Team.id).where(Team.name == epic.team_name)
+        team_id_to_update = session.exec(statement2).one()
+
+        statement3 = select(Sponsor.id).where(Sponsor.name == epic.sponsor_name)
+        sponsor_id_to_update = session.exec(statement3).one()
+
+        epic_to_update.name = epic.epic_name
+        epic_to_update.short_name = epic.short_name
+        epic_to_update.team_id = team_id_to_update
+        epic_to_update.sponsor_id = sponsor_id_to_update
+        epic_to_update.start_date = epic.start_date
+        epic_to_update.is_active = epic.is_active
+        epic_to_update.updated_at = datetime.now()
+    session.commit()

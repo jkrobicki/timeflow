@@ -18,7 +18,7 @@
 		sponsor_short_name: 'input',
 		client_name: {
 			input: 'autocomplete',
-			selectDisplay: 'name',
+			selectDisplay: 'client_name',
 			options: clients,
 			placeholder: "client's name"
 		},
