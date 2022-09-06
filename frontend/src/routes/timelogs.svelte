@@ -61,23 +61,6 @@
 				is_locked: false
 			})
 		});
-		console.log(
-			'post data is',
-			JSON.stringify({
-				user_id: selectedUser.id,
-				start_time: startTime,
-				end_time: endTime,
-				epic_id: selectedEpic.id,
-				epic_area_id: selectedEpicArea.id,
-				count_hours: 1,
-				count_days: 1,
-				month: startTimeDate.getMonth() + 1,
-				year: startTimeDate.getFullYear(),
-				created_at: Date.now(),
-				updated_at: Date.now(),
-				is_locked: false
-			})
-		);
 		const json = await res.json();
 		result = JSON.stringify(json);
 		timelogs = await getTimelogs(timelogs);
@@ -98,7 +81,7 @@
 
 	async function epicAreasByEpic(selectedEpic: any) {
 		const response = await fetch(
-			'http://localhost:8002/api/epic_areas/?epic_id=' + selectedEpic.epic_id,
+			'http://localhost:8002/api/epic_areas/?epic_id=' + selectedEpic.id,
 			{
 				method: 'GET',
 				headers: { 'Content-type': 'application/json' }
@@ -135,10 +118,11 @@
 				options={epics}
 				selectDisplay="epic_name"
 				placeholder="search epic"
+				onChange={epicAreasByEpic}
 			/>
 		</Column>
 		<Column>
-			{#key selectedEpic.epic_id}
+			{#key selectedEpic.id}
 				<Autocomplete
 					bind:selectedOption={selectedEpicArea}
 					options={epicAreas}

@@ -26,15 +26,12 @@ async function getEpics() {
     let epics = await response.json()
     return epics
 };
-/**
- * @param {any} epicAreas
- */
-async function getEpicAreas(epicAreas) {
+async function getEpicAreas() {
     const response = await fetch('http://localhost:8002/api/epic_areas/', {
         method: 'GET',
         headers: { 'Content-type': 'application/json' }
     });
-    epicAreas = await response.json()
+    let epicAreas = await response.json()
     return epicAreas
 };
 /**
