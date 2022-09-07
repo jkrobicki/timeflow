@@ -65,7 +65,7 @@ upData {JSON.stringify(upData)}
 <Grid>
 	<Row>
 		<Column>
-			<TextInput placeholder="new sponsor's full name" bind:value={newEpicAreaName} />
+			<TextInput placeholder="new epic area's full name" bind:value={newEpicAreaName} />
 		</Column>
 		<Autocomplete
 			options={epics}
