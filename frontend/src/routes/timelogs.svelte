@@ -9,6 +9,7 @@
 	let users: any[];
 	let epics: any[];
 	let epicAreas: any;
+	let epicAreasSelect: any;
 	let timelogs: any = [];
 	let timelog = {
 		username: '',
@@ -32,7 +33,7 @@
 		users = await getUsers();
 	});
 	onMount(async () => {
-		epicAreas = await getEpicAreas(epicAreas);
+		epicAreas = await getEpicAreas();
 	});
 	onMount(async () => {
 		epics = await getEpics();
@@ -87,7 +88,7 @@
 				headers: { 'Content-type': 'application/json' }
 			}
 		);
-		epicAreas = await response.json();
+		epicAreasSelect = await response.json();
 		return epicAreas;
 	}
 	async function onUpdate() {
@@ -125,7 +126,7 @@
 			{#key selectedEpic.id}
 				<Autocomplete
 					bind:selectedOption={selectedEpicArea}
-					options={epicAreas}
+					options={epicAreasSelect}
 					selectDisplay="epic_area_name"
 					placeholder="search epic area"
 				/>
