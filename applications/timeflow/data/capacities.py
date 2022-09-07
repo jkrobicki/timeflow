@@ -42,7 +42,7 @@ def capacities_all():
     rows = []
     for item in response.json():
         d = {
-            "capacity id": item["capacity_id"],
+            "capacity id": item["id"],
             "user": item["last_name"] + " " + item["first_name"],
             "year": item["year"],
             "month": item["month"],

@@ -70,7 +70,7 @@ async def get_teams_list(
     )
     if is_active != None:
         statement_final = statement.where(Team.is_active == is_active).order_by(
-            Team.is_active.desc().order_by(Team.name.asc())
+            Team.name.asc()
         )
     else:
         statement_final = statement.order_by(Team.is_active.desc()).order_by(

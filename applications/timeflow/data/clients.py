@@ -37,7 +37,7 @@ def clients_active() -> List[Select]:
     for item in response.json():
         d = {
             "id": item["id"],
-            "name": item["name"],
+            "name": item["client_name"],
             "is active": item["is_active"],
         }
         rows.append(d)
@@ -50,7 +50,7 @@ def clients_names(is_active: bool = None, label="select client") -> List[Select]
     response_client_name = requests.get(api_client_name, params=params)
     client_name_rows = [Select(value="", display_value=label)]
     for item in response_client_name.json():
-        d = Select(value=item["id"], display_value=item["name"])
+        d = Select(value=item["id"], display_value=item["client_name"])
         client_name_rows.append(d)
     return client_name_rows
 

@@ -8,16 +8,13 @@
 	export let text: any = '';
 	export let selectedItem: any = '';
 	export let onChange = function (selectedItem: any) {};
-	// export let bind = function (selectedItem: any) {};
 	let current = 0;
 	export let selectedOption: object = {};
-	export let onFocus = function (event: any) {};
 
 	function getValues() {
 		isSelectHidden = false;
 		changed = text;
 		selectedOptions = options.filter((item: any) => item[selectDisplay].includes(text));
-		console.log('selectedOptions are', selectedOptions);
 	}
 
 	function handleSelect(event: any) {
@@ -36,12 +33,10 @@
 		} else {
 			isSelectHidden = true;
 		}
-		console.log(isSelectHidden);
 	}
 
 	function handleKeyDown(event: any) {
 		let itemsCount = selectedOptions.length;
-		console.log(current, itemsCount);
 		if (event.key == 'ArrowUp' && current > 1) {
 			current = current - 1;
 		}
@@ -68,7 +63,6 @@
 		on:input={getValues}
 		on:keydown={handleKeyDown}
 		{placeholder}
-		on:focus={onFocus}
 		on:click={getValues}
 	/>
 	<!-- <Arrow {handleArrow} /> -->

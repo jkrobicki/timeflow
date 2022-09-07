@@ -71,6 +71,12 @@
 				on:click={handleClick}
 				isSelected={selectedNavLink == 'Roles'}
 			/>
+			<SideNavMenuItem
+				href="/epic-areas"
+				text="Epic Areas"
+				on:click={handleClick}
+				isSelected={selectedNavLink == 'Epic Areas'}
+			/>
 		</SideNavMenu>
 	</SideNavItems>
 </SideNav>

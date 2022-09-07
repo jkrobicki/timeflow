@@ -5,6 +5,9 @@ from ..models.epic_area import EpicArea
 from ..models.epic import Epic
 from sqlalchemy.exc import NoResultFound
 from datetime import datetime
+from typing import List
+from pydantic import BaseModel
+
 
 router = APIRouter(prefix="/api/epic_areas", tags=["epic_area"])
 
@@ -62,7 +65,6 @@ async def get_epic_areas_list(
     statement = select(
         EpicArea.id,
         EpicArea.epic_id,
-        Epic.id,
         EpicArea.name.label("epic_area_name"),
         Epic.name.label("epic_name"),
         EpicArea.is_active,
@@ -184,3 +186,30 @@ async def update_epic_area(
     session.commit()
     session.refresh(epic_area_to_update)
     return epic_area_to_update
+
+
+class UpdateEpicArea(BaseModel):
+    id: int
+    epic_area_name: str
+    epic_name: str
+    is_active: bool
+
+
+@router.post("/bulk_update")
+async def update_epic_areas(
+    epic_areas: List[UpdateEpicArea],
+    session: Session = Depends(get_session),
+):
+    for epic_area in epic_areas:
+        statement = select(EpicArea).where(EpicArea.id == epic_area.id)
+        epic_area_to_update = session.exec(statement).one()
+
+        statement2 = select(Epic.id).where(Epic.name == epic_area.epic_name)
+        epic_id_to_update = session.exec(statement2).one()
+
+        epic_area_to_update.epic_id = epic_id_to_update
+        epic_area_to_update.name = epic_area.epic_area_name
+        epic_area_to_update.is_active = epic_area.is_active
+        epic_area_to_update.updated_at = datetime.now()
+        session.add(epic_area_to_update)
+    session.commit()

@@ -67,23 +67,23 @@
 	<svelte:fragment slot="cell" let:cell let:row let:rowIndex let:cellIndex>
 		{#if selectedRowIds.includes(row.id)}
 			{#if cell.key in columnsToEdit}
-				{#each Object.entries(columnsToEdit) as [title, paragraph]}
-					{#if cell.key === title}
-						{#if paragraph === 'input'}
+				{#each Object.entries(columnsToEdit) as [columnName, value]}
+					{#if cell.key === columnName}
+						{#if value === 'input'}
 							<input
 								type="text"
 								class="month-picker"
 								value={cell.value}
 								on:blur={(event) => updateData(event, { row }, { cell })}
 							/>
-						{:else if paragraph === 'datetime'}
+						{:else if value === 'datetime'}
 							<input
 								type="datetime-local"
 								class="month-picker"
 								value={cell.value}
 								on:blur={(event) => updateData(event, { row }, { cell })}
 							/>
-						{:else if paragraph === 'toggle'}
+						{:else if value === 'toggle'}
 							<Toggle
 								hideLabel
 								size="sm"
@@ -92,11 +92,11 @@
 								toggled={cell.value}
 								on:change={(event) => updateData(event, { row }, { cell })}
 							/>
-						{:else if paragraph.input === 'autocomplete'}
+						{:else if value.type === 'autocomplete'}
 							<Autocomplete
-								options={paragraph.options}
-								selectDisplay={paragraph.selectDisplay}
-								placeholder={paragraph.placeholder}
+								options={value.options}
+								selectDisplay={value.selectDisplay}
+								placeholder={value.placeholder}
 								text={cell.value}
 								onChange={(event) => updateData(event, { row }, { cell }, 'autocomplete')}
 							/>
