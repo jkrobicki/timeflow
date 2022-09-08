@@ -59,7 +59,7 @@
 			<EditableDatatable
 				headers={[
 					{ key: 'id', value: 'ID' },
-					{ key: 'name', value: "FULL ROLE'S NAME" },
+					{ key: 'role_name', value: "FULL ROLE'S NAME" },
 					{ key: 'short_name', value: "SHORT ROLE'S NAME" },
 					{ key: 'is_active', value: 'IS ACTIVE' }
 				]}

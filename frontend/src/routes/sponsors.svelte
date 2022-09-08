@@ -17,7 +17,7 @@
 		sponsor_name: 'input',
 		sponsor_short_name: 'input',
 		client_name: {
-			input: 'autocomplete',
+			type: 'autocomplete',
 			selectDisplay: 'client_name',
 			options: clients,
 			placeholder: "client's name"
@@ -63,6 +63,7 @@
 	}
 </script>
 
+clients {JSON.stringify(clients)}
 upData {JSON.stringify(upData)}
 <Grid>
 	<Row>
@@ -74,7 +75,7 @@ upData {JSON.stringify(upData)}
 		</Column>
 		<Autocomplete
 			options={clients}
-			selectDisplay="name"
+			selectDisplay="client_name"
 			bind:selectedOption={selectedClient}
 			placeholder="search client"
 		/>

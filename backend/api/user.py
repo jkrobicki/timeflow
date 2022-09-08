@@ -65,7 +65,7 @@ async def get_users(
             AppUser.last_name,
             (AppUser.first_name + " " + AppUser.last_name).label("full_name"),
             Role.name.label("role_name"),
-            Team.short_name.label("main_team"),
+            Team.name.label("main_team"),
             AppUser.start_date,
             AppUser.supervisor,
             AppUser.is_active,
@@ -102,7 +102,7 @@ async def get_user_by_id(user_id: int, session: Session = Depends(get_session)):
             AppUser.first_name,
             AppUser.last_name,
             Role.name.label("role_name"),
-            Team.short_name.label("main_team"),
+            Team.short_name.label("team_name"),
             AppUser.start_date,
             AppUser.is_active,
         )

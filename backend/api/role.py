@@ -47,7 +47,7 @@ async def read_roles(session: Session = Depends(get_session), is_active: bool = 
     """
     statement = select(
         Role.id,
-        Role.name,
+        Role.name.label("role_name"),
         Role.short_name,
         Role.is_active,
     )
