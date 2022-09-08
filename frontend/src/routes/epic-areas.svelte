@@ -13,7 +13,7 @@
 	let newEpicAreaName: string;
 	let startDate: string = '';
 	let selectedEpic: Object = {};
-	let upData: Array<object> = [];
+	let updatedData: Array<object> = [];
 
 	let columnsToEdit = {
 		epic_area_name: 'input',
@@ -52,16 +52,15 @@
 	async function onUpdate() {
 		const updateRes = await fetch('http://localhost:8002/api/epic_areas/bulk_update', {
 			method: 'POST',
-			headers: { 'Content-type': 'application/json' },
-			body: JSON.stringify(upData)
+			headers: { 'Content-type': 'application/json' }
 		});
 		epicAreas = await getEpicAreas();
-		upData = [];
+		updatedData = [];
 		selectedRowIds = [];
 	}
 </script>
 
-upData {JSON.stringify(upData)}
+<!-- updatedData {JSON.stringify(updatedData)} -->
 <Grid>
 	<Row>
 		<Column>
@@ -92,7 +91,7 @@ upData {JSON.stringify(upData)}
 				]}
 				rows={epicAreas}
 				bind:selectedRowIds
-				bind:upData
+				bind:updatedData
 				{onUpdate}
 				bind:columnsToEdit
 			/>

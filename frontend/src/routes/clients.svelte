@@ -22,7 +22,7 @@
 		is_active: 'toggle',
 		client_name: 'input'
 	};
-	let upData: Array<object> = [];
+	let updatedData: Array<object> = [];
 
 	onMount(async () => {
 		clients = await getClients();
@@ -44,10 +44,10 @@
 		const updateRes = await fetch('http://localhost:8002/api/clients/bulk_update', {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
-			body: JSON.stringify(upData)
+			body: JSON.stringify(updatedData)
 		});
 		clients = await getClients();
-		upData = [];
+		updatedData = [];
 		selectedRowIds = [];
 	}
 </script>
@@ -73,7 +73,7 @@
 				rows={clients}
 				{columnsToEdit}
 				bind:selectedRowIds
-				bind:upData
+				bind:updatedData
 				{onUpdate}
 			/>
 		</Column>

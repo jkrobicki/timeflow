@@ -19,7 +19,7 @@
 	let selectedSupervisor: object = {};
 	let startDate: string = '';
 	let selectedEpic: Object = {};
-	let upData: Array<object> = [];
+	let updatedData: Array<object> = [];
 
 	let columnsToEdit = {
 		first_name: 'input',
@@ -89,16 +89,15 @@
 	async function onUpdate() {
 		const updateRes = await fetch('http://localhost:8002/api/users/bulk_update', {
 			method: 'POST',
-			headers: { 'Content-type': 'application/json' },
-			body: JSON.stringify(upData)
+			headers: { 'Content-type': 'application/json' }
 		});
 		users = await getUsers();
-		upData = [];
+		updatedData = [];
 		selectedRowIds = [];
 	}
 </script>
 
-upData {JSON.stringify(upData)}
+<!-- upData {JSON.stringify(upData)} -->
 <Grid>
 	<Row>
 		<Column>
@@ -165,7 +164,7 @@ upData {JSON.stringify(upData)}
 				]}
 				rows={users}
 				bind:selectedRowIds
-				bind:upData
+				bind:updatedData
 				{onUpdate}
 				bind:columnsToEdit
 			/>

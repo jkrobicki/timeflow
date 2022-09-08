@@ -17,7 +17,7 @@
 	export let selectedRowIds: Array<number> = [];
 	export let onRemove: Function = () => {};
 	export let onUpdate: Function = () => {};
-	export let upData: { id: number; name: string }[] = [];
+	export let updatedData: { id: number; name: string }[] = [];
 	export let onCancel = function () {};
 	export let columnsToEdit: Object = {};
 	export let filteredRowIds: any = [];
@@ -30,17 +30,17 @@
 		let row = event_row.row;
 		console.log('event', event);
 		//@ts-ignore
-		if (!(upData.filter((obj) => obj.id === rowId).length > 0)) {
-			upData = [...upData, row];
+		if (!(updatedData.filter((obj) => obj.id === rowId).length > 0)) {
+			updatedData = [...updatedData, row];
 		}
-		let objIndex: any = upData.findIndex((obj) => obj.id === rowId);
+		let objIndex: any = updatedData.findIndex((obj) => obj.id === rowId);
 		//@ts-ignore
 		if (columnName === 'is_active') {
-			upData[objIndex][columnName] = event.srcElement.checked;
+			updatedData[objIndex][columnName] = event.srcElement.checked;
 		} else if (autocomplete) {
-			upData[objIndex][columnName] = event[autocomplete.dataColumnName];
+			updatedData[objIndex][columnName] = event[autocomplete.dataColumnName];
 		} else {
-			upData[objIndex][columnName] = event.srcElement.value;
+			updatedData[objIndex][columnName] = event.srcElement.value;
 		}
 	}
 </script>

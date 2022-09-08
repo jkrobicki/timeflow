@@ -12,7 +12,7 @@
 	let newSponsorsFullName: string;
 	let newSponsorsShortName: string;
 	let selectedClient: Object = {};
-	let upData: Array<object> = [];
+	let updatedData: Array<object> = [];
 	let columnsToEdit = {
 		sponsor_name: 'input',
 		sponsor_short_name: 'input',
@@ -26,7 +26,7 @@
 	};
 
 	if (selectedRowIds === []) {
-		upData = [];
+		updatedData = [];
 	}
 	onMount(async () => {
 		sponsors = await getSponsors();
@@ -55,16 +55,16 @@
 		const updateRes = await fetch('http://localhost:8002/api/sponsors/bulk_update', {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
-			body: JSON.stringify(upData)
+			body: JSON.stringify(updatedData)
 		});
 		sponsors = await getSponsors();
-		upData = [];
+		updatedData = [];
 		selectedRowIds = [];
 	}
 </script>
 
-clients {JSON.stringify(clients)}
-upData {JSON.stringify(upData)}
+<!-- clients {JSON.stringify(clients)} -->
+<!-- upData {JSON.stringify(upData)} -->
 <Grid>
 	<Row>
 		<Column>

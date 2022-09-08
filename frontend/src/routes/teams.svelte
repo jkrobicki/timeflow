@@ -13,10 +13,10 @@
 	let newTeamsShortName: string;
 	let columnsToEdit = ['team_name', 'team_short_name', 'is_active', 'username', 'full_lead_name'];
 	let selectedUser: Object = {};
-	let upData: Array<object> = [];
+	let updatedData: Array<object> = [];
 
 	if (selectedRowIds === []) {
-		upData = [];
+		updatedData = [];
 	}
 	onMount(async () => {
 		teams = await getTeams();
@@ -42,11 +42,10 @@
 	async function onUpdate() {
 		const updateRes = await fetch('http://localhost:8002/api/teams/bulk_update', {
 			method: 'POST',
-			headers: { 'Content-type': 'application/json' },
-			body: JSON.stringify(upData)
+			headers: { 'Content-type': 'application/json' }
 		});
 		teams = await getTeams();
-		upData = [];
+		updatedData = [];
 		selectedRowIds = [];
 	}
 </script>
@@ -83,7 +82,7 @@
 				rows={teams}
 				{columnsToEdit}
 				bind:selectedRowIds
-				bind:upData
+				bind:updatedData
 				{onUpdate}
 				autocompleteOptions={users}
 			/>
