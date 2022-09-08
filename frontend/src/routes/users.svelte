@@ -21,39 +21,49 @@
 	let selectedEpic: Object = {};
 	let upData: Array<object> = [];
 
-	// let headers: object ={[
-	// 				{ key: 'id', value: 'ID' },
-	// 				{ key: 'username', value: 'USERNAME' },
-	// 				{ key: 'first_name', value: 'FIRST NAME' },
-	// 				{ key: 'last_name', value: 'LAST NAME' },
-	// 				{ key: 'role_name', value: 'ROLE' },
-	// 				{ key: 'main_team', value: 'MAIN_TEAM' },
-	// 				{ key: 'start_date', value: 'START DATE' },
-	// 				{ key: 'supervisor', value: 'SUPERVISOR' },
-	// 				{ key: 'is_active', value: 'IS ACTIVE' }
-	// 			]}
-
 	let columnsToEdit = {
-		username: 'input',
 		first_name: 'input',
+		last_name: 'input',
+		role_name: {
+			type: 'autocomplete',
+			selectDisplay: 'role_name',
+			options: roles,
+			placeholder: "role's name"
+		},
+		main_team: {
+			type: 'autocomplete',
+			selectDisplay: 'team_name',
+			options: teams,
+			placeholder: "teams's name"
+		},
 		epic_name: {
 			type: 'autocomplete',
 			selectDisplay: 'epic_name',
 			options: roles,
 			placeholder: "epic's name"
 		},
-		is_active: 'toggle'
+		supervisor: {
+			type: 'autocomplete',
+			selectDisplay: 'full_name',
+			options: users,
+			placeholder: 'select supervisor'
+		},
+		is_active: 'toggle',
+		email: 'input',
+		start_date: 'date'
 	};
 
 	onMount(async () => {
 		users = await getUsers();
-		// columnsToEdit.epic_name.options = epics;
+		columnsToEdit.supervisor.options = users;
 	});
 	onMount(async () => {
 		roles = await getRoles();
+		columnsToEdit.role_name.options = roles;
 	});
 	onMount(async () => {
 		teams = await getTeams();
+		columnsToEdit.main_team.options = teams;
 	});
 
 	async function onSubmit() {
@@ -77,7 +87,7 @@
 		users = await getUsers();
 	}
 	async function onUpdate() {
-		const updateRes = await fetch('http://localhost:8002/api/epic_areas/bulk_update', {
+		const updateRes = await fetch('http://localhost:8002/api/users/bulk_update', {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify(upData)
@@ -88,7 +98,7 @@
 	}
 </script>
 
-<!-- upData {JSON.stringify(upData)} -->
+upData {JSON.stringify(upData)}
 <Grid>
 	<Row>
 		<Column>
@@ -148,6 +158,7 @@
 					{ key: 'last_name', value: 'LAST NAME' },
 					{ key: 'role_name', value: 'ROLE' },
 					{ key: 'main_team', value: 'MAIN_TEAM' },
+					{ key: 'email', value: 'EMAIL' },
 					{ key: 'start_date', value: 'START DATE' },
 					{ key: 'supervisor', value: 'SUPERVISOR' },
 					{ key: 'is_active', value: 'IS ACTIVE' }
