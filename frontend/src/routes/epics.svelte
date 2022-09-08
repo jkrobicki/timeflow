@@ -32,7 +32,7 @@
 	let selectedTeam: Object = {};
 	let selectedSponsor: Object = {};
 	let startDate: string = '';
-	let upData: Array<object> = [];
+	let updatedData: Array<object> = [];
 	onMount(async () => {
 		epics = await getEpics();
 	});
@@ -77,11 +77,10 @@
 	async function onUpdate() {
 		const updateRes = await fetch('http://localhost:8002/api/epics/bulk_update', {
 			method: 'POST',
-			headers: { 'Content-type': 'application/json' },
-			body: JSON.stringify(upData)
+			headers: { 'Content-type': 'application/json' }
 		});
 		epics = await getEpics();
-		upData = [];
+		updatedData = [];
 		selectedRowIds = [];
 	}
 </script>
@@ -128,7 +127,7 @@
 				]}
 				rows={epics}
 				bind:selectedRowIds
-				bind:upData
+				bind:updatedData
 				{onUpdate}
 				bind:columnsToEdit
 			/>

@@ -10,7 +10,7 @@
 	let newRolesFullName: string;
 	let newRolesShortName: string;
 	let columnsToEdit = ['name', 'short_name', 'is_active'];
-	let upData: Array<object> = [];
+	let updatedData: Array<object> = [];
 
 	onMount(async () => {
 		roles = await getRoles();
@@ -32,11 +32,10 @@
 	async function onUpdate() {
 		const updateRes = await fetch('http://localhost:8002/api/roles/bulk_update', {
 			method: 'POST',
-			headers: { 'Content-type': 'application/json' },
-			body: JSON.stringify(upData)
+			headers: { 'Content-type': 'application/json' }
 		});
 		roles = await getRoles();
-		upData = [];
+		updatedData = [];
 		selectedRowIds = [];
 	}
 </script>
@@ -59,14 +58,14 @@
 			<EditableDatatable
 				headers={[
 					{ key: 'id', value: 'ID' },
-					{ key: 'name', value: "FULL ROLE'S NAME" },
+					{ key: 'role_name', value: "FULL ROLE'S NAME" },
 					{ key: 'short_name', value: "SHORT ROLE'S NAME" },
 					{ key: 'is_active', value: 'IS ACTIVE' }
 				]}
 				rows={roles}
 				{columnsToEdit}
 				bind:selectedRowIds
-				bind:upData
+				bind:updatedData
 				{onUpdate}
 			/>
 		</Column>

@@ -25,7 +25,7 @@
 	let result: any = null;
 	let selectedUser = { id: '', username: '' };
 	let selectedRowIds: any = [];
-	let upData: Array<object> = [];
+	let updatedData: Array<object> = [];
 	let updateRes: any;
 	let columnsToEdit = ['start_time', 'end_time'];
 
@@ -94,11 +94,10 @@
 	async function onUpdate() {
 		const updateRes = await fetch('http://localhost:8002/api/timelogs/bulk_update', {
 			method: 'POST',
-			headers: { 'Content-type': 'application/json' },
-			body: JSON.stringify(upData)
+			headers: { 'Content-type': 'application/json' }
 		});
 		timelogs = await getTimelogs(timelogs);
-		upData = [];
+		updatedData = [];
 		selectedRowIds = [];
 	}
 </script>
@@ -161,7 +160,7 @@
 				bind:selectedRowIds
 				{onRemove}
 				{onUpdate}
-				bind:upData
+				bind:updatedData
 			/>
 		</Column>
 	</Row>
