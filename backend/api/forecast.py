@@ -59,10 +59,11 @@ async def get_forecasts(
     """
     statement = (
         select(
-            Forecast.id.label("forecast_id"),
+            Forecast.id,
             AppUser.username,
             AppUser.first_name,
             AppUser.last_name,
+            (AppUser.last_name + " " + AppUser.first_name).label("full_name"),
             Epic.name.label("epic_name"),
             Epic.id.label("epic_id"),
             Forecast.year,
@@ -121,7 +122,7 @@ async def get_forecasts_by_user(
     """
     statement = (
         select(
-            Forecast.id.label("forecast_id"),
+            Forecast.id,
             AppUser.username,
             AppUser.first_name,
             AppUser.last_name,
@@ -196,7 +197,7 @@ async def get_forecasts_by_user_year_epic(
     """
     statement = (
         select(
-            Forecast.id.label("forecast_id"),
+            Forecast.id,
             AppUser.username,
             Epic.name.label("epic_name"),
             Forecast.year,
@@ -236,7 +237,7 @@ async def get_forecasts_by_user_year_epic(
     """
     statement = (
         select(
-            Forecast.id.label("forecast_id"),
+            Forecast.id,
             AppUser.username,
             Epic.name.label("epic_name"),
             Forecast.year,
