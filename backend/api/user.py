@@ -183,17 +183,6 @@ async def update_user(
     session.refresh(user_to_update)
     return user_to_update
 
-    # headers={[
-    # 	{ key: 'id', value: 'ID' },
-    # 	{ key: 'first_name', value: 'FIRST NAME' },
-    # 	{ key: 'last_name', value: 'LAST NAME' },
-    # 	{ key: 'role_name', value: 'ROLE' },
-    # 	{ key: 'main_team', value: 'MAIN_TEAM' },
-    # 	{ key: 'start_date', value: 'START DATE' },
-    # 	{ key: 'supervisor', value: 'SUPERVISOR' },
-    # 	{ key: 'is_active', value: 'IS ACTIVE' }
-    # ]}
-
 
 class UpdateUser(BaseModel):
     id: int
@@ -202,7 +191,7 @@ class UpdateUser(BaseModel):
     email: str
     role_name: str
     main_team: str
-    supervisor: str
+    supervisor: str = None
     start_date: date
     is_active: bool
 
@@ -227,7 +216,8 @@ async def update_users(
         user_to_update.email = user.email
         user_to_update.role_id = role_id_to_update
         user_to_update.team_id = team_id_to_update
-        user_to_update.supervisor = user.supervisor
+        if user.supervisor != None:
+            user_to_update.supervisor = user.supervisor
         user_to_update.start_date = user.start_date
         user_to_update.is_active = user.is_active
         user_to_update.updated_at = datetime.now()
