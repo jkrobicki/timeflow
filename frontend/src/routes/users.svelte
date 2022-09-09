@@ -106,7 +106,8 @@
 	async function onUpdate() {
 		const updateRes = await fetch(`${baseUrl}/api/users/bulk_update`, {
 			method: 'POST',
-			headers: { 'Content-type': 'application/json' }
+			headers: { 'Content-type': 'application/json' },
+			body: JSON.stringify(updatedData)
 		});
 		users = await getUsers();
 		updatedData = [];
