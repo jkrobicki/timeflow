@@ -1,8 +1,10 @@
+import { baseUrl } from './utils.js'
+
 /**
  * @param {any} timelogs
  */
 async function getTimelogs(timelogs) {
-    const response = await fetch('http://localhost:8002/api/timelogs/', {
+    const response = await fetch(`${baseUrl}/api/timelogs/`, {
         method: 'GET',
         headers: { 'Content-type': 'application/json' }
     });
@@ -11,7 +13,7 @@ async function getTimelogs(timelogs) {
 }
 
 async function getUsers() {
-    const response = await fetch('http://localhost:8002/api/users/', {
+    const response = await fetch(`${baseUrl}/api/users/`, {
         method: 'GET',
         headers: { 'Content-type': 'application/json' }
     });
@@ -19,7 +21,7 @@ async function getUsers() {
     return users
 };
 async function getEpics() {
-    const response = await fetch('http://localhost:8002/api/epics/', {
+    const response = await fetch(`${baseUrl}/api/epics/`, {
         method: 'GET',
         headers: { 'Content-type': 'application/json' }
     });
@@ -27,7 +29,7 @@ async function getEpics() {
     return epics
 };
 async function getEpicAreas() {
-    const response = await fetch('http://localhost:8002/api/epic_areas/', {
+    const response = await fetch(`${baseUrl}/api/epic_areas/`, {
         method: 'GET',
         headers: { 'Content-type': 'application/json' }
     });
@@ -38,7 +40,7 @@ async function getEpicAreas() {
  * @param {any} capacities
  */
 async function getCapacities(capacities) {
-    const response = await fetch('http://localhost:8002/api/capacities/', {
+    const response = await fetch(`${baseUrl}/api/capacities/`, {
         method: 'GET',
         headers: { 'Content-type': 'application/json' }
     });
@@ -46,7 +48,7 @@ async function getCapacities(capacities) {
     return capacities
 };
 async function getClients() {
-    const response = await fetch('http://localhost:8002/api/clients/', {
+    const response = await fetch(`${baseUrl}/api/clients/`, {
         method: 'GET',
         headers: { 'Content-type': 'application/json' }
     });
@@ -55,7 +57,7 @@ async function getClients() {
 };
 
 async function getSponsors() {
-    const response = await fetch('http://localhost:8002/api/sponsors/', {
+    const response = await fetch(`${baseUrl}/api/sponsors/`, {
         method: 'GET',
         headers: { 'Content-type': 'application/json' }
     });
@@ -64,7 +66,7 @@ async function getSponsors() {
 };
 
 async function getTeams() {
-    const response = await fetch('http://localhost:8002/api/teams/', {
+    const response = await fetch(`${baseUrl}/api/teams/`, {
         method: 'GET',
         headers: { 'Content-type': 'application/json' }
     });
@@ -73,7 +75,7 @@ async function getTeams() {
 };
 
 async function getRoles() {
-    const response = await fetch('http://localhost:8002/api/roles/', {
+    const response = await fetch(`${baseUrl}/api/roles/`, {
         method: 'GET',
         headers: { 'Content-type': 'application/json' }
     });

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import 'carbon-components-svelte/css/white.css';
 	import { onMount } from 'svelte';
+	import { baseUrl } from './utils.js';
 	import {
 		DataTable,
 		Grid,
@@ -35,7 +36,7 @@
 	});
 
 	async function onSubmit() {
-		const res = await fetch('http://localhost:8002/api/capacities/', {
+		const res = await fetch(`${baseUrl}/api/capacities/`, {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify({
@@ -55,7 +56,7 @@
 
 	async function onRemove() {
 		async function DeleteApi(id: number) {
-			const response = await fetch('http://localhost:8002/api/capacities/?capacity_id=' + id, {
+			const response = await fetch(`${baseUrl}/api/capacities/?capacity_id=` + id, {
 				method: 'DELETE',
 				headers: {
 					'Content-type': 'application/json'

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { baseUrl } from './utils.js';
 	import { getTeams } from './data.js';
 	import { getUsers } from './data.js';
 	import EditableDatatable from '../library/components/EditableDatatable.svelte';
@@ -25,7 +26,7 @@
 		users = await getUsers();
 	});
 	async function onSubmit() {
-		const res = await fetch('http://localhost:8002/api/teams/', {
+		const res = await fetch(`${baseUrl}/api/teams/`, {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify({
@@ -40,7 +41,7 @@
 		teams = await getTeams();
 	}
 	async function onUpdate() {
-		const updateRes = await fetch('http://localhost:8002/api/teams/bulk_update', {
+		const updateRes = await fetch(`${baseUrl}/api/teams/bulk_update`, {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' }
 		});
