@@ -42,6 +42,13 @@
 
 		<SideNavMenu text="Admin">
 			<SideNavMenuItem
+				href="/forecasts"
+				text="Forecasts"
+				on:click={handleClick}
+				isSelected={selectedNavLink == 'Forecasts'}
+			/>
+
+			<SideNavMenuItem
 				href="/epics"
 				text="Epics"
 				on:click={handleClick}
