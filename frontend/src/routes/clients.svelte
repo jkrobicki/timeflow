@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { getClients } from './data.js';
 	import { onMount } from 'svelte';
+	import { baseUrl } from './utils.js';
 	import EditableDatatable from '../library/components/EditableDatatable.svelte';
 	import {
 		Grid,
@@ -28,7 +29,7 @@
 		clients = await getClients();
 	});
 	async function onSubmit() {
-		const res = await fetch('http://localhost:8002/api/clients/', {
+		const res = await fetch(`${baseUrl}/api/clients/`, {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify({
@@ -41,7 +42,7 @@
 		clients = await getClients();
 	}
 	async function onUpdate() {
-		const updateRes = await fetch('http://localhost:8002/api/clients/bulk_update', {
+		const updateRes = await fetch(`${baseUrl}/api/clients/bulk_update`, {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify(updatedData)

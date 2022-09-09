@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { getSponsors } from './data.js';
 	import { getClients } from './data.js';
+	import { baseUrl } from './utils.js';
 	import EditableDatatable from '../library/components/EditableDatatable.svelte';
 	import Autocomplete from '../library/components/autocomplete.svelte';
 
@@ -37,7 +38,7 @@
 	});
 
 	async function onSubmit() {
-		const res = await fetch('http://localhost:8002/api/sponsors/', {
+		const res = await fetch(`${baseUrl}/api/sponsors/`, {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify({
@@ -52,7 +53,7 @@
 		sponsors = await getSponsors();
 	}
 	async function onUpdate() {
-		const updateRes = await fetch('http://localhost:8002/api/sponsors/bulk_update', {
+		const updateRes = await fetch(`${baseUrl}/api/sponsors/bulk_update`, {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify(updatedData)
@@ -96,7 +97,7 @@
 				]}
 				rows={sponsors}
 				bind:selectedRowIds
-				bind:upData
+				bind:updatedData
 				{onUpdate}
 				bind:columnsToEdit
 			/>

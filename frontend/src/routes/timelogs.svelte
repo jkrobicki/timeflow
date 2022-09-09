@@ -1,6 +1,7 @@
 <script lang="ts">
 	import 'carbon-components-svelte/css/white.css';
 	import { onMount } from 'svelte';
+	import { baseUrl } from './utils.js';
 	import { Grid, Column, Row, Button } from '../library/carbon/components';
 	import { getTimelogs, getUsers, getEpics, getEpicAreas } from './data.js';
 	import Autocomplete from '../library/components/autocomplete.svelte';
@@ -44,7 +45,7 @@
 
 	async function onSubmit() {
 		let startTimeDate = new Date(startTime);
-		const res = await fetch('http://localhost:8002/api/timelogs/', {
+		const res = await fetch(`${baseUrl}/api/timelogs/`, {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify({
@@ -69,7 +70,7 @@
 
 	async function onRemove() {
 		async function DeleteApi(id: number) {
-			const response = await fetch('http://localhost:8002/api/timelogs/' + id, {
+			const response = await fetch(`${baseUrl}/api/timelogs/` + id, {
 				method: 'DELETE',
 				headers: {
 					'Content-type': 'application/json'
@@ -81,18 +82,15 @@
 	}
 
 	async function epicAreasByEpic(selectedEpic: any) {
-		const response = await fetch(
-			'http://localhost:8002/api/epic_areas/?epic_id=' + selectedEpic.id,
-			{
-				method: 'GET',
-				headers: { 'Content-type': 'application/json' }
-			}
-		);
+		const response = await fetch(`${baseUrl}/api/epic_areas/?epic_id=` + selectedEpic.id, {
+			method: 'GET',
+			headers: { 'Content-type': 'application/json' }
+		});
 		epicAreasSelect = await response.json();
 		return epicAreas;
 	}
 	async function onUpdate() {
-		const updateRes = await fetch('http://localhost:8002/api/timelogs/bulk_update', {
+		const updateRes = await fetch(`${baseUrl}/api/timelogs/bulk_update`, {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' }
 		});

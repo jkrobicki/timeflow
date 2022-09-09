@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { baseUrl } from './utils.js';
 	import { getUsers, getRoles, getTeams } from './data.js';
 	import EditableDatatable from '../library/components/EditableDatatable.svelte';
 	import Autocomplete from '../library/components/autocomplete.svelte';
@@ -67,7 +68,7 @@
 	});
 
 	async function onSubmit() {
-		const res = await fetch('http://localhost:8002/api/users/', {
+		const res = await fetch(`${baseUrl}/api/users/`, {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify({
@@ -84,10 +85,26 @@
 				updated_at: Date.now()
 			})
 		});
+		console.log(
+			'post user',
+			JSON.stringify({
+				username: newUsername,
+				first_name: newUserFirstName,
+				last_name: newUserLastName,
+				email: newEmail,
+				role_id: selectedRole.id,
+				team_id: selectedTeam.id,
+				start_date: startDate,
+				supervisor: selectedSupervisor.full_name,
+				is_active: true,
+				created_at: Date.now(),
+				updated_at: Date.now()
+			})
+		);
 		users = await getUsers();
 	}
 	async function onUpdate() {
-		const updateRes = await fetch('http://localhost:8002/api/users/bulk_update', {
+		const updateRes = await fetch(`${baseUrl}/api/users/bulk_update`, {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' }
 		});
@@ -97,7 +114,7 @@
 	}
 </script>
 
-<!-- upData {JSON.stringify(upData)} -->
+<!-- updatedData {JSON.stringify(updatedData)} -->
 <Grid>
 	<Row>
 		<Column>
@@ -117,7 +134,7 @@
 		<Column>
 			<Autocomplete
 				options={roles}
-				selectDisplay="name"
+				selectDisplay="role_name"
 				bind:selectedOption={selectedRole}
 				placeholder="select role"
 			/>
