@@ -46,7 +46,7 @@ async function getCapacities(capacities) {
     return capacities
 };
 async function getClients() {
-    const response = await fetch('http://localhost:8002/api/clients/', {
+    const response = await fetch('http://fastapi:8002/api/clients/', {
         method: 'GET',
         headers: { 'Content-type': 'application/json' }
     });

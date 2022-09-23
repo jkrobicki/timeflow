@@ -32,7 +32,7 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI(title="timeflow app API", openapi_tags=tags_metadata)
 
 origins = [
-    "http://localhost:5173",
+        "http://localhost:5173", #old one localhost:5173
 ]
 
 app.add_middleware(

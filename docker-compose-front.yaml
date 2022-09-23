@@ -1,0 +1,30 @@
+version: '3.3'
+networks:
+  caddy:
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    command: caddy reverse-proxy --from https://dyvenia.test-timeflow.com:443 --to http://front:4173
+    ports:
+     - 80:80
+     - 443:443
+    volumes:
+     - /data/caddy/Caddyfile:/etc/caddy/Caddyfile
+     - /data/caddy/data:/data # Optional
+     - /data/caddy/config:/config # Optional
+    depends_on:
+      - "front"
+    networks:
+      - caddy
+
+  front:
+    image: frontend:v2
+    restart: unless-stopped
+    ports:
+      - 4173:4173
+    environment:
+      - url=https://dyvenia.test-timeflow.com
+    networks:
+      - caddy
