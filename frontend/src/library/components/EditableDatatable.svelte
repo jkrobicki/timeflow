@@ -11,6 +11,7 @@
 	} from '../carbon/components';
 	import { Toggle, TextInput } from '../carbon/components';
 	import Autocomplete from './autocomplete.svelte';
+	import { TrashCan, UpdateNow } from '../carbon/icons';
 
 	export let headers: Array<Object> = [];
 	export let rows: any = [{}];
@@ -59,8 +60,8 @@
 			<ToolbarSearch persistent shouldFilterRows bind:filteredRowIds />
 		</ToolbarContent>
 		<ToolbarBatchActions on:cancel={onCancel}>
-			<Button on:click={onRemove}>Remove</Button>
-			<Button on:click={onUpdate}>Update</Button>
+			<Button icon={TrashCan} on:click={onRemove}>Remove</Button>
+			<Button icon={UpdateNow} on:click={onUpdate}>Update</Button>
 		</ToolbarBatchActions>
 	</Toolbar>
 
