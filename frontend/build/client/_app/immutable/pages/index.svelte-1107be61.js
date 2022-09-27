@@ -1,0 +1,1 @@
+import{S as s,i as e,s as n}from"../chunks/index-f831fcd5.js";async function o(){return{status:302,redirect:"/timelogs"}}o();class r extends s{constructor(t){super(),e(this,t,null,null,n,{})}}export{r as default,o as load};
