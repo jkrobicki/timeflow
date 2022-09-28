@@ -147,9 +147,8 @@ node_modules
 .vscode
 
 # HTTPS certs
-127.0.0.1-key.pem
-127.0.0.1.pem
-certs
+**.pem
+#certs/
 
 # Secrets
 .env
