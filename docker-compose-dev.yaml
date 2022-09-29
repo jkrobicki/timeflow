@@ -23,7 +23,7 @@ services:
         ipv4_address: 172.28.1.6
 
   front:
-    image: frontend:v2
+    image: frontend:v4
     restart: always
     ports:
       - 4173:4173
