@@ -136,12 +136,12 @@ dmypy.json
 trashcode
 
 # databases
-database.sqlite
-test_db.sqlite
+**/database.sqlite
+**/test_db.sqlite
 
 # tailwind
-build
-node_modules
+**/build
+**/node_modules
 
 # VSCode
 .vscode
