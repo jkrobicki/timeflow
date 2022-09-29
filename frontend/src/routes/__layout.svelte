@@ -42,6 +42,13 @@
 
 		<SideNavMenu text="Admin">
 			<SideNavMenuItem
+				href="/forecasts"
+				text="Forecasts"
+				on:click={handleClick}
+				isSelected={selectedNavLink == 'Forecasts'}
+			/>
+
+			<SideNavMenuItem
 				href="/epics"
 				text="Epics"
 				on:click={handleClick}
@@ -76,6 +83,12 @@
 				text="Epic Areas"
 				on:click={handleClick}
 				isSelected={selectedNavLink == 'Epic Areas'}
+			/>
+			<SideNavMenuItem
+				href="/users"
+				text="Users"
+				on:click={handleClick}
+				isSelected={selectedNavLink == 'Users'}
 			/>
 		</SideNavMenu>
 	</SideNavItems>

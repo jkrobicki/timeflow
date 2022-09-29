@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { baseUrl } from './utils.js';
 	import { getSponsors, getTeams, getEpics } from './data.js';
 	import EditableDatatable from '../library/components/EditableDatatable.svelte';
 	import Autocomplete from '../library/components/autocomplete.svelte';
@@ -32,7 +33,7 @@
 	let selectedTeam: Object = {};
 	let selectedSponsor: Object = {};
 	let startDate: string = '';
-	let upData: Array<object> = [];
+	let updatedData: Array<object> = [];
 	onMount(async () => {
 		epics = await getEpics();
 	});
@@ -46,7 +47,7 @@
 		columnsToEdit.team_name.options = teams;
 	});
 	async function onSubmit() {
-		const res = await fetch('http://localhost:8002/api/epics/', {
+		const res = await fetch(`${baseUrl}/api/epics/`, {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify({
@@ -75,13 +76,12 @@
 		epics = await getEpics();
 	}
 	async function onUpdate() {
-		const updateRes = await fetch('http://localhost:8002/api/epics/bulk_update', {
+		const updateRes = await fetch(`${baseUrl}/api/epics/bulk_update`, {
 			method: 'POST',
-			headers: { 'Content-type': 'application/json' },
-			body: JSON.stringify(upData)
+			headers: { 'Content-type': 'application/json' }
 		});
 		epics = await getEpics();
-		upData = [];
+		updatedData = [];
 		selectedRowIds = [];
 	}
 </script>
@@ -128,7 +128,7 @@
 				]}
 				rows={epics}
 				bind:selectedRowIds
-				bind:upData
+				bind:updatedData
 				{onUpdate}
 				bind:columnsToEdit
 			/>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { getRoles } from './data.js';
+	import { baseUrl } from './utils.js';
 	import EditableDatatable from '../library/components/EditableDatatable.svelte';
 	import Autocomplete from '../library/components/autocomplete.svelte';
 
@@ -10,13 +11,13 @@
 	let newRolesFullName: string;
 	let newRolesShortName: string;
 	let columnsToEdit = ['name', 'short_name', 'is_active'];
-	let upData: Array<object> = [];
+	let updatedData: Array<object> = [];
 
 	onMount(async () => {
 		roles = await getRoles();
 	});
 	async function onSubmit() {
-		const res = await fetch('http://localhost:8002/api/roles/', {
+		const res = await fetch(`${baseUrl}/api/roles/`, {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify({
@@ -30,13 +31,12 @@
 		roles = await getRoles();
 	}
 	async function onUpdate() {
-		const updateRes = await fetch('http://localhost:8002/api/roles/bulk_update', {
+		const updateRes = await fetch(`${baseUrl}/api/roles/bulk_update`, {
 			method: 'POST',
-			headers: { 'Content-type': 'application/json' },
-			body: JSON.stringify(upData)
+			headers: { 'Content-type': 'application/json' }
 		});
 		roles = await getRoles();
-		upData = [];
+		updatedData = [];
 		selectedRowIds = [];
 	}
 </script>
@@ -59,14 +59,14 @@
 			<EditableDatatable
 				headers={[
 					{ key: 'id', value: 'ID' },
-					{ key: 'name', value: "FULL ROLE'S NAME" },
+					{ key: 'role_name', value: "FULL ROLE'S NAME" },
 					{ key: 'short_name', value: "SHORT ROLE'S NAME" },
 					{ key: 'is_active', value: 'IS ACTIVE' }
 				]}
 				rows={roles}
 				{columnsToEdit}
 				bind:selectedRowIds
-				bind:upData
+				bind:updatedData
 				{onUpdate}
 			/>
 		</Column>

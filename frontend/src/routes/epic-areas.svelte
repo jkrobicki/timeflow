@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { baseUrl } from './utils.js';
 	import { getEpics } from './data.js';
 	import { getEpicAreas } from './data.js';
 	import EditableDatatable from '../library/components/EditableDatatable.svelte';
@@ -13,7 +14,7 @@
 	let newEpicAreaName: string;
 	let startDate: string = '';
 	let selectedEpic: Object = {};
-	let upData: Array<object> = [];
+	let updatedData: Array<object> = [];
 
 	let columnsToEdit = {
 		epic_area_name: 'input',
@@ -35,7 +36,7 @@
 	});
 
 	async function onSubmit() {
-		const res = await fetch('http://localhost:8002/api/epic_areas/', {
+		const res = await fetch(`${baseUrl}/api/epic_areas/`, {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify({
@@ -50,22 +51,21 @@
 		epicAreas = await getEpicAreas();
 	}
 	async function onUpdate() {
-		const updateRes = await fetch('http://localhost:8002/api/epic_areas/bulk_update', {
+		const updateRes = await fetch(`${baseUrl}/api/epic_areas/bulk_update`, {
 			method: 'POST',
-			headers: { 'Content-type': 'application/json' },
-			body: JSON.stringify(upData)
+			headers: { 'Content-type': 'application/json' }
 		});
 		epicAreas = await getEpicAreas();
-		upData = [];
+		updatedData = [];
 		selectedRowIds = [];
 	}
 </script>
 
-upData {JSON.stringify(upData)}
+<!-- updatedData {JSON.stringify(updatedData)} -->
 <Grid>
 	<Row>
 		<Column>
-			<TextInput placeholder="new sponsor's full name" bind:value={newEpicAreaName} />
+			<TextInput placeholder="new epic area's full name" bind:value={newEpicAreaName} />
 		</Column>
 		<Autocomplete
 			options={epics}
@@ -92,7 +92,7 @@ upData {JSON.stringify(upData)}
 				]}
 				rows={epicAreas}
 				bind:selectedRowIds
-				bind:upData
+				bind:updatedData
 				{onUpdate}
 				bind:columnsToEdit
 			/>

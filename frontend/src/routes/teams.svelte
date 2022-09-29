@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { baseUrl } from './utils.js';
 	import { getTeams } from './data.js';
 	import { getUsers } from './data.js';
 	import EditableDatatable from '../library/components/EditableDatatable.svelte';
@@ -13,10 +14,10 @@
 	let newTeamsShortName: string;
 	let columnsToEdit = ['team_name', 'team_short_name', 'is_active', 'username', 'full_lead_name'];
 	let selectedUser: Object = {};
-	let upData: Array<object> = [];
+	let updatedData: Array<object> = [];
 
 	if (selectedRowIds === []) {
-		upData = [];
+		updatedData = [];
 	}
 	onMount(async () => {
 		teams = await getTeams();
@@ -25,7 +26,7 @@
 		users = await getUsers();
 	});
 	async function onSubmit() {
-		const res = await fetch('http://localhost:8002/api/teams/', {
+		const res = await fetch(`${baseUrl}/api/teams/`, {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify({
@@ -40,13 +41,12 @@
 		teams = await getTeams();
 	}
 	async function onUpdate() {
-		const updateRes = await fetch('http://localhost:8002/api/teams/bulk_update', {
+		const updateRes = await fetch(`${baseUrl}/api/teams/bulk_update`, {
 			method: 'POST',
-			headers: { 'Content-type': 'application/json' },
-			body: JSON.stringify(upData)
+			headers: { 'Content-type': 'application/json' }
 		});
 		teams = await getTeams();
-		upData = [];
+		updatedData = [];
 		selectedRowIds = [];
 	}
 </script>
@@ -83,7 +83,7 @@
 				rows={teams}
 				{columnsToEdit}
 				bind:selectedRowIds
-				bind:upData
+				bind:updatedData
 				{onUpdate}
 				autocompleteOptions={users}
 			/>
