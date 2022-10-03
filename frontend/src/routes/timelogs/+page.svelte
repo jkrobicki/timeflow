@@ -1,12 +1,12 @@
 <script lang="ts">
 	import 'carbon-components-svelte/css/white.css';
 	import { onMount } from 'svelte';
-	import { baseUrl } from './utils.js';
-	import { Grid, Column, Row, Button } from '../library/carbon/components';
-	import { getTimelogs, getUsers, getEpics, getEpicAreas } from './data.js';
-	import Autocomplete from '../library/components/autocomplete.svelte';
-	import EditableDatatable from '../library/components/EditableDatatable.svelte';
-	import DateTimePicker from '../library/components/DateTimePicker.svelte';
+	import { baseUrl } from '../data/+server.js';
+	import { Grid, Column, Row, Button } from '../../library/carbon/components';
+	import { getTimelogs, getUsers, getEpics, getEpicAreas } from '../data/+server.js';
+	import Autocomplete from '../../library/components/autocomplete.svelte';
+	import EditableDatatable from '../../library/components/EditableDatatable.svelte';
+	import DateTimePicker from '../../library/components/DateTimePicker.svelte';
 	let users: any[];
 	let epics: any[];
 	let epicAreas: any;

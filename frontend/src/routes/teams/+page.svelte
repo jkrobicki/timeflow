@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { baseUrl } from './utils.js';
-	import { getTeams } from './data.js';
-	import { getUsers } from './data.js';
-	import EditableDatatable from '../library/components/EditableDatatable.svelte';
-	import Autocomplete from '../library/components/autocomplete.svelte';
+	import { baseUrl } from '../data/+server.js';
+	import { getTeams } from '../data/+server.js';
+	import { getUsers } from '../data/+server.js';
+	import EditableDatatable from '../../library/components/EditableDatatable.svelte';
+	import Autocomplete from '../../library/components/autocomplete.svelte';
 
-	import { Grid, Column, Row, Button, TextInput } from '../library/carbon/components';
+	import { Grid, Column, Row, Button, TextInput } from '../../library/carbon/components';
 	let teams = [{}];
 	let users: Array<object>;
 	let selectedRowIds: Array<string> = [];
@@ -16,7 +16,7 @@
 	let selectedUser: Object = {};
 	let updatedData: Array<object> = [];
 
-	if (selectedRowIds === []) {
+	if ((selectedRowIds = [])) {
 		updatedData = [];
 	}
 	onMount(async () => {

@@ -1,5 +1,4 @@
-import { baseUrl } from './utils.js'
-
+export const baseUrl = 'http://localhost:8002'
 /**
  * @param {any} timelogs
  */
