@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { baseUrl } from './utils.js';
-	import { getEpics } from './data.js';
-	import { getEpicAreas } from './data.js';
-	import EditableDatatable from '../library/components/EditableDatatable.svelte';
-	import Autocomplete from '../library/components/autocomplete.svelte';
-	import DateTimePicker from '../library/components/DateTimePicker.svelte';
+	import { baseUrl } from '../data/+server.js';
+	import { getEpics } from '../data/+server.js';
+	import { getEpicAreas } from '../data/+server.js';
+	import EditableDatatable from '../../library/components/EditableDatatable.svelte';
+	import Autocomplete from '../../library/components/autocomplete.svelte';
+	import DateTimePicker from '../../library/components/DateTimePicker.svelte';
 
-	import { Grid, Column, Row, Button, TextInput } from '../library/carbon/components';
+	import { Grid, Column, Row, Button, TextInput } from '../../library/carbon/components';
 	let epics: Array<object> = [];
 	let epicAreas: Array<object> = [];
 	let selectedRowIds: Array<string> = [];

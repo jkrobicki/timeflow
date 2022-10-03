@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { baseUrl } from './utils.js';
-	import { getForecasts, getEpics, getUsers } from './data.js';
-	import EditableDatatable from '../library/components/EditableDatatable.svelte';
-	import Autocomplete from '../library/components/autocomplete.svelte';
+	import { baseUrl } from '../data/+server.js';
+	import { getForecasts, getEpics, getUsers } from '../data/+server.js';
+	import EditableDatatable from '../../library/components/EditableDatatable.svelte';
+	import Autocomplete from '../../library/components/autocomplete.svelte';
 
-	import { Grid, Column, Row, Button, NumberInput } from '../library/carbon/components';
+	import { Grid, Column, Row, Button, NumberInput } from '../../library/carbon/components';
 	let forecasts = [{}];
 	let users: any = [{}];
 	let epics = [{}];
