@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { getClients } from './data.js';
+	import { getClients } from '../data/+server.js';
 	import { onMount } from 'svelte';
-	import { baseUrl } from './utils.js';
-	import EditableDatatable from '../library/components/EditableDatatable.svelte';
+	import { baseUrl } from '../data/+server.js';
+	import EditableDatatable from '../../library/components/EditableDatatable.svelte';
 	import {
 		Grid,
 		Column,
@@ -14,7 +14,7 @@
 		ToolbarBatchActions,
 		TextInput,
 		Toggle
-	} from '../library/carbon/components';
+	} from '../../library/carbon/components';
 
 	let newClientsName: string;
 	let clients = [{}];

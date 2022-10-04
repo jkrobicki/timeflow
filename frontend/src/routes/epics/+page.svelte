@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { baseUrl } from './utils.js';
-	import { getSponsors, getTeams, getEpics } from './data.js';
-	import EditableDatatable from '../library/components/EditableDatatable.svelte';
-	import Autocomplete from '../library/components/autocomplete.svelte';
+	import { baseUrl } from '../data/+server.js';
+	import { getSponsors, getTeams, getEpics } from '../data/+server.js';
+	import EditableDatatable from '../../library/components/EditableDatatable.svelte';
+	import Autocomplete from '../../library/components/autocomplete.svelte';
 
-	import { Grid, Column, Row, Button, TextInput } from '../library/carbon/components';
+	import { Grid, Column, Row, Button, TextInput } from '../../library/carbon/components';
 	let epics = [{}];
 	let teams = [{}];
 	let sponsors: Array<object> = [{}];

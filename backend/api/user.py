@@ -5,8 +5,9 @@ from sqlalchemy.exc import NoResultFound
 from ..models.user import AppUser
 from ..models.role import Role
 from ..models.team import Team
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime, date
+from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/users", tags=["user"])
 
@@ -63,9 +64,10 @@ async def get_users(
             AppUser.username,
             AppUser.first_name,
             AppUser.last_name,
-            (AppUser.first_name + " " + AppUser.last_name).label("full_name"),
+            AppUser.email,
+            (AppUser.last_name + " " + AppUser.first_name).label("full_name"),
             Role.name.label("role_name"),
-            Team.short_name.label("main_team"),
+            Team.name.label("main_team"),
             AppUser.start_date,
             AppUser.supervisor,
             AppUser.is_active,
@@ -102,7 +104,7 @@ async def get_user_by_id(user_id: int, session: Session = Depends(get_session)):
             AppUser.first_name,
             AppUser.last_name,
             Role.name.label("role_name"),
-            Team.short_name.label("main_team"),
+            Team.short_name.label("team_name"),
             AppUser.start_date,
             AppUser.is_active,
         )
@@ -180,3 +182,43 @@ async def update_user(
     session.commit()
     session.refresh(user_to_update)
     return user_to_update
+
+
+class UpdateUser(BaseModel):
+    id: int
+    first_name: str
+    last_name: str
+    email: str
+    role_name: str
+    main_team: str
+    supervisor: str = None
+    start_date: date
+    is_active: bool
+
+
+@router.post("/bulk_update")
+async def update_users(
+    users: List[UpdateUser],
+    session: Session = Depends(get_session),
+):
+    for user in users:
+        statement = select(AppUser).where(AppUser.id == user.id)
+        user_to_update = session.exec(statement).one()
+
+        statement2 = select(Team.id).where(Team.name == user.main_team)
+        team_id_to_update = session.exec(statement2).one()
+
+        statement3 = select(Role.id).where(Role.name == user.role_name)
+        role_id_to_update = session.exec(statement3).one()
+
+        user_to_update.first_name = user.first_name
+        user_to_update.last_name = user.last_name
+        user_to_update.email = user.email
+        user_to_update.role_id = role_id_to_update
+        user_to_update.team_id = team_id_to_update
+        if user.supervisor != None:
+            user_to_update.supervisor = user.supervisor
+        user_to_update.start_date = user.start_date
+        user_to_update.is_active = user.is_active
+        user_to_update.updated_at = datetime.now()
+    session.commit()

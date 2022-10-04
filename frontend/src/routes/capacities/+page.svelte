@@ -1,7 +1,7 @@
 <script lang="ts">
 	import 'carbon-components-svelte/css/white.css';
 	import { onMount } from 'svelte';
-	import { baseUrl } from './utils.js';
+	import { baseUrl } from '../data/+server.js';
 	import {
 		DataTable,
 		Grid,
@@ -12,10 +12,10 @@
 		Toolbar,
 		ToolbarBatchActions,
 		NumberInput
-	} from '../library/carbon/components';
-	import { TrashCan } from '../library/carbon/icons';
-	import { getUsers, getCapacities } from './data.js';
-	import Autocomplete from '../library/components/autocomplete.svelte';
+	} from '../../library/carbon/components';
+	import { TrashCan } from '../../library/carbon/icons';
+	import { getUsers, getCapacities } from '../data/+server.js';
+	import Autocomplete from '../../library/components/autocomplete.svelte';
 
 	let users: any[];
 	let capacities = [{ id: '', last_name: '', first_name: '', year: '', month: '', days: '' }];

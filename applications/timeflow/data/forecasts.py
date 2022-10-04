@@ -25,7 +25,7 @@ def forecasts_all() -> List[Dict]:
     rows = []
     for item in response.json():
         d = {
-            "FORECAST ID": item["forecast_id"],
+            "FORECAST ID": item["id"],
             "USER": item["last_name"] + " " + item["first_name"],
             "EPIC NAME": item["epic_name"],
             "YEAR": item["year"],
@@ -42,7 +42,7 @@ def forecasts_by_user(user_id: int) -> List[Dict]:
     rows = []
     for item in response.json():
         d = {
-            "FORECAST ID": item["forecast_id"],
+            "FORECAST ID": item["id"],
             "USER": item["last_name"] + " " + item["first_name"],
             "EPIC NAME": item["epic_name"],
             "YEAR": item["year"],
@@ -63,7 +63,7 @@ def forecasts_by_user_year_month(user_id: int, year_month: str) -> List[Dict]:
     rows = []
     for item in response.json():
         d = {
-            "FORECAST ID": item["forecast_id"],
+            "FORECAST ID": item["id"],
             "USER": item["last_name"] + " " + item["first_name"],
             "EPIC NAME": item["epic_name"],
             "YEAR": item["year"],
