@@ -1,4 +1,4 @@
-export const baseUrl = 'http://localhost:8002'
+export const baseUrl = 'http://dyvenia.test-timeflow.com:8002'
 /**
  * @param {any} timelogs
  */
