@@ -1,6 +1,6 @@
-import { PUBLIC_SVELTEKIT_DEV_BASE_URL } from '$env/static/public'
+import { env } from '$env/dynamic/public'
 
-export const baseUrl = PUBLIC_SVELTEKIT_DEV_BASE_URL
+export const baseUrl = env.PUBLIC_SVELTEKIT_DEV_BASE_URL
 /**
  * @param {any} timelogs
  */

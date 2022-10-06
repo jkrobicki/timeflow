@@ -29,6 +29,7 @@ services:
       - 4173:4173
     environment:
       - url=https://dyvenia.test-timeflow.com
+      - PUBLIC_SVELTEKIT_DEV_BASE_URL=http://localhost:8002
     networks:
       static-network:
         ipv4_address: 172.28.1.5 # Added frontend image to docker-compose file
