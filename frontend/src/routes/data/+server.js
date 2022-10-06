@@ -1,4 +1,6 @@
-export const baseUrl = 'http://dyvenia.test-timeflow.com:8002'
+import { PUBLIC_SVELTEKIT_DEV_BASE_URL } from '$env/static/public'
+
+export const baseUrl = PUBLIC_SVELTEKIT_DEV_BASE_URL
 /**
  * @param {any} timelogs
  */

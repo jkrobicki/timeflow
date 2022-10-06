@@ -9,6 +9,7 @@
 		SkipToContent,
 		Content
 	} from '../library/carbon/components';
+	import 'carbon-components-svelte/css/white.css';
 	import '../app.css';
 	let isSideNavOpen = false;
 	let selectedNavLink = '';
