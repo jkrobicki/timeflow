@@ -1,6 +1,5 @@
-// import { redirect } from '@sveltejs/kit';
-
-// export async function load() {
-// 	throw redirect(302, '/timelogs');
-// }
-// load();
+import { redirect } from '@sveltejs/kit';
+/** @type {import('./$types').PageLoad} */
+export function load() {
+    throw redirect(307, '/timelogs');
+}
