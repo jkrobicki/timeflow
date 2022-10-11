@@ -61,24 +61,13 @@
 				updated_at: Date.now()
 			})
 		});
-		console.log(
-			JSON.stringify({
-				team_id: selectedTeam.id,
-				sponsor_id: selectedSponsor.id,
-				name: newEpicsFullName,
-				short_name: newEpicsShortName,
-				start_date: startDate,
-				is_active: true,
-				created_at: Date.now(),
-				updated_at: Date.now()
-			})
-		);
 		epics = await getEpics();
 	}
 	async function onUpdate() {
 		const updateRes = await fetch(`${baseUrl}/api/epics/bulk_update`, {
 			method: 'POST',
-			headers: { 'Content-type': 'application/json' }
+			headers: { 'Content-type': 'application/json' },
+			body: JSON.stringify(updatedData)
 		});
 		epics = await getEpics();
 		updatedData = [];

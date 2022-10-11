@@ -109,6 +109,8 @@
 								onChange={(event) =>
 									updateData(event, { row }, { cell }, { dataColumnName: value.selectDisplay })}
 							/>
+						{:else}
+							{cell.value}
 						{/if}
 					{/if}
 				{/each}
