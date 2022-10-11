@@ -98,3 +98,13 @@
 <Content>
 	<slot />
 </Content>
+
+<style>
+	:global(.bx--side-nav) {
+		max-width: 12rem;
+	}
+
+	:global(.bx--side-nav.bx--side-nav--expanded ~ .bx--content) {
+		margin-left: 9rem;
+	}
+</style>
