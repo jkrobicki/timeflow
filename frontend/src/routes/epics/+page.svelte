@@ -40,11 +40,9 @@
 
 	onMount(async () => {
 		sponsors = await getSponsors();
-		columnsToEdit.sponsor_name.options = sponsors;
 	});
 	onMount(async () => {
 		teams = await getTeams();
-		columnsToEdit.team_name.options = teams;
 	});
 	async function onSubmit() {
 		const res = await fetch(`${baseUrl}/api/epics/`, {
@@ -119,7 +117,24 @@
 				bind:selectedRowIds
 				bind:updatedData
 				{onUpdate}
-				bind:columnsToEdit
+				removeAction={true}
+				columnsToEdit={{
+					epic_name: 'input',
+					short_name: 'input',
+					is_active: 'toggle',
+					team_name: {
+						input: 'autocomplete',
+						selectDisplay: 'team_name',
+						options: teams,
+						placeholder: "team's name"
+					},
+					sponsor_name: {
+						input: 'autocomplete',
+						selectDisplay: 'sponsor_name',
+						options: sponsors,
+						placeholder: "sponsor's name"
+					}
+				}}
 			/>
 		</Column>
 	</Row>
