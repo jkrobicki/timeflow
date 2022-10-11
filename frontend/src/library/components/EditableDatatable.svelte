@@ -22,6 +22,7 @@
 	export let onCancel = function () {};
 	export let columnsToEdit: Object = {};
 	export let filteredRowIds: any = [];
+	export let removeAction: boolean;
 
 	//@ts-ignore
 	function updateData(event, event_row, event_cell, autocomplete: any = null) {
@@ -60,7 +61,9 @@
 			<ToolbarSearch persistent shouldFilterRows bind:filteredRowIds />
 		</ToolbarContent>
 		<ToolbarBatchActions on:cancel={onCancel}>
-			<Button icon={TrashCan} on:click={onRemove}>Remove</Button>
+			{#if removeAction === true}
+				<Button icon={TrashCan} on:click={onRemove}>Remove</Button>
+			{/if}
 			<Button icon={UpdateNow} on:click={onUpdate}>Update</Button>
 		</ToolbarBatchActions>
 	</Toolbar>
