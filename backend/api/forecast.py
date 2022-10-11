@@ -8,6 +8,9 @@ from sqlmodel import Session, select, and_
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy import func
 from datetime import datetime, date
+from pydantic import BaseModel
+from typing import Optional, List
+
 
 router = APIRouter(prefix="/api/forecasts", tags=["forecast"])
 
@@ -95,8 +98,9 @@ async def get_forecasts(
             statement.order_by(Forecast.year.asc())
             .where(Forecast.year >= datetime.now().year)
             .where(Forecast.month >= datetime.now().month)
-            .order_by(Forecast.year.asc())
-            .order_by(Forecast.month.asc())
+            .order_by(Forecast.year)
+            .order_by(Forecast.month)
+            .order_by(Forecast.id)
         )
 
     result = session.exec(final_statement).all()
@@ -279,3 +283,21 @@ async def delete_forecasts(
     session.delete(forecast_to_delete)
     session.commit()
     return True
+
+
+class UpdateForecast(BaseModel):
+    id: int
+    forecast_days: float
+
+
+@router.post("/bulk_update")
+async def update_forecasts(
+    forecasts: List[UpdateForecast],
+    session: Session = Depends(get_session),
+):
+    for forecast in forecasts:
+        statement = select(Forecast).where(Forecast.id == forecast.id)
+        forecast_to_update = session.exec(statement).one()
+        forecast_to_update.days = forecast.forecast_days
+        forecast_to_update.updated_at = datetime.now()
+    session.commit()
