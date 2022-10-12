@@ -9,6 +9,7 @@
 		SkipToContent,
 		Content
 	} from '../library/carbon/components';
+	import 'carbon-components-svelte/css/white.css';
 	import '../app.css';
 	let isSideNavOpen = false;
 	let selectedNavLink = '';
@@ -103,3 +104,13 @@
 <Content>
 	<slot />
 </Content>
+
+<style>
+	:global(.bx--side-nav) {
+		max-width: 12rem;
+	}
+
+	:global(.bx--side-nav.bx--side-nav--expanded ~ .bx--content) {
+		margin-left: 9rem;
+	}
+</style>

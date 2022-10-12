@@ -44,7 +44,8 @@
 	async function onUpdate() {
 		const updateRes = await fetch(`${baseUrl}/api/forecasts/bulk_update`, {
 			method: 'POST',
-			headers: { 'Content-type': 'application/json' }
+			headers: { 'Content-type': 'application/json' },
+			body: JSON.stringify(updatedData)
 		});
 		forecasts = await getForecasts();
 		updatedData = [];

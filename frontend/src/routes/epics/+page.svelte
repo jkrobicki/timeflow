@@ -40,11 +40,9 @@
 
 	onMount(async () => {
 		sponsors = await getSponsors();
-		columnsToEdit.sponsor_name.options = sponsors;
 	});
 	onMount(async () => {
 		teams = await getTeams();
-		columnsToEdit.team_name.options = teams;
 	});
 	async function onSubmit() {
 		const res = await fetch(`${baseUrl}/api/epics/`, {
@@ -61,24 +59,13 @@
 				updated_at: Date.now()
 			})
 		});
-		console.log(
-			JSON.stringify({
-				team_id: selectedTeam.id,
-				sponsor_id: selectedSponsor.id,
-				name: newEpicsFullName,
-				short_name: newEpicsShortName,
-				start_date: startDate,
-				is_active: true,
-				created_at: Date.now(),
-				updated_at: Date.now()
-			})
-		);
 		epics = await getEpics();
 	}
 	async function onUpdate() {
 		const updateRes = await fetch(`${baseUrl}/api/epics/bulk_update`, {
 			method: 'POST',
-			headers: { 'Content-type': 'application/json' }
+			headers: { 'Content-type': 'application/json' },
+			body: JSON.stringify(updatedData)
 		});
 		epics = await getEpics();
 		updatedData = [];
@@ -130,7 +117,24 @@
 				bind:selectedRowIds
 				bind:updatedData
 				{onUpdate}
-				bind:columnsToEdit
+				removeAction={true}
+				columnsToEdit={{
+					epic_name: 'input',
+					short_name: 'input',
+					is_active: 'toggle',
+					team_name: {
+						input: 'autocomplete',
+						selectDisplay: 'team_name',
+						options: teams,
+						placeholder: "team's name"
+					},
+					sponsor_name: {
+						input: 'autocomplete',
+						selectDisplay: 'sponsor_name',
+						options: sponsors,
+						placeholder: "sponsor's name"
+					}
+				}}
 			/>
 		</Column>
 	</Row>

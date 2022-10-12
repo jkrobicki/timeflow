@@ -85,22 +85,6 @@
 				updated_at: Date.now()
 			})
 		});
-		console.log(
-			'post user',
-			JSON.stringify({
-				username: newUsername,
-				first_name: newUserFirstName,
-				last_name: newUserLastName,
-				email: newEmail,
-				role_id: selectedRole.id,
-				team_id: selectedTeam.id,
-				start_date: startDate,
-				supervisor: selectedSupervisor.full_name,
-				is_active: true,
-				created_at: Date.now(),
-				updated_at: Date.now()
-			})
-		);
 		users = await getUsers();
 	}
 	async function onUpdate() {
