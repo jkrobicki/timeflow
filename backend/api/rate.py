@@ -7,6 +7,8 @@ from sqlmodel import Session, select
 from sqlalchemy.exc import NoResultFound
 from ..models.rate import Rate
 from datetime import datetime, timedelta
+from pydantic import BaseModel
+from typing import List
 
 router = APIRouter(prefix="/api/rates", tags=["rate"])
 
@@ -62,7 +64,7 @@ async def post_rate(
 
 
 @router.get("/")
-async def get_rates(session: Session = Depends(get_session)):
+async def get_rates(session: Session = Depends(get_session), is_active: bool = None):
     user_id = None
     client_id = None
     """
@@ -79,12 +81,14 @@ async def get_rates(session: Session = Depends(get_session)):
             AppUser.username,
             AppUser.first_name,
             AppUser.last_name,
+            (AppUser.first_name + " " + AppUser.last_name).label("full_name"),
             Rate.id,
             Client.name,
             Rate.user_id,
             Rate.valid_from,
             Rate.valid_to,
             Rate.amount,
+            Rate.is_active,
         )
         .join(AppUser)
         .join(Client)
@@ -93,11 +97,11 @@ async def get_rates(session: Session = Depends(get_session)):
         statement_final = (
             statement.where(Rate.user_id == user_id)
             .where(Rate.client_id == client_id)
-            .order_by(AppUser.username.asc())
+            .order_by(Rate.id.desc())
         )
 
     else:
-        statement_final = statement.order_by(AppUser.username.asc())
+        statement_final = statement.order_by(Rate.id.desc())
     results = session.exec(statement_final).all()
     return results
 
@@ -258,7 +262,7 @@ async def activate_rate(
 
 @router.put("/{rate_id}/deactivate")
 async def deactivate_rate_id(
-    rate_id: str = None,
+    rate_id: int,
     session: Session = Depends(get_session),
 ):
     """
@@ -311,3 +315,45 @@ async def update_rates(
     session.commit()
     session.refresh(rate_to_update)
     return True
+
+
+@router.put("/{rate_id}/deactivate-rate")
+async def update_rates(
+    *,
+    rate_id: int,
+    session: Session = Depends(get_session),
+):
+    """Deactivate a rate"""
+    statement = select(Rate).where(Rate.id == rate_id)
+    rate_to_update = session.exec(statement).one()
+    rate_to_update.active = False
+    statement2 = select(Epic).join(Rate)
+    rate_to_update = session.exec(statement).one()
+    rate_to_update.is_active = False
+    for rate in rate_to_update:
+        rate.is_active = False
+        session.add(rate)
+    session.commit()
+    return True
+
+
+class UpdateRate(BaseModel):
+
+    id: int
+    is_active: bool
+
+
+@router.post("/bulk_update")
+async def update_rates(
+    rates: List[UpdateRate],
+    session: Session = Depends(get_session),
+):
+    for rate in rates:
+        statement = select(Rate).where(Rate.id == rate.id)
+        rate_to_update = session.exec(statement).one()
+        rate_to_update.is_active = rate.is_active
+        rate_to_update.updated_at = datetime.now()
+        session.add(rate_to_update)
+        # session.refresh(timelog_to_update)
+    session.commit()
+    # l.append(timelog_to_update)
