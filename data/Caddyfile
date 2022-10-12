@@ -1,0 +1,11 @@
+frontend.test.dyvenia.com {
+	reverse_proxy front:4173
+}
+
+fastapi.test.dyvenia.com {
+	reverse_proxy fastapi:8002
+}
+
+database.test.dyvenia.com {
+	reverse_proxy pgadmin:5433
+}

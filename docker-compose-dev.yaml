@@ -15,20 +15,20 @@ services:
      - 80:80
      - 443:443
     volumes:
-     - /data/caddy/Caddyfile:/etc/caddy/Caddyfile
-     - /data/caddy/data:/data # Optional
-     - /data/caddy/config:/config # Optional
+     - ./data/Caddyfile:/etc/caddy/Caddyfile
+       #- /data/caddy/data:/data # Optional
+       #- /data/caddy/config:/config # Optional
     networks:
      static-network:
         ipv4_address: 172.28.1.6
 
   front:
-    image: frontend:v4
+    image: frontend:v2
     restart: always
     ports:
       - 4173:4173
     environment:
-      - url=https://dyvenia.test-timeflow.com
+      - url=https://frontend.test.dyvenia.com
       - PUBLIC_SVELTEKIT_DEV_BASE_URL=http://localhost:8002
     networks:
       static-network:
