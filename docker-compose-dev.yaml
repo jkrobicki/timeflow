@@ -23,13 +23,13 @@ services:
         ipv4_address: 172.28.1.6
 
   front:
-    image: frontend:v2
+    image: frontend:v8
     restart: always
     ports:
       - 4173:4173
     environment:
-      - url=https://frontend.test.dyvenia.com
-      - PUBLIC_SVELTEKIT_DEV_BASE_URL=http://localhost:8002
+      - url=https://timeflow.test.dyvenia.com
+      - PUBLIC_SVELTEKIT_DEV_BASE_URL=https://timeflow.test.dyvenia.com/fastapi
     networks:
       static-network:
         ipv4_address: 172.28.1.5 # Added frontend image to docker-compose file
@@ -60,7 +60,7 @@ services:
         ipv4_address: 172.28.1.4
 
   fastapi:
-    image: fastapi:v1
+    image: fastapi:v3
     volumes:
       - ./backend/:/backend/
     command: >

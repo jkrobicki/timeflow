@@ -1,11 +1,12 @@
-frontend.test.dyvenia.com {
+timeflow.test.dyvenia.com {
 	reverse_proxy front:4173
 }
 
-fastapi.test.dyvenia.com {
+timeflow.test.dyvenia.com/fastapi/* {
+	uri strip_prefix /fastapi
 	reverse_proxy fastapi:8002
 }
 
-database.test.dyvenia.com {
-	reverse_proxy pgadmin:5433
-}
+#database.test.dyvenia.com {
+#	reverse_proxy pgadmin:5433
+#}

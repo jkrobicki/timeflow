@@ -11,14 +11,13 @@ services:
   caddy:
     image: caddy:2-alpine
     restart: unless-stopped
-    command: caddy reverse-proxy --from https://dyvenia.test-timeflow.com:443 --to http://front:4173
     ports:
      - 80:80
      - 443:443
     volumes:
-     - /data/caddy/Caddyfile:/etc/caddy/Caddyfile
-     - /data/caddy/data:/data # Optional
-     - /data/caddy/config:/config # Optional
+     - ./data/Caddyfile:/etc/caddy/Caddyfile
+       #- /data/caddy/data:/data # Optional
+       #- /data/caddy/config:/config # Optional
     depends_on:
       - "front"
     networks:
@@ -26,12 +25,13 @@ services:
         ipv4_address: 172.28.1.6
 
   front:
-    image: frontend:v6
+    image: frontend:v8
     restart: unless-stopped
     ports:
       - 4173:4173
-        #environment:
-          #- url=https://dyvenia.test-timeflow.com
+    environment:
+      - url=https://timeflow.test.dyvenia.com
+      - PUBLIC_SVELTEKIT_DEV_BASE_URL=https://timeflow.test.dyvenia.com/fastapi
     networks:
       static-network:
         ipv4_address: 172.28.1.5 # Added frontend image to docker-compose file
@@ -68,10 +68,10 @@ services:
         ipv4_address: 172.28.1.4
 
   fastapi:
-    image: fastapi:v2
+    image: fastapi:v3
     volumes:
       - ./backend/:/backend/
-    command: bash -c "rm -f backend/database.sqlite && export TIMEFLOW_DEV=true && uvicorn backend.main:app --reload --port 8002 --host 0.0.0.0 --access-log"
+    command: bash -c "rm -f backend/database.sqlite && export TIMEFLOW_DEV=false && uvicorn backend.main:app --reload --port 8002 --host 0.0.0.0 --access-log"
       #command: bash -c "TIMEFLOW_DEV=false && uvicorn backend.main:app --reload --port 8002 --host 0.0.0.0 --access-log"
     ports:
       - 8002:8002
@@ -85,23 +85,6 @@ services:
     networks:
       static-network:
         ipv4_address: 172.28.1.2
-
-  applications:
-    image: idom:v1
-    volumes:
-      - ./:/applications
-    command: >
-      bash -c "export TIMEFLOW_DEV=true  && cd /applications && uvicorn main:app --workers 1 --host 0.0.0.0 --port 8001 --reload --ssl-keyfile certs/127.0.0.1-key.pem  --ssl-certfile certs/127.0.0.1.pem --access-log"
-    ports:
-      - 8001:8001
-    depends_on:
-      - "db"
-    env_file:
-      - .env
-    container_name: applications
-    networks:
-      static-network:
-        ipv4_address: 172.28.1.1
 
 volumes:
   db-data:
