@@ -80,6 +80,12 @@
 				isSelected={selectedNavLink == 'Roles'}
 			/>
 			<SideNavMenuItem
+				href="/rates"
+				text="Rates"
+				on:click={handleClick}
+				isSelected={selectedNavLink == 'Rates'}
+			/>
+			<SideNavMenuItem
 				href="/epic-areas"
 				text="Epic Areas"
 				on:click={handleClick}

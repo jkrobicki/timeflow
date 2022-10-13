@@ -15,6 +15,7 @@
 
 	onMount(async () => {
 		roles = await getRoles();
+		console.log('roles', roles);
 	});
 	async function onSubmit() {
 		const res = await fetch(`${baseUrl}/api/roles/`, {

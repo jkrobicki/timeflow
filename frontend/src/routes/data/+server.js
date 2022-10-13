@@ -83,6 +83,15 @@ async function getRoles() {
     let roles = await response.json()
     return roles
 };
+
+async function getRate() {
+    const response = await fetch(`${baseUrl}/api/rates/`, {
+        method: 'GET',
+        headers: { 'Content-type': 'application/json' }
+    });
+    let rate = await response.json()
+    return rate
+};
 async function getForecasts() {
     const response = await fetch(`${baseUrl}/api/forecasts/`, {
         method: 'GET',
@@ -93,4 +102,4 @@ async function getForecasts() {
 };
 
 
-export { getTimelogs, getUsers, getEpics, getEpicAreas, getCapacities, getClients, getSponsors, getTeams, getRoles, getForecasts }
+export { getTimelogs, getUsers, getEpics, getEpicAreas, getCapacities, getClients, getSponsors, getTeams, getRoles, getRate, getForecasts }
