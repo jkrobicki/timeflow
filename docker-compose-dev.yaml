@@ -8,19 +8,6 @@ networks:
         - subnet: 172.28.0.0/16
 
 services:
-  caddy:
-    image: caddy:2-alpine
-    restart: unless-stopped
-    ports:
-     - 80:80
-     - 443:443
-    volumes:
-     - ./data/Caddyfile:/etc/caddy/Caddyfile
-       #- /data/caddy/data:/data # Optional
-       #- /data/caddy/config:/config # Optional
-    networks:
-     static-network:
-        ipv4_address: 172.28.1.6
 
   front:
     image: frontend:v8
@@ -29,7 +16,7 @@ services:
       - 4173:4173
     environment:
       - url=https://timeflow.test.dyvenia.com
-      - PUBLIC_SVELTEKIT_DEV_BASE_URL=https://timeflow.test.dyvenia.com/fastapi
+      - PUBLIC_SVELTEKIT_DEV_BASE_URL=http://localhost:8002
     networks:
       static-network:
         ipv4_address: 172.28.1.5 # Added frontend image to docker-compose file
