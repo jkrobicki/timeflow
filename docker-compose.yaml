@@ -68,7 +68,7 @@ services:
         ipv4_address: 172.28.1.4
 
   fastapi:
-    image: fastapi:v3
+    image: fastapi:v4
     volumes:
       - ./backend/:/backend/
     command: bash -c "rm -f backend/database.sqlite && export TIMEFLOW_DEV=false && uvicorn backend.main:app --reload --port 8002 --host 0.0.0.0 --access-log"
