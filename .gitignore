@@ -157,3 +157,5 @@ trashcode
 # Files
 *.parquet
 
+postgres_data
+db-data

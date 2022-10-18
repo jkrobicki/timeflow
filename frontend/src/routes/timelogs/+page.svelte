@@ -7,6 +7,7 @@
 	import Autocomplete from '../../library/components/autocomplete.svelte';
 	import EditableDatatable from '../../library/components/EditableDatatable.svelte';
 	import DateTimePicker from '../../library/components/DateTimePicker.svelte';
+
 	let users: any[];
 	let epics: any[];
 	let epicAreas: any;
@@ -31,9 +32,8 @@
 	let columnsToEdit = ['start_time', 'end_time'];
 
 	onMount(async () => {
-		users = await getUsers();
-	});
-	onMount(async () => {
+		const auth_res = false
+        if (!auth_res) return { status: 302, redirect: '/login' };
 		epicAreas = await getEpicAreas();
 	});
 	onMount(async () => {
@@ -100,66 +100,66 @@
 	}
 </script>
 
-<Grid>
-	<Row>
-		<Column>
-			<Autocomplete
-				bind:selectedOption={selectedUser}
-				options={users}
-				selectDisplay="username"
-				placeholder="search user"
-			/>
-		</Column>
-		<Column>
-			<Autocomplete
-				bind:selectedOption={selectedEpic}
-				options={epics}
-				selectDisplay="epic_name"
-				placeholder="search epic"
-				onChange={epicAreasByEpic}
-			/>
-		</Column>
-		<Column>
-			{#key selectedEpic.id}
+	<Grid>
+		<Row>
+			<Column>
 				<Autocomplete
-					bind:selectedOption={selectedEpicArea}
-					options={epicAreasSelect}
-					selectDisplay="epic_area_name"
-					placeholder="search epic area"
+					bind:selectedOption={selectedUser}
+					options={users}
+					selectDisplay="username"
+					placeholder="search user"
 				/>
-			{/key}
-		</Column>
-
-		<Column>
-			<DateTimePicker bind:value={startTime} />
-		</Column>
-		<Column>
-			<DateTimePicker bind:value={endTime} />
-		</Column>
-		<Column>
-			<Button on:click={onSubmit} size="small" kind="primary">Submit</Button>
-		</Column>
-	</Row>
-	<Row>
-		<Column>
-			<EditableDatatable
-				headers={[
-					{ key: 'id', value: 'ID' },
-					{ key: 'username', value: 'USERAME' },
-					{ key: 'epic_name', value: 'EPIC NAME' },
-					{ key: 'epic_area_name', value: 'EPIC AREA NAME' },
-					{ key: 'start_time', value: 'START TIME' },
-					{ key: 'end_time', value: 'END TIME' },
-					{ key: 'count_hours', value: 'COUNT HOURS' },
-					{ key: 'count_days', value: 'COUNT DAYS' }
-				]}
-				rows={timelogs}
-				{columnsToEdit}
-				bind:selectedRowIds
-				{onRemove}
-				{onUpdate}
-				bind:updatedData
-			/>
-		</Column>
-	</Row>
-</Grid>
+			</Column>
+			<Column>
+				<Autocomplete
+					bind:selectedOption={selectedEpic}
+					options={epics}
+					selectDisplay="epic_name"
+					placeholder="search epic"
+					onChange={epicAreasByEpic}
+				/>
+			</Column>
+			<Column>
+				{#key selectedEpic.id}
+					<Autocomplete
+						bind:selectedOption={selectedEpicArea}
+						options={epicAreasSelect}
+						selectDisplay="epic_area_name"
+						placeholder="search epic area"
+					/>
+				{/key}
+			</Column>
+	
+			<Column>
+				<DateTimePicker bind:value={startTime} />
+			</Column>
+			<Column>
+				<DateTimePicker bind:value={endTime} />
+			</Column>
+			<Column>
+				<Button on:click={onSubmit} size="small" kind="primary">Submit</Button>
+			</Column>
+		</Row>
+		<Row>
+			<Column>
+				<EditableDatatable
+					headers={[
+						{ key: 'id', value: 'ID' },
+						{ key: 'username', value: 'USERAME' },
+						{ key: 'epic_name', value: 'EPIC NAME' },
+						{ key: 'epic_area_name', value: 'EPIC AREA NAME' },
+						{ key: 'start_time', value: 'START TIME' },
+						{ key: 'end_time', value: 'END TIME' },
+						{ key: 'count_hours', value: 'COUNT HOURS' },
+						{ key: 'count_days', value: 'COUNT DAYS' }
+					]}
+					rows={timelogs}
+					{columnsToEdit}
+					bind:selectedRowIds
+					{onRemove}
+					{onUpdate}
+					bind:updatedData
+				/>
+			</Column>
+		</Row>
+	</Grid>	

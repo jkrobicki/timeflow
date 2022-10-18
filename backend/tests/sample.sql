@@ -1,12 +1,12 @@
-INSERT INTO app_db.appuser (username, first_name, last_name, email, role_id, team_id, start_date, created_at, updated_at, is_active)
+INSERT INTO app_db.appuser (username, first_name, last_name, email, created_at, updated_at, is_active)
 VALUES
-    ('bmoore', 'Brian', 'Moore', 'BrianFMoore@dayrep.com', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE),
-    ('thyatt', 'Tammy', 'Hyatt', 'TammyDHyatt@rhyta.com', 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE),
-    ('ghills', 'George', 'Hills', 'GeorgeSHills@dayrep.com', 2, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE),
-    ('aryan', 'Annette', 'Ryan', 'AnnetteJRyan@teleworm.us', 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE),
-    ('jwhobrey', 'James', 'Whobrey', 'JamesJWhobrey@armyspy.com', 2, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE),
-    ('mwoodmansee', 'Mathew', 'Woodmansee', 'MathewKWoodmansee@rhyta.com', 3, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE),
-    ('mtaylor', 'Michael', 'Taylor', 'MichaelJTaylor@teleworm.us', 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
+    ('bmoore', 'Brian', 'Moore', 'BrianFMoore@dayrep.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE),
+    ('thyatt', 'Tammy', 'Hyatt', 'TammyDHyatt@rhyta.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE),
+    ('ghills', 'George', 'Hills', 'GeorgeSHills@dayrep.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE),
+    ('aryan', 'Annette', 'Ryan', 'AnnetteJRyan@teleworm.us', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE),
+    ('jwhobrey', 'James', 'Whobrey', 'JamesJWhobrey@armyspy.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE),
+    ('mwoodmansee', 'Mathew', 'Woodmansee', 'MathewKWoodmansee@rhyta.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE),
+    ('mtaylor', 'Michael', 'Taylor', 'MichaelJTaylor@teleworm.us', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
   
 INSERT INTO app_db.client (name, is_active, created_at, updated_at)
 VALUES

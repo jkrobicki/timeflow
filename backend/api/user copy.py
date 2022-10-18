@@ -35,6 +35,7 @@ async def post_user(
         session.add(user)
         session.commit()
         session.refresh(user)
+        print(user, "jeeeeeeeeeeeeeere")
         return user
 
 
@@ -57,13 +58,40 @@ async def get_users(
     username : str
         Short name of user to be pulled.
     """
-    statement = select(
+    statement = (
+        select(
             AppUser.id,
             AppUser.username,
             AppUser.first_name,
             AppUser.last_name,
-            AppUser.email)
-    result = session.exec(statement).all()
+            AppUser.email,
+            (AppUser.last_name + " " + AppUser.first_name).label("full_name"),
+            Role.name.label("role_name"),
+            Team.name.label("main_team"),
+            AppUser.start_date,
+            AppUser.supervisor,
+            AppUser.is_active,
+        )
+        .select_from(AppUser)
+        .join(Role, AppUser.role_id == Role.id, isouter=True)
+        .join(Team, AppUser.team_id == Team.id, isouter=True)
+    )
+
+    if is_active != None:
+        statement_final = statement.where(AppUser.is_active == is_active).order_by(
+            AppUser.last_name.asc()
+        )
+
+    elif username != None:
+        statement_final = statement.select_from(AppUser).where(
+            AppUser.username == username
+        )
+    else:
+        statement_final = statement.order_by(AppUser.start_date.desc()).order_by(
+            AppUser.is_active.desc()
+        )
+
+    result = session.exec(statement_final).all()
     return result
 
 
