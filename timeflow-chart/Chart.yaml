@@ -1,0 +1,22 @@
+apiVersion: v2
+name: timeflow
+description: timeflow helm charts
+
+type: application
+
+version: 0.1.0
+
+appVersion: "14.5"
+
+keywords:
+  - postgresql
+  - postgres
+  - database
+  - timeflow
+  - idom
+  - pgadmin
+  - fastapi
+
+maintainers:
+  - email: iandrade@dyvenia.com
+    name: ivan

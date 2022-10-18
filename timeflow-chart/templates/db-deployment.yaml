@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-db # Sets Deployment name
+
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.service.db.labels.app }} #match label name in service config file
+  
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.service.db.labels.app }} #pod label 
+    
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.image.db.repository }} # Sets Image
+          imagePullPolicy: {{ .Values.image.db.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.db.port }} # Exposes container port
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-db-configmap
+            #- secretRef:
+            #    name: {{ .Release.Name }}-db-secret
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data/
+              subPath: db-storage
+              name: db-data
+
+      restartPolicy: Always
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-db-pvc

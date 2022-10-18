@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-ingress-timeflow
+  namespace: timeflow
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    kubernetes.io/ingress.class: nginx
+    #kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name }}-frontend-sv
+                port:
+                  number: {{ .Values.service.frontend.port }}
+
+  # ------ SECRETS????? -------
+  tls:
+    - hosts:
+        - {{ .Values.ingress.host }}
+      secretName: timeflow-secret

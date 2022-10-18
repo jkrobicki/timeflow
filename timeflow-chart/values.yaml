@@ -1,0 +1,77 @@
+replicaCount: 1
+
+image:
+  db:
+    repository: postgres:14
+    pullPolicy: IfNotPresent
+    #tag: "14.5"
+
+  fastapi:
+    repository: ancasi/fastapi:v3
+    pullPolicy: IfNotPresent
+
+  frontend:
+    repository: ancasi/frontend:v8
+    pullPolicy: IfNotPresent
+
+  # pgadmin:
+  #   repository: dpage/pgadmin4
+  #   pullPolicy: IfNotPresent
+
+service:
+  db:
+    type: ClusterIP
+    port: 5900
+    targetPort: 5432
+    labels:
+      app: db
+    annotations:
+      location: nbg1
+      networkzone: nbg1
+      #load-balancer.hetzner.cloud/location: nbg1
+      #load-balancer.hetzner.cloud/network-zone: nbg1
+
+  fastapi:
+    name: fastapi
+    port: 8002
+    targetPort: 8022
+    labels:
+      app: fastapi
+    stdin: true
+    tty: true
+
+  frontend:
+    name: frontend
+    port: 4173
+    targetPort: 4173
+    labels:
+      app: frontend
+
+  # pgadmin:
+  #   name: pgadmin
+  #   port: 5433
+  #   targetPort: 80
+  #   labels:
+  #     app: pgadmin
+
+storage: 2Gi
+db:
+  user: postgres
+  pass: flowers
+  name: timeflow_db
+  #POSTGRE_PORT: "5900"
+  #name: ${POSTGRE_DB}
+  #user: ${POSTGRE_USER}
+  #password: ${POSTGRE_PASS}
+  #port: ${POSTGRE_PORT}
+  #data: ${POSTGRE_DATA}
+ingress:
+  host: timeflow.helm.dyvenia.com
+
+frontend:
+  url: https://timeflow.helm.dyvenia.com
+  svelt_url: https://timeflow.helm.dyvenia.com/fastapi
+  #svelt_url: PUBLIC_SVELTEKIT_DEV_BASE_URL=https://timeflow.helm.dyvenia.com/fastapi
+# pg:
+#   email: user@postgres.com
+#   pass: example

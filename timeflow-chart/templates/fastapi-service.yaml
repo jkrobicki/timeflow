@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-fastapi-sv # Sets service name
+  labels:
+    app: {{ .Values.service.fastapi.labels.app }} # service label
+    
+spec:
+  #type: {{ .Values.service.db.type }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.service.fastapi.port }} # Sets port to run the postgres application
+      targetPort: {{ .Values.service.fastapi.targetPort }}
+  selector:
+    app: {{ .Values.service.fastapi.labels.app }} # match with deployment service and pods

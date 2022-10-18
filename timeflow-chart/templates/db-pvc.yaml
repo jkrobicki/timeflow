@@ -1,0 +1,14 @@
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-db-pvc
+  labels:
+    app: {{ .Values.service.db.labels.app }} # persistent volume claim label
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.storage }}

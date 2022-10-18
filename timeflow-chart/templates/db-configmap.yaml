@@ -1,0 +1,20 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-db-configmap
+  labels:
+    app: {{ .Values.service.db.labels.app }} #configmap label
+
+data:
+  PG_DATA: /var/lib/postgresql/data/db-storage
+  POSTGRES_DB: {{ .Values.db.name }}
+  POSTGRES_USER: {{ .Values.db.user }}
+  POSTGRES_PASSWORD: {{ .Values.db.pass }}
+
+  
+  FRONT_URL: {{ .Values.frontend.url }}
+  FRONT_SVELT_URL: {{ .Values.frontend.svelt_url }}
+  
+  
+  

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-frontend-sv # Sets service name
+  labels:
+    app: {{ .Values.service.frontend.labels.app }} # service label
+    
+spec:
+  #type: {{ .Values.service.db.type }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.service.frontend.port }} # Sets port to run the postgres application
+      targetPort: {{ .Values.service.frontend.targetPort }}
+  selector:
+    app: {{ .Values.service.frontend.labels.app }} # match with deployment service and pods
