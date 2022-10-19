@@ -20,4 +20,9 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-db-configmap
+          # command:
+          # - /bin/bash
+          # - -c
+          # - |
+          #     sleep 999999
       restartPolicy: Always

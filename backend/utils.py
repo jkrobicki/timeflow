@@ -11,17 +11,13 @@ def create_connection_str():
     If app is ran in developer mode, test database is used.
     If app is ran in production mode, given database is used.
     """
-    if os.getenv("TIMEFLOW_DEV") == "true":
-        return f"postgresql://pguser:password@db:5432/test_db"
-    elif os.getenv("TIMEFLOW_DEV") == "false":
-        # database_loc = "/var/lib/postgresql/data"
-        POSTGRE_USER = os.getenv("POSTGRES_USER")
-        POSTGRE_PASS = os.getenv("POSTGRES_PASS")
-        POSTGRE_DB = os.getenv("POSTGRES_DB")
-        POSTGRE_PORT = os.getenv("POSTGRES_PORT")
-        POSTGRE_HOST = os.getenv("POSTGRES_HOST")
-        return f"postgresql://{POSTGRE_USER}:{POSTGRE_PASS}@{POSTGRE_HOST}:{POSTGRE_PORT}/{POSTGRE_DB}"
-
+    POSTGRE_USER = os.getenv("POSTGRES_USER")
+    POSTGRE_PASS = os.getenv("POSTGRES_PASSWORD")
+    POSTGRE_DB = os.getenv("POSTGRES_DB")
+    POSTGRE_PORT = os.getenv("POSTGRES_PORT")
+    POSTGRE_HOST = os.getenv("POSTGRES_HOST")
+    
+    return f"postgresql://{POSTGRE_USER}:{POSTGRE_PASS}@{POSTGRE_HOST}:{POSTGRE_PORT}/{POSTGRE_DB}"
 
 # Create the connection string
 con_str = create_connection_str()

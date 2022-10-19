@@ -12,5 +12,6 @@ data:
   POSTGRES_DB: {{ .Values.db.name }}
   POSTGRES_USER: {{ .Values.db.user }}
   POSTGRES_PASSWORD: {{ .Values.db.pass }}
-  
+  TIMEFLOW_DEV: "true"
+  PUBLIC_SVELTEKIT_DEV_BASE_URL: https://{{ .Values.ingress.host }}/fastapi
   

@@ -1,23 +1,24 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Release.Name }}-ingress-timeflow
+  name: {{ .Release.Name }}-ingress-fastapi
   namespace: timeflow
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: /
+          - path: /fastapi(/|$)(.*)
             pathType: Prefix
             backend:
               service:
-                name: {{ .Release.Name }}-frontend-sv
+                name: {{ .Release.Name }}-fastapi-sv
                 port:
-                  number: {{ .Values.frontend.service.port }}
+                  number: {{ .Values.fastapi.service.port }}
   tls:
     - hosts:
         - {{ .Values.ingress.host }}
