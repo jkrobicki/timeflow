@@ -15,11 +15,12 @@ def create_connection_str():
         return f"postgresql://pguser:password@db:5432/test_db"
     elif os.getenv("TIMEFLOW_DEV") == "false":
         # database_loc = "/var/lib/postgresql/data"
-        POSTGRE_USER = os.getenv("POSTGRE_USER")
-        POSTGRE_PASS = os.getenv("POSTGRE_PASS")
-        POSTGRE_DB = os.getenv("POSTGRE_DB")
-        POSTGRE_PORT = os.getenv("POSTGRE_PORT")
-        return f"postgresql://{POSTGRE_USER}:{POSTGRE_PASS}@db:5432/{POSTGRE_DB}"
+        POSTGRE_USER = os.getenv("POSTGRES_USER")
+        POSTGRE_PASS = os.getenv("POSTGRES_PASS")
+        POSTGRE_DB = os.getenv("POSTGRES_DB")
+        POSTGRE_PORT = os.getenv("POSTGRES_PORT")
+        POSTGRE_HOST = os.getenv("POSTGRES_HOST")
+        return f"postgresql://{POSTGRE_USER}:{POSTGRE_PASS}@{POSTGRE_HOST}:{POSTGRE_PORT}/{POSTGRE_DB}"
 
 
 # Create the connection string
