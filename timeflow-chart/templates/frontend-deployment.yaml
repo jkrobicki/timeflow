@@ -2,24 +2,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-frontend # Sets Deployment name
+  labels: &FrontendLabels
+    {{- include "timeflow.frontend.labels" . | nindent 4 }}
 
 spec:
   selector:
-    matchLabels:
-      app: {{ .Values.service.frontend.labels.app }} #match label name in service config file
-  
+    matchLabels: *FrontendLabels  
   template:
     metadata:
-      labels:
-        app: {{ .Values.service.frontend.labels.app }} #pod label 
-    
+      labels: *FrontendLabels    
     spec:
       containers:
-        - name: {{ .Values.service.frontend.name }}
-          image: {{ .Values.image.frontend.repository }} # Sets Image
-          imagePullPolicy: {{ .Values.image.frontend.pullPolicy }}
+        - name: frontend
+          image: {{ .Values.frontend.repository }}:{{ .Values.frontend.tag }} # Sets Image
+          imagePullPolicy: {{ .Values.frontend.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.service.frontend.port }} # Exposes container port
+            - containerPort: {{ .Values.frontend.service.port }} # Exposes container port
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-db-configmap
@@ -27,7 +25,3 @@ spec:
             #    name: {{ .Release.Name }}-db-secret
 
       restartPolicy: Always
-      # volumes:
-      #   - name: db-data
-      #     persistentVolumeClaim:
-      #       claimName: {{ .Release.Name }}-db-pvc

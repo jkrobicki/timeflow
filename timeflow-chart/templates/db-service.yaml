@@ -2,19 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Release.Name }}-db-sv # Sets service name
-  labels:
-    app: {{ .Values.service.db.labels.app }} # service label
-  # annotations:   
-  #   load-balancer.hetzner.cloud/location: {{ index  .Values.service.db.annotations.location }}
-  #   load-balancer.hetzner.cloud/network-zone: {{ index .Values.service.db.annotations.networkzone }}
-    #load-balancer.hetzner.cloud/location: nbg1
-    #load-balancer.hetzner.cloud/network-zone: nbg1
-    
+  labels: &DbLabels
+    {{- include "timeflow.db.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.db.type }}
+  type: ClusterIP
   ports:
     - protocol: TCP
-      port: {{ .Values.service.db.port }} # Sets port to run the postgres application
-      targetPort: {{ .Values.service.db.targetPort }}
-  selector:
-    app: {{ .Values.service.db.labels.app }} # match with deployment service and pods
+      port: {{ .Values.db.service.port }} # Sets port to run the postgres application
+      targetPort: {{ .Values.db.service.targetPort }}
+  selector: *DbLabels

@@ -4,11 +4,10 @@ apiVersion: v1
 metadata:
   name: {{ .Release.Name }}-db-pvc
   labels:
-    app: {{ .Values.service.db.labels.app }} # persistent volume claim label
-
+    {{- include "timeflow.db.labels" . | nindent 4 }}
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.storage }}
+      storage: {{ .Values.db.storage }}

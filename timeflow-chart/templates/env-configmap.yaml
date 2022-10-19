@@ -4,17 +4,14 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-db-configmap
   labels:
-    app: {{ .Values.service.db.labels.app }} #configmap label
-
+    {{- include "timeflow.labels" . | nindent 4 }}
 data:
   PG_DATA: /var/lib/postgresql/data/db-storage
+  POSTGRES_HOST: {{ .Release.Name }}-db-sv
+  POSTGRES_PORT: {{ .Values.db.service.port }}
   POSTGRES_DB: {{ .Values.db.name }}
   POSTGRES_USER: {{ .Values.db.user }}
   POSTGRES_PASSWORD: {{ .Values.db.pass }}
-
   
   FRONT_URL: {{ .Values.frontend.url }}
   FRONT_SVELT_URL: {{ .Values.frontend.svelt_url }}
-  
-  
-  

@@ -18,7 +18,7 @@ spec:
               service:
                 name: {{ .Release.Name }}-frontend-sv
                 port:
-                  number: {{ .Values.service.frontend.port }}
+                  number: {{ .Values.frontend.service.port }}
 
   # ------ SECRETS????? -------
   tls:

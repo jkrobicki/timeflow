@@ -2,39 +2,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-fastapi # Sets Deployment name
-
+  labels: &FastapiLabels
+    {{- include "timeflow.fastapi.labels" . | nindent 4 }}
 spec:
   selector:
-    matchLabels:
-      app: {{ .Values.service.fastapi.labels.app }} #match label name in service config file
-  
+    matchLabels: *FastapiLabels  
   template:
     metadata:
-      labels:
-        app: {{ .Values.service.fastapi.labels.app }} #pod label 
-    
+      labels: *FastapiLabels
     spec:
       containers:
-        - name: {{ .Values.service.fastapi.name }}
-          image: {{ .Values.image.fastapi.repository }} # Sets Image
-          imagePullPolicy: {{ .Values.image.fastapi.pullPolicy }}
+        - name: fastapi
+          image: {{ .Values.fastapi.repository }}:{{ .Values.fastapi.tag }} # Sets Image
+          imagePullPolicy: {{ .Values.fastapi.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.service.fastapi.port }} # Exposes container port
+            - containerPort: {{ .Values.fastapi.service.port }} # Exposes container port
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-db-configmap
-              
-            #- secretRef:
-            #    name: {{ .Release.Name }}-db-secret
-          stdin: {{ .Values.service.fastapi.stdin }}
-          tty: {{ .Values.service.fastapi.tty }}
-          # volumeMounts:
-          #   - mountPath: /backend
-          #     #subPath: db-storage
-          #     name: fastapi-data
-
       restartPolicy: Always
-      #volumes:
-      #  - name: fastapi-data
-      #    persistentVolumeClaim:
-      #      claimName: {{ .Release.Name }}-fastapi-pvc

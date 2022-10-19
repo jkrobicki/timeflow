@@ -2,24 +2,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-db # Sets Deployment name
-
+  labels: &DbLabels
+    {{- include "timeflow.db.labels" . | nindent 4 }}    
 spec:
   selector:
-    matchLabels:
-      app: {{ .Values.service.db.labels.app }} #match label name in service config file
-  
+    matchLabels: *DbLabels
   template:
     metadata:
-      labels:
-        app: {{ .Values.service.db.labels.app }} #pod label 
-    
+      labels: *DbLabels
     spec:
       containers:
-        - name: {{ .Chart.Name }}
-          image: {{ .Values.image.db.repository }} # Sets Image
-          imagePullPolicy: {{ .Values.image.db.pullPolicy }}
+        - name: postgres
+          image: {{ .Values.db.repository }}:{{ .Values.db.tag }} # Sets Image
+          imagePullPolicy: {{ .Values.db.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.service.db.port }} # Exposes container port
+            - containerPort: {{ .Values.db.service.targetPort }} # Exposes container port
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-db-configmap
