@@ -25,5 +25,5 @@
 .env
 env-test
 dry-run
-raw.values
-ingress-fastapi.yaml
+timeflow-chart/raw.values
+timeflow-chart/ingress-fastapi.yaml
