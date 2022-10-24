@@ -12,16 +12,18 @@ spec:
     metadata:
       labels: *FrontendLabels    
     spec:
+      {{- with .Values.frontend }}
       containers:
         - name: frontend
-          image: {{ .Values.frontend.repository }}:{{ .Values.frontend.tag }} # Sets Image
-          imagePullPolicy: {{ .Values.frontend.pullPolicy }}
+          image: {{ .repository }}:{{ .tag }} # Sets Image
+          imagePullPolicy: {{ .pullPolicy }}
           ports:
-            - containerPort: {{ .Values.frontend.service.port }} # Exposes container port
+            - containerPort: {{ .service.port }} # Exposes container port
           envFrom:
             - configMapRef:
-                name: {{ .Release.Name }}-db-configmap
-            #- secretRef:
-            #    name: {{ .Release.Name }}-db-secret
+                name: {{ $.Release.Name }}-env-configmap
+            - secretRef:
+                name: {{ $.Release.Name }}-db-secret
 
       restartPolicy: Always
+      {{- end  }}

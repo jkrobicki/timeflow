@@ -13,8 +13,7 @@ keywords:
   - postgres
   - database
   - timeflow
-  - idom
-  - pgadmin
+  - ingress
   - fastapi
 
 maintainers:

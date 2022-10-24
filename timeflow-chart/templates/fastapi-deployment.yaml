@@ -11,18 +11,17 @@ spec:
     metadata:
       labels: *FastapiLabels
     spec:
+      {{- with .Values.fastapi }}
       containers:
         - name: fastapi
-          image: {{ .Values.fastapi.repository }}:{{ .Values.fastapi.tag }} # Sets Image
-          imagePullPolicy: {{ .Values.fastapi.pullPolicy }}
+          image: {{ .repository }}:{{ .tag }} # Sets Image
+          imagePullPolicy: {{ .pullPolicy }}
           ports:
-            - containerPort: {{ .Values.fastapi.service.port }} # Exposes container port
+            - containerPort: {{ .service.port }} # Exposes container port
           envFrom:
             - configMapRef:
-                name: {{ .Release.Name }}-db-configmap
-          # command:
-          # - /bin/bash
-          # - -c
-          # - |
-          #     sleep 999999
+                name: {{ $.Release.Name }}-env-configmap
+            - secretRef:
+                name: {{ $.Release.Name }}-db-secret
       restartPolicy: Always
+      {{- end  }}   

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-fastapi-sv # Sets service name
+  name: {{ .Release.Name }}-fastapi # Sets service name
   labels: &FastapiLabels
     {{- include "timeflow.fastapi.labels" . | nindent 4 }}    
 spec:

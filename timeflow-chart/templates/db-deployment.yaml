@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-db # Sets Deployment name
   labels: &DbLabels
-    {{- include "timeflow.db.labels" . | nindent 4 }}    
+    {{- include "timeflow.db.labels" . | nindent 4 }}        
 spec:
   selector:
     matchLabels: *DbLabels
@@ -11,17 +11,18 @@ spec:
     metadata:
       labels: *DbLabels
     spec:
+      {{- with .Values.db }}
       containers:
         - name: postgres
-          image: {{ .Values.db.repository }}:{{ .Values.db.tag }} # Sets Image
-          imagePullPolicy: {{ .Values.db.pullPolicy }}
+          image: {{ .repository }}:{{ .tag }} # Sets Image
+          imagePullPolicy: {{ .pullPolicy }}
           ports:
-            - containerPort: {{ .Values.db.service.targetPort }} # Exposes container port
+            - containerPort: {{ .service.targetPort }} # Exposes container port
           envFrom:
             - configMapRef:
-                name: {{ .Release.Name }}-db-configmap
-            #- secretRef:
-            #    name: {{ .Release.Name }}-db-secret
+                name: {{ $.Release.Name }}-env-configmap
+            - secretRef:
+                name: {{ $.Release.Name }}-db-secret
           volumeMounts:
             - mountPath: /var/lib/postgresql/data/
               subPath: db-storage
@@ -31,4 +32,5 @@ spec:
       volumes:
         - name: db-data
           persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-db-pvc
+            claimName: {{ $.Release.Name }}-db-pvc #pvc config file
+      {{- end  }}

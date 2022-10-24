@@ -6,18 +6,28 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: /
+          - path: /()(.*)
             pathType: Prefix
             backend:
               service:
-                name: {{ .Release.Name }}-frontend-sv
+                name: {{ .Release.Name }}-frontend
                 port:
                   number: {{ .Values.frontend.service.port }}
+      
+          - path: /fastapi(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name }}-fastapi
+                port:
+                  number: {{ .Values.fastapi.service.port }}
+
   tls:
     - hosts:
         - {{ .Values.ingress.host }}

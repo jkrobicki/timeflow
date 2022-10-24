@@ -2,16 +2,15 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-db-configmap
+  name: {{ .Release.Name }}-env-configmap
   labels:
     {{- include "timeflow.labels" . | nindent 4 }}
 data:
   PG_DATA: /var/lib/postgresql/data/db-storage
-  POSTGRES_HOST: {{ .Release.Name }}-db-sv
+  POSTGRES_HOST: {{ .Release.Name }}-db #db service name
   POSTGRES_PORT: {{ .Values.db.service.port | quote }}
   POSTGRES_DB: {{ .Values.db.name }}
-  POSTGRES_USER: {{ .Values.db.user }}
-  POSTGRES_PASSWORD: {{ .Values.db.pass }}
   TIMEFLOW_DEV: "true"
-  PUBLIC_SVELTEKIT_DEV_BASE_URL: https://{{ .Values.ingress.host }}/fastapi
+  PUBLIC_SVELTEKIT_DEV_BASE_URL: https://{{ $.Values.ingress.host }}/fastapi
+
   

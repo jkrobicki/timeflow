@@ -21,3 +21,9 @@
 .idea/
 *.tmproj
 .vscode/
+
+.env
+env-test
+dry-run
+raw-values
+ingress-fastapi.yaml

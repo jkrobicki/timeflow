@@ -16,10 +16,11 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ .Release.Name }}-fastapi-sv
+                name: {{ .Release.Name }}-fastapi
                 port:
                   number: {{ .Values.fastapi.service.port }}
   tls:
     - hosts:
         - {{ .Values.ingress.host }}
       secretName: timeflow-secret
+
