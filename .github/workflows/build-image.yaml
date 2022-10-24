@@ -35,10 +35,11 @@ jobs:
       - name: Build fastapi image
         run: docker build . -f backend/Dockerfile -t fastapi:$(date +%s)
 
-      # - name: Build frontend image
-      #   #uses: docker/build-push-action@v3
+      - name: Build frontend image
+        uses: docker/build-push-action@v3
+        run: docker build . -f frontend/Dockerfile -t frontend:$(date +%s)
       #   #working-directory:
-      #   run: docker build . -f frontend/Dockerfile -t frontend:$(date +%s)
+      
       #   # with:
       #   #   context: .
       #   #   push: true

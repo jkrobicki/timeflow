@@ -10,7 +10,7 @@ data:
   POSTGRES_HOST: {{ .Release.Name }}-db #db service name
   POSTGRES_PORT: {{ .Values.db.service.port | quote }}
   POSTGRES_DB: {{ .Values.db.name }}
-  TIMEFLOW_DEV: "true"
+  TIMEFLOW_DEV: "false"
   PUBLIC_SVELTEKIT_DEV_BASE_URL: https://{{ $.Values.ingress.host }}/fastapi
 
   
