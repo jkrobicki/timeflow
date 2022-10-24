@@ -1,4 +1,4 @@
-name: building docker image
+name: build docker images
 
 on:
   push:
@@ -33,9 +33,12 @@ jobs:
       #     password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build fastapi image
+        run: docker build . -f backend/Dockerfile -t fastapi:$(date +%s)
+
+      - name: Build frontend image
         #uses: docker/build-push-action@v3
         #working-directory:
-        run: docker build . -f backend/Dockerfile -t fastapi:$(date +%s)
+        run: docker build . -f frontend/Dockerfile -t fastapi:$(date +%s)
         # with:
         #   context: .
         #   push: true
