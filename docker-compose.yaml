@@ -71,7 +71,7 @@ services:
     image: fastapi:v4
     volumes:
       - ./backend/:/backend/
-    command: bash -c "rm -f backend/database.sqlite && export TIMEFLOW_DEV=false && uvicorn backend.main:app --reload --port 8002 --host 0.0.0.0 --access-log"
+    command: bash -c "uvicorn backend.main:app --reload --port 8002 --host 0.0.0.0 --access-log"
       #command: bash -c "TIMEFLOW_DEV=false && uvicorn backend.main:app --reload --port 8002 --host 0.0.0.0 --access-log"
     ports:
       - 8002:8002
@@ -79,6 +79,8 @@ services:
       - "db"
     env_file:
       - .env
+    environment:
+      - TIMEFLOW_DEV=false
     container_name: fastapi
     stdin_open: true # docker run -i
     tty: true # docker run -t
