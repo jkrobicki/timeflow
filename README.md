@@ -1,28 +1,27 @@
-# Official documentation
-<a href="https://dyvenia.github.io/timeflow/" target="_blank">https://dyvenia.github.io/timeflow/</a>
+# Instructions to run timeflow in DEV mode 
 
-# Local Setup instructions
-
-1) Install with pip all libs in requirements.txt `pip install -r requirements`
-
-2) `uvicorn main:app --reload`
-
-3) `uvicorn backend.main:app --reload`
-
-# Docker instructions for DEV 
-
-1) run `build.sh` to build the docker images used in this repo
-
-2) Generate the cert files and put them in the `/certs` folder, you can use `mkcert` for generating local cert files for `https`
-
-3) Run docker-compose up
-
+1) Create env variables for frontend
+     Create `.env` file in `/frontend` directory
+     Add variable 
+2) Create docker images used in this repo
 ```bash
-docker-compose -f docker-compose-dev.yaml
+sh build.sh
 ```
 
-If you don't wish to look at the docker logs, run the command `docker-compose up` with the flag `-d` instead of `docker-compose up`
+3) Run docker-compose to spin up the backend
 
 ```bash
-docker-compose up -d
+docker-compose -f docker-compose-dev.yaml up -d
 ```
+
+3) Run frontend in dev mode 
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+4) Navigate to the main app page
+`http://localhost:5173`
+

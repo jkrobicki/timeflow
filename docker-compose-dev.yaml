@@ -56,12 +56,9 @@ services:
       - 8002:8002
     depends_on:
       - "db"
-    env_file:
-      - .env
     container_name: fastapi
     stdin_open: true # docker run -i
     tty: true # docker run -t
     networks:
       static-network:
         ipv4_address: 172.28.1.2
-
