@@ -149,7 +149,6 @@
 				bind:selectedRowIds
 				{onRemove}
 				bind:updatedData
-				removeAction
 			/>
 		</Column>
 	</Row>
