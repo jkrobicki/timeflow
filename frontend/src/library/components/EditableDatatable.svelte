@@ -16,8 +16,8 @@
 	export let headers: Array<Object> = [];
 	export let rows: any = [{}];
 	export let selectedRowIds: Array<number> = [];
-	export let onRemove: Function = () => {};
-	export let onUpdate: Function = () => {};
+	export let onRemove: Function;
+	export let onUpdate: Function;
 	export let updatedData: { id: number; name: string }[] = [];
 	export let onCancel = function () {};
 	export let columnsToEdit: Object = {};
@@ -61,10 +61,12 @@
 			<ToolbarSearch persistent shouldFilterRows bind:filteredRowIds />
 		</ToolbarContent>
 		<ToolbarBatchActions on:cancel={onCancel}>
-			{#if removeAction === true}
+			{#if removeAction}
 				<Button icon={TrashCan} on:click={onRemove}>Remove</Button>
 			{/if}
-			<Button icon={UpdateNow} on:click={onUpdate}>Update</Button>
+			{#if onUpdate}
+				<Button icon={UpdateNow} on:click={onUpdate}>Update</Button>
+			{/if}
 		</ToolbarBatchActions>
 	</Toolbar>
 

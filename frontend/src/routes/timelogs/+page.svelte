@@ -89,15 +89,6 @@
 		epicAreasSelect = await response.json();
 		return epicAreas;
 	}
-	async function onUpdate() {
-		const updateRes = await fetch(`${baseUrl}/api/timelogs/bulk_update`, {
-			method: 'POST',
-			headers: { 'Content-type': 'application/json' }
-		});
-		timelogs = await getTimelogs(timelogs);
-		updatedData = [];
-		selectedRowIds = [];
-	}
 </script>
 
 <Grid>
@@ -157,8 +148,8 @@
 				{columnsToEdit}
 				bind:selectedRowIds
 				{onRemove}
-				{onUpdate}
 				bind:updatedData
+				removeAction
 			/>
 		</Column>
 	</Row>

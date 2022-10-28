@@ -85,7 +85,6 @@
 				bind:selectedRowIds
 				bind:updatedData
 				{onUpdate}
-				autocompleteOptions={users}
 			/>
 		</Column>
 	</Row>
