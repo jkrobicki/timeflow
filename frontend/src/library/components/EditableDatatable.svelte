@@ -9,7 +9,7 @@
 		ToolbarContent,
 		ToolbarSearch
 	} from '../carbon/components';
-	import { Toggle, TextInput } from '../carbon/components';
+	import { Toggle, TextInput, NumberInput } from '../carbon/components';
 	import Autocomplete from './autocomplete.svelte';
 	import { TrashCan, UpdateNow } from '../carbon/icons';
 
@@ -91,6 +91,13 @@
 						{:else if value === 'date'}
 							<input
 								type="date"
+								class="month-picker"
+								value={cell.value}
+								on:blur={(event) => updateData(event, { row }, { cell })}
+							/>
+						{:else if value === 'number'}
+							<input
+								type="number"
 								class="month-picker"
 								value={cell.value}
 								on:blur={(event) => updateData(event, { row }, { cell })}

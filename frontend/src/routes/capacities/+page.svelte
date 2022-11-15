@@ -16,6 +16,7 @@
 	import { TrashCan } from '../../library/carbon/icons';
 	import { getUsers, getCapacities } from '../data/+server.js';
 	import Autocomplete from '../../library/components/autocomplete.svelte';
+	import EditableDatatable from '../../library/components/EditableDatatable.svelte';
 
 	let users: any[];
 	let capacities = [{ id: '', last_name: '', first_name: '', year: '', month: '', days: '' }];
@@ -25,7 +26,8 @@
 	let selectedRowIds: any = [];
 	let selectedItemDisplay = '';
 	let selectedItemValue = '';
-	let numberInput = 0;
+	let capacityDays: number;
+	let updatedData: [];
 	let time = '';
 
 	onMount(async () => {
@@ -41,7 +43,7 @@
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify({
 				user_id: selectedUser.id,
-				days: numberInput,
+				days: capacityDays,
 				month: time.slice(5, 8),
 				year: time.slice(0, 4),
 				created_at: Date.now(),
@@ -53,7 +55,16 @@
 		result = JSON.stringify(json);
 		capacities = await getCapacities(capacities);
 	}
-
+	async function onUpdate() {
+		const updateRes = await fetch(`${baseUrl}/api/capacities/bulk_update`, {
+			method: 'POST',
+			headers: { 'Content-type': 'application/json' },
+			body: JSON.stringify(updatedData)
+		});
+		capacities = await getCapacities(capacities);
+		updatedData = [];
+		selectedRowIds = [];
+	}
 	async function onRemove() {
 		async function DeleteApi(id: number) {
 			const response = await fetch(`${baseUrl}/api/capacities/?capacity_id=` + id, {
@@ -63,7 +74,7 @@
 				},
 				body: JSON.stringify({
 					user_id: selectedUser.id,
-					days: numberInput,
+					days: capacityDays,
 					month: time.slice(5, 8),
 					year: time.slice(0, 4),
 					created_at: Date.now(),
@@ -95,7 +106,7 @@
 			<input class="month-picker" type="month" bind:value={time} />
 		</Column>
 		<Column>
-			<NumberInput bind:value={numberInput} />
+			<input type="number" min="0" class="number-picker" bind:value={capacityDays} />
 		</Column>
 		<Column>
 			<Button size="small" kind="primary" on:click={onSubmit}>Submit</Button>
@@ -103,10 +114,7 @@
 	</Row>
 	<Row>
 		<Column>
-			<DataTable
-				sortable
-				selectable
-				bind:selectedRowIds
+			<EditableDatatable
 				headers={[
 					{ key: 'id', value: 'capacity ID' },
 					{ key: 'full_name', value: 'USER' },
@@ -114,21 +122,21 @@
 					{ key: 'month', value: 'MONTH' },
 					{ key: 'days', value: 'CAPACITY DAYS' }
 				]}
-				pageSize={Pagination.pageSize}
-				page={Pagination.page}
 				rows={capacities}
-			>
-				<Toolbar>
-					<ToolbarBatchActions>
-						<Button icon={TrashCan} on:click={onRemove}>Remove</Button>
-					</ToolbarBatchActions>
-				</Toolbar>
-			</DataTable>
-			<Pagination
-				bind:pageSize={Pagination.pageSize}
-				bind:page={Pagination.page}
-				totalItems={capacities.length}
+				bind:selectedRowIds
+				bind:updatedData
+				{onUpdate}
+				{onRemove}
+				columnsToEdit={{
+					days: 'number'
+				}}
 			/>
+			<!-- <Toolbar>
+				<ToolbarBatchActions>
+					<Button icon={TrashCan} on:click={onRemove}>Remove</Button>
+				</ToolbarBatchActions>
+			</Toolbar>
+			<Pagination bind:pageSize={Pagination.pageSize} bind:page={Pagination.page} /> -->
 		</Column>
 	</Row>
 </Grid>

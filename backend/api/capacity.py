@@ -4,6 +4,9 @@ from ..models.capacity import Capacity
 from sqlmodel import Session, select, and_
 from sqlalchemy.exc import NoResultFound
 from ..models.user import AppUser
+from pydantic import BaseModel
+from datetime import datetime
+from typing import List
 
 router = APIRouter(prefix="/api/capacities", tags=["capacity"])
 
@@ -152,3 +155,21 @@ async def delete_capacities(
     session.delete(capacity_to_delete)
     session.commit()
     return True
+
+
+class UpdateCapacity(BaseModel):
+    id: int
+    days: int
+
+
+@router.post("/bulk_update")
+async def update_capacities(
+    capacities: List[UpdateCapacity],
+    session: Session = Depends(get_session),
+):
+    for capacity in capacities:
+        statement = select(Capacity).where(Capacity.id == capacity.id)
+        capacity_to_update = session.exec(statement).one()
+
+        capacity_to_update.days = capacity.days
+    session.commit()
