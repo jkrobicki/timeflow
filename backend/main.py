@@ -25,6 +25,7 @@ from .api import (
     capacity,
     demand,
     calendar,
+    token,
 )
 import csv
 from fastapi.middleware.cors import CORSMiddleware
@@ -56,6 +57,7 @@ app.include_router(sponsor.router)
 app.include_router(capacity.router)
 app.include_router(demand.router)
 app.include_router(calendar.router)
+app.include_router(token.router)
 
 
 @app.on_event("startup")
