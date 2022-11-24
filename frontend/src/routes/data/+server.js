@@ -1,6 +1,8 @@
 import { env } from '$env/dynamic/public'
+import Keycloak from "keycloak-js";
 
 export const baseUrl = env.PUBLIC_SVELTEKIT_DEV_BASE_URL
+const kcBaseUrl = 'http://127.0.0.1:8080';
 /**
  * @param {any} timelogs
  */
@@ -103,3 +105,28 @@ async function getForecasts() {
 
 
 export { getTimelogs, getUsers, getEpics, getEpicAreas, getCapacities, getClients, getSponsors, getTeams, getRoles, getRate, getForecasts }
+
+const instance = {
+    url: kcBaseUrl,
+    realm: 'master',
+    clientId: 'timeflow',
+    'enable-cors': false,
+}
+
+async function initLogin() {
+    const keycloak = new Keycloak(instance);
+    await keycloak.init({ onLoad: 'login-required' })
+    await keycloak.updateToken(30)
+    await keycloak.tokenParsed
+    let token = keycloak.token
+    let name = keycloak.tokenParsed['given_name'];
+    let lastname = keycloak.tokenParsed['family_name'];
+    let email = keycloak.tokenParsed['email'];
+    let roles = keycloak.realmAccess["roles"];
+    let user = { 'name': name, 'lastname': lastname, 'email': email, 'roles': roles, 'token': token, 'kc': keycloak }
+    console.log(user)
+    return user
+
+};
+
+export { initLogin }

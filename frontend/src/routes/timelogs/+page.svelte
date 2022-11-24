@@ -29,7 +29,10 @@
 	let updatedData: Array<object> = [];
 	let updateRes: any;
 	let columnsToEdit = ['start_time', 'end_time'];
-
+	onMount(async () => {
+		const auth_res = false;
+		if (!auth_res) return { status: 302, redirect: '/login' };
+	});
 	onMount(async () => {
 		users = await getUsers();
 	});

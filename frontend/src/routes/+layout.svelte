@@ -11,9 +11,10 @@
 	} from '../library/carbon/components';
 	import 'carbon-components-svelte/css/white.css';
 	import '../app.css';
+	import { Authorized } from '../library/components';
 	let isSideNavOpen = false;
 	let selectedNavLink = '';
-
+	let logged = true;
 	function handleClick(event) {
 		selectedNavLink = event.target.outerText;
 		console.log('event', event);
