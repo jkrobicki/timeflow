@@ -112,21 +112,40 @@ const instance = {
     clientId: 'timeflow',
     'enable-cors': false,
 }
-
 async function initLogin() {
     const keycloak = new Keycloak(instance);
     await keycloak.init({ onLoad: 'login-required' })
     await keycloak.updateToken(30)
     await keycloak.tokenParsed
     let token = keycloak.token
+    let username = keycloak.tokenParsed['preferred_username'];
     let name = keycloak.tokenParsed['given_name'];
     let lastname = keycloak.tokenParsed['family_name'];
     let email = keycloak.tokenParsed['email'];
     let roles = keycloak.realmAccess["roles"];
-    let user = { 'name': name, 'lastname': lastname, 'email': email, 'roles': roles, 'token': token, 'kc': keycloak }
-    console.log(user)
-    return user
+    let user = { 'name': name, 'lastname': lastname, 'email': email, 'username': username }
+    let accessToken
+    let postedUser
+    await fetch(`${baseUrl}/api/token/`, {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json', 'accept': 'application/json' },
+        body: JSON.stringify({
+            "username": username,
+            "name": name,
+            "lastname": lastname,
+            "email": email,
 
+        })
+    }).then((response) => response.json()).then((obj) => {
+        accessToken = obj.access_token
+        postedUser = obj.user
+    })
+    await console.log("accessToken is", accessToken, "postedUser is", postedUser)
+    if (JSON.stringify(user) === JSON.stringify(postedUser)) {
+        return user
+
+    }
 };
 
 export { initLogin }
+
