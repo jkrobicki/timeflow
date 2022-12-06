@@ -55,12 +55,13 @@ services:
       - ./backend/:/backend/
       - ./requirements.txt/:/requirements.txt/
     command: >
-      bash -c "export TIMEFLOW_DEV=true  && uvicorn backend.main:app --reload  --reload-dir ./backend --port 8002 --host 0.0.0.0"
+      bash -c "export TIMEFLOW_DEV=true  && uvicorn backend.main:app --reload --reload-dir ./backend --port 8002 --host 0.0.0.0"
     ports:
       - 8002:8002
     depends_on:
       - "db"
-    container_name: fastapi
+    env_file:
+      - .env
     stdin_open: true # docker run -i
     tty: true # docker run -t
     restart: on-failure
