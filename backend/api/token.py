@@ -1,3 +1,4 @@
+import os
 from fastapi import APIRouter, Depends
 from sqlalchemy.exc import NoResultFound
 from sqlmodel import Session, select
@@ -19,7 +20,7 @@ import json
 
 router = APIRouter(prefix="/api/token", tags=["token"])
 
-SECRET_KEY = "5556ed7886a0f5a1e0aa2aeb30b40191"
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 
 
@@ -35,7 +36,7 @@ class User(BaseModel):
 
 
 @router.post("/")
-async def test(user: User, session: Session = Depends(get_session)):
+async def create_internal_token(user: User, session: Session = Depends(get_session)):
     payload = {
         "name": user.name,
         "lastname": user.lastname,
