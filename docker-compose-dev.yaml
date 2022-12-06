@@ -55,13 +55,15 @@ services:
       - ./backend/:/backend/
       - ./requirements.txt/:/requirements.txt/
     command: >
-      bash -c "rm -f backend/database.sqlite  && export TIMEFLOW_DEV=true  && uvicorn backend.main:app --reload --port 8002 --host 0.0.0.0"
+      bash -c "export TIMEFLOW_DEV=true  && uvicorn backend.main:app --reload  --reload-dir ./backend --port 8002 --host 0.0.0.0"
     ports:
       - 8002:8002
     depends_on:
       - "db"
+    container_name: fastapi
     stdin_open: true # docker run -i
     tty: true # docker run -t
+    restart: on-failure
     networks:
       static-network:
         ipv4_address: 172.28.1.2
